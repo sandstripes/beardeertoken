@@ -226,9 +226,9 @@
                 <button class="rl-button" onclick="logIn();">Log in</button> 
             </div>
             <div id="rl-signup-container" class="hidden">
-                <input id="rl-username-s" placeholder="Username..." type="text" maxlength=20></input><br>
-                <input id="rl-password-s" placeholder="Password..." type="password"></input><br>
-                <input id="rl-invitecode" placeholder="Invite code..." type="text" maxlength=16></input><br>
+                <input id="rl-username-s" autocomplete="off" placeholder="Username..." type="text" maxlength=20></input><br>
+                <input id="rl-password-s" autocomplete="off" placeholder="Password..." type="password"></input><br>
+                <input id="rl-invitecode" autocomplete="off" placeholder="Invite code..." type="text" maxlength=16></input><br>
                 <button class="rl-button" onclick="register();">Sign up</button><br>
             </div><br><br>
             <span>Please ensure you have read the <a href="https://soktdeer.fraudulent.loan/guidelines">GUIDELINES</a>.</span><br>
@@ -269,14 +269,14 @@
             <button onclick="switchScene('main-scene');">Return to Home</button><br>
             <div class="mc-container">
                 <h2 class="header-notop">Profile</h2>
-                <input id="mc-display-name" placeholder="Display name..." type="text" maxlength=20></input> <button onclick="setDisplayName();">Set display name</button><br>
-                <input id="mc-avatar" placeholder="Avatar URL..." type="text" maxlength=656></input> <button onclick="setAvatar();">Set avatar URL</button><br>
-                <input id="mc-bio" placeholder="Bio..." type="text" maxlength=512></input> <button onclick="setBio();">Set bio</button><br>
-                <input id="mc-lastfm" placeholder="Last.fm..." type="text" maxlength=72></input> <button onclick="setLastfm();">Set last.fm</button>
+                <input id="mc-display-name" placeholder="Display name..." autocomplete="off" type="text" maxlength=20></input> <button onclick="setDisplayName();">Set display name</button><br>
+                <input id="mc-avatar" placeholder="Avatar URL..." autocomplete="off" type="text" maxlength=656></input> <button onclick="setAvatar();">Set avatar URL</button><br>
+                <input id="mc-bio" placeholder="Bio..." type="text" autocomplete="off" maxlength=512></input> <button onclick="setBio();">Set bio</button><br>
+                <input id="mc-lastfm" placeholder="Last.fm..." autocomplete="off" type="text" maxlength=72></input> <button onclick="setLastfm();">Set last.fm</button>
             </div>
             <div class="mc-container">
                 <h2 class="header-notop">Misc</h2>
-                <input id="mc-imgbb-key" placeholder="ImgBB key..." type="text" maxlength=128></input> <button onclick="updateStg('imgbb_key');">Set ImgBB key</button><br>
+                <input id="mc-imgbb-key" placeholder="ImgBB key..." autocomplete="off" type="text" maxlength=128></input> <button onclick="updateStg('imgbb_key');">Set ImgBB key</button><br>
                 <button id="mc-button-replace" onclick="updateStg('replace_text')">(?) Replace text</button><br><br>
                 <button onclick="logOut();">Log out</button>
             </div>
@@ -284,11 +284,11 @@
                 <h2 class="header-notop">Dangerous</h2>
                 <p>Be careful!</p>
                 <span id="mc-support"><button onclick="getSupportCode();">Show support code</button></span><br>
-                <input id="mc-da-password" placeholder="Password..." type="password"></input> 
+                <input id="mc-da-password" placeholder="Password..." autocomplete="off" type="password"></input> 
                 <button onclick="deleteAcc();">Delete account</button><br><br>
                 <h3 class="header-notop">Change password</h3>
-                <input id="mc-pw-password" placeholder="Current password..." type="password"></input><br>
-                <input id="mc-pw-new-password" placeholder="New password..." type="password"></input><br>
+                <input id="mc-pw-password" placeholder="Current password..." autocomplete="off" type="password"></input><br>
+                <input id="mc-pw-new-password" placeholder="New password..." autocomplete="off" type="password"></input><br>
                 <button onclick="changePswd();">Change password</button>
             </div><br><br>
             <small id="mc-version"></small>
