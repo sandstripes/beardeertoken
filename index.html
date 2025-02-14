@@ -489,7 +489,7 @@ const loclUrl = "ws://192.168.1.149:3621";
 //   DO NOT FORGET TO CHANGE THE URL
 //
 
-const ws = new WebSocket(loclUrl)
+const ws = new WebSocket(prodUrl)
 
 ws.onmessage = function (event) {
     let incoming = JSON.parse(event.data);
