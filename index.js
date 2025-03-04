@@ -11,7 +11,7 @@ function closePopup () {
     document.getElementById("error-bar").classList.add("hidden");
 };
 
-const version = "1.5.4b";
+const version = "1.5.5b";
 const serverVersion = "Sokt-1.5.3b";
 let last_cmd = "";
 let username = "";
@@ -485,39 +485,53 @@ function loadPost(resf, isFetch, isInbox) {
         // note: modified
 
         for (let i = 0; i < resf.attachments.length; i++) {
+            var dft_debug = {
+                "dft_enabled": detect_file_type,
+                "postid": resf.id,
+                "attachment": i,
+                "pth": null,
+                "type": null
+            };
             if (detect_file_type) {
                 var pth = new URL(resf.attachments[i]).pathname;
                 if (pth[pth.length - 1] == "/") {
                     pth = pth.slice(0, -1)
                 }
                 pth = pth.split(".")[self.length + 1]
+                dft_debug.pth = pth;
                 if (["mp4", "webm", "mov"].includes(pth)) {
+                    dft_debug.type = "video";
                     let attachment = document.createElement("video");
                     attachment.id = `${resf.id}-attachment-${Number(i)}-video`
                     attachment.classList.add("attachment");
                     attachment.setAttribute("onerror", "this.remove();");
                     attachment.controls = true;
-                    post.appendChild(attachment);
                     let source = document.createElement("source");
                     source.src = resf.attachments[i];
                     attachment.appendChild(source);
+                    post.appendChild(attachment);
                 } else if (["png", "jpg", "jpeg", "webp", "gif", "heic"].includes(pth)) {
+                    dft_debug.type = "image";
                     let attachment = document.createElement("img");
                     attachment.src = resf.attachments[i];
                     attachment.classList.add("attachment");
                     attachment.setAttribute("onerror", "this.remove();");
                     post.appendChild(attachment);
                 } else if (["mp3", "wav", "ogg"].includes(pth)) {
+                    dft_debug.type = "audio";
                     let attachment = document.createElement("audio");
                     attachment.id = `${resf.id}-attachment-${Number(i)}-audio`
                     attachment.classList.add("attachment");
                     attachment.setAttribute("onerror", "this.remove();");
                     attachment.controls = true;
-                    post.appendChild(attachment);
                     let source = document.createElement("source");
                     source.src = resf.attachments[i];
                     attachment.appendChild(source);
+                    post.appendChild(attachment);
+                } else {
+                    dft_debug.type = "none";
                 };
+                console.log(dft_debug);
             } else {
                 let attachment = document.createElement("img");
                 attachment.src = resf.attachments[i];
