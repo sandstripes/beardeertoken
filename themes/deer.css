@@ -24,14 +24,18 @@ button:disabled, button[disabled] {
     background-color: #282623;
     cursor: not-allowed;
 }
-input {
+input,
+textarea {
     background-color: #403d39;
     color: #ede4d5;
     border: none;
     border-radius: 4px;
     padding: 8px;
     font-family: 'Noto Sans', sans-serif;
+    font-size: 14px;
     margin-bottom: 4px;
+    margin-block: 0;
+    vertical-align: baseline;
 }
 #rl-username, #rl-password, #rl-username-s, #rl-password-s, #rl-invitecode, .rl-button {
     width: 175px;
