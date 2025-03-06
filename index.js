@@ -50,20 +50,20 @@ document.getElementById("top-style").href = `/themes/${localStorage.getItem("the
 
 const settings_template = {"replace_text": true, "detect_file_type": false, "debug": true, "imgbb_key": ""}
 
-if (localStorage.getItem("settings") == null) {
-    localStorage.setItem("settings", JSON.stringify(settings_template))
+if (localStorage.getItem("beardeer:settings") == null) {
+    localStorage.setItem("beardeer:settings", JSON.stringify(settings_template))
 };
 
-if (localStorage.getItem("last_inbox_id") == null) {
-    localStorage.setItem("last_inbox_id", 0)
+if (localStorage.getItem("beardeer:last_inbox_id") == null) {
+    localStorage.setItem("beardeer:last_inbox_id", 0)
 };
 
-let settings = JSON.parse(localStorage.getItem("settings"));
+let settings = JSON.parse(localStorage.getItem("beardeer:settings"));
 
 for (const i in settings_template) {
     if (!i in settings) {
         settings[i] = settings_template[i]
-        localStorage.setItem("settings", JSON.stringify(settings))
+        localStorage.setItem("beardeer:settings", JSON.stringify(settings))
     }
 }
 
@@ -93,7 +93,7 @@ function updateStg(setting) {
     } else if (setting == "detect_file_type") {
         settings.detect_file_type = !settings.detect_file_type;
     };
-    localStorage.setItem("settings", JSON.stringify(settings));
+    localStorage.setItem("beardeer:settings", JSON.stringify(settings));
     stgsTriggers();
 };
 
@@ -153,14 +153,14 @@ ws.onmessage = function (event) {
         for (const i in incoming.messages) {
             loadPost(incoming.messages[i], true, false);
         };
-        if (localStorage.getItem("username") == null || localStorage.getItem("token") == null) {
+        if (localStorage.getItem("beardeer:username") == null || localStorage.getItem("beardeer:token") == null) {
             scene = "register-login";
             document.getElementById("loading").classList.toggle("hidden");
             document.getElementById("register-login").classList.toggle("hidden")
         } else {
-            username = localStorage.getItem("username").toLowerCase();
+            username = localStorage.getItem("beardeer:username").toLowerCase();
             last_cmd = "login_token";
-            ws.send(JSON.stringify({command: "login_token", username: username, token: localStorage.getItem("token"), client: `BossDeer ${version}`}))
+            ws.send(JSON.stringify({command: "login_token", username: username, token: localStorage.getItem("beardeer:token"), client: `BossDeer ${version}`}))
         };
     } else if (incoming.command == "ulist") {
         ulist = Object.keys(incoming.ulist);
@@ -200,8 +200,8 @@ ws.onmessage = function (event) {
         console.warn(`Shadow disconnected, but the server has re-connected us.\nCPI: ${incoming.cpi}\nProblems: ${JSON.stringify(incoming.problems)}`)
     }
     if ("token" in incoming && incoming.listener == "RegisterLoginPswdListener") {
-        localStorage.setItem("username", username);
-        localStorage.setItem("token", incoming.token);
+        localStorage.setItem("beardeer:username", username);
+        localStorage.setItem("beardeer:token", incoming.token);
         if (last_cmd == "register") {
             window.location.reload();
         };
@@ -216,9 +216,9 @@ ws.onmessage = function (event) {
             loadPost(incoming.inbox[i], true, true);
         };
         if (!incoming.inbox.length == 0) {
-            if (localStorage.getItem("last_inbox_id") != incoming.inbox[0].id) {
+            if (localStorage.getItem("beardeer:last_inbox_id") != incoming.inbox[0].id) {
                 document.getElementById("ms-button-inbox").innerText = "Inbox*";
-                localStorage.setItem("last_inbox_id", incoming.inbox[0].id)
+            localStorage.setItem("beardeer:last_inbox_id", incoming.inbox[0].id)
             } else {
                 document.getElementById("ms-button-inbox").innerText = "Inbox";
             }
