@@ -198,3 +198,7 @@ a {
     vertical-align: bottom;
     font-size: 18px !important;
 }
+
+#ms-replies:not(:empty) {
+  display: block;
+}

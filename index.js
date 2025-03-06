@@ -425,6 +425,17 @@ const emojify = (s) => {
     .replace("👎", "<img src=\"https://cdn.discordapp.com/emojis/1233290735999258664.webp?size=24&quality=lossless\" style=\"vertical-align:middle\">");
 }
 
+function replyText(replies) {
+  var replies_loaded = ""
+  for (const i in replies) {
+      replies_loaded += `→ ${replies[i].author.display_name} (@${replies[i].author.username}): ${replies[i].content}`
+      if (i != replies.length - 1) {
+          replies_loaded += "\n"
+      };
+  };
+  return replies_loaded
+}
+
 function loadPost(resf, isFetch, isInbox) {
     if (settings.debug) { console.log("Loading post " + resf.id) };
     var tsr = resf.created
@@ -434,13 +445,7 @@ function loadPost(resf, isFetch, isInbox) {
     ts.setTime(tsrb);
     var sts = ts.toLocaleString();
 
-    var replies_loaded = ""
-    for (const i in resf.replies) {
-        replies_loaded += `→ ${resf.replies[i].author.display_name} (@${resf.replies[i].author.username}): ${resf.replies[i].content}`
-        if (i != resf.replies.length - 1) {
-            replies_loaded += "\n"
-        };
-    };
+    var replies_loaded = replyText(resf.replies)
 
     var post = document.createElement("div");
     post.classList.add("post");
@@ -477,7 +482,7 @@ function loadPost(resf, isFetch, isInbox) {
     if (isInbox) {
         postDetails.innerHTML = `${sts}`;
     } else {
-        postDetails.innerHTML = `${sts} - <span class="text-clickable" onclick="reply(${resf.id});">Reply</span>`;
+        postDetails.innerHTML = `${sts} - <span class="text-clickable" onclick="reply(${JSON.stringify(resf).replace(/"/g, "&quot;")});">Reply</span>`;
     };
     post.appendChild(postDetails);
     
@@ -597,7 +602,7 @@ function sendPost() {
             content = content.replaceAll(i, text_replacements[i]);
         };
     };
-    ws.send(JSON.stringify({command: "post", content: content, replies: replies, attachments: attachments}))
+    ws.send(JSON.stringify({command: "post", content: content, replies: replies.map((reply) => reply.id), attachments: attachments}))
     document.getElementById("ms-msg").value = "";
     attachments = [];
     replies = [];
@@ -677,6 +682,8 @@ function updateDetailsMsg() {
         if (attachments.length == 1) {var plurals_b = ""} else {var plurals_b = "s"}
         document.getElementById("ms-details").innerHTML = `${replies.length} repl${plurals}, ${attachments.length} attachment${plurals_b} - <span class="text-clickable" onclick="clearAll();">Remove all</span>`
     };
+    console.log("hi?")
+    document.getElementById("ms-replies").innerText = replyText(replies);
 };
 
 function addAttachment() {
