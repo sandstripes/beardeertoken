@@ -36,10 +36,8 @@ let detect_file_type = false;
 let text_replacements = {
     "\\n": "\n",
     ":x:": "❌",
-    ":+1:": "👍",
-    ":-1:": "👎",
-    ":yuhhuh:": "👍",
-    ":nuhhuh:": "👎",
+    ":+1:": ":yuhhuh:",
+    ":-1:": ":nuhhuh:",
     ":check:": "✅",
     ":b:": "🅱️"
 };
@@ -421,8 +419,8 @@ function logOut() {
 
 const emojify = (s) => {
   return s
-    .replace(/👍/g, "<img src=\"https://cdn.discordapp.com/emojis/1227268820213698611.webp?size=24&quality=lossless\" style=\"vertical-align:middle\">")
-    .replace(/👎/g, "<img src=\"https://cdn.discordapp.com/emojis/1233290735999258664.webp?size=24&quality=lossless\" style=\"vertical-align:middle\">");
+    .replace(/:yuhhuh:/g, "<img src=\"https://cdn.discordapp.com/emojis/1227268820213698611.webp?size=24&quality=lossless\" style=\"vertical-align:middle\">")
+    .replace(/:nuhhuh:/g, "<img src=\"https://cdn.discordapp.com/emojis/1233290735999258664.webp?size=24&quality=lossless\" style=\"vertical-align:middle\">");
 }
 
 function replyText(replies) {
