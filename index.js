@@ -4,6 +4,9 @@ document.getElementById("rl-invitecode").value = "";
 
 function displayError (errText) {
     document.getElementById("error-text").innerText = errText;
+    if (errText.includes("{{Reload}}")) {
+        document.getElementById("error-text").innerHTML = errText.replaceAll("{{Reload}}", "<span class='text-clickable' onclick='window.location.reload();'>Reload</span>");
+    }
     document.getElementById("error-bar").classList.remove("hidden");
 };
 
@@ -11,7 +14,7 @@ function closePopup () {
     document.getElementById("error-bar").classList.add("hidden");
 };
 
-const version = "1.5.5b";
+const version = "1.5.6b";
 const serverVersion = "Sokt-1.5.3b";
 let last_cmd = "";
 let username = "";
@@ -22,6 +25,7 @@ let ulist = [];
 let posts = [];
 let replies = [];
 let attachments = [];
+let last_ping = Date.now();
 //let buddies = [];
 //let online_buddies = [];
 let guest = false;
@@ -161,6 +165,8 @@ ws.onmessage = function (event) {
             } else {
                 displayError(`We hit an error. ("${incoming.code}" from ${incoming.form})`);
             };
+        } else if (incoming.listener == "PingBossDeer") {
+            last_ping = Date.now();
         } else if (last_cmd == "login_token" || last_cmd == "login_pswd") {
             if (scene == "register-login") {
                 document.getElementById("register-login").classList.toggle("hidden");
@@ -761,7 +767,10 @@ function textinput() {
 };
 
 function ping() {
-    ws.send(JSON.stringify({command: "ping"}))
+    ws.send(JSON.stringify({command: "ping", listener: "PingBossDeer"}))
+    if (last_ping + 5000 <= Date.now()) {
+        displayError("We appear to have disconnected... {{Reload}}?");
+    }
 };
 
 setInterval(ping, 2500)
