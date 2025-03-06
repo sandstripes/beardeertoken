@@ -35,7 +35,7 @@ textarea {
     font-size: 14px;
     margin-bottom: 4px;
     margin-block: 0;
-    vertical-align: baseline;
+    vertical-align: middle;
 }
 #rl-username, #rl-password, #rl-username-s, #rl-password-s, #rl-invitecode, .rl-button {
     width: 175px;
@@ -87,6 +87,11 @@ hr {
 }
 .mono {
     font-family: monospace;
+}
+#ms-make-post {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 #ms-msg {
     width:60vw;
