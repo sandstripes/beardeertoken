@@ -336,7 +336,7 @@ function updateUlist() {
     //if (guest == false) {
         //for (const i in online_buddies) {
             //if (!old_online_buddies.includes(i)) {
-                //var audio = new Audio('/nudge.mp3');
+                //var audio = new Audio('nudge.mp3');
                 //audio.play();
                 //break;
             //}
@@ -355,7 +355,7 @@ function switchScene (newScene, isguest) {
         ws.send(JSON.stringify({command: "get_inbox"}))
     };
     if (scene == "user-display") {
-        document.getElementById("ud-avatar").src = "/assets/default.png";
+        document.getElementById("ud-avatar").src = "assets/default.png";
     };
     if (newScene == "main-scene" && isguest == true) {
         document.getElementById("ms-hide-guest-nav").classList.toggle("hidden");
@@ -441,9 +441,9 @@ function loadPost(resf, isFetch, isInbox) {
     if (resf.author.avatar) {
         avatar.src = resf.author.avatar;
     } else {
-        avatar.src = "/assets/default.png";
+        avatar.src = "assets/default.png";
     };
-    avatar.setAttribute("onerror", "this.src = '/assets/default.png';")
+    avatar.setAttribute("onerror", "this.src = 'assets/default.png';")
     avatar.setAttribute("onclick", `showUser("${resf.author.username}");`); // TODO: use this more often
     avatar.classList.add("clickable");
     avatar.classList.add("pfp");
