@@ -7,7 +7,7 @@
 }
 
 body {
-    font-family: 'Noto Sans', sans-serif, 'sitelen seli kiwen';
+    font-family: 'Noto Sans', sans-serif, serif, 'sitelen seli kiwen';
     margin: 0px;
     background-color: #2e2d2b;
     color: #ede4d5;
@@ -19,7 +19,7 @@ button {
     border: none;
     border-radius: 4px;
     padding: 8px;
-    font-family: 'Noto Sans', sans-serif, 'sitelen seli kiwen';
+    font-family: 'Noto Sans', sans-serif, serif, 'sitelen seli kiwen';
     margin-bottom: 4px;
 }
 button:hover {
@@ -37,7 +37,7 @@ textarea {
     border: none;
     border-radius: 4px;
     padding: 8px;
-    font-family: 'Noto Sans', sans-serif, 'sitelen seli kiwen';
+    font-family: 'Noto Sans', sans-serif, serif, 'sitelen seli kiwen';
     font-size: 14px;
     margin-bottom: 4px;
     margin-block: 0;
