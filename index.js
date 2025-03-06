@@ -300,10 +300,16 @@ ws.onerror = function (event) {
     switchScene("connection-lost");
 };
 
+const clientIcon = (c) =>
+  c.startsWith("BossDeer ") ? " 🦌"
+  : c.startsWith("BearDeer" ) ? " 🐻"
+  : c.startsWith("BetterDeer ") ? "✨"
+  : "🤖"
+
 function updateUlist() {
     var ulstring = "";
     for (const i in ulist) {
-        ulstring += `<span class="clickable" title="${raw_ulist[ulist[i]]}" onclick="showUser('${ulist[i]}');">${ulist[i]}</span>` //vulnerable!
+        ulstring += `<span class="clickable" title="${raw_ulist[ulist[i]]}" onclick="showUser('${ulist[i]}');">${ulist[i]} ${clientIcon(raw_ulist[ulist[i]])}</span>` //vulnerable!
         if (i != ulist.length - 1) {
             ulstring += ", "
         };
