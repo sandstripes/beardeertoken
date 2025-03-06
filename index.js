@@ -160,7 +160,7 @@ ws.onmessage = function (event) {
         } else {
             username = localStorage.getItem("beardeer:username").toLowerCase();
             last_cmd = "login_token";
-            ws.send(JSON.stringify({command: "login_token", username: username, token: localStorage.getItem("beardeer:token"), client: `BossDeer ${version}`}))
+            ws.send(JSON.stringify({command: "login_token", username: username, token: localStorage.getItem("beardeer:token"), client: `BearDeer ${version}`}))
         };
     } else if (incoming.command == "ulist") {
         ulist = Object.keys(incoming.ulist);
