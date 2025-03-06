@@ -1,12 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap');
 
 @font-face {
-  font-family: "Fairfax HD";
-  src: local("Fairfax HD"), url("assets/fairfaxhd/FairfaxHD.ttf");
+  font-family: "sitelen seli kiwen";
+  src: url("assets/sitelenselikiwen/sitelenselikiwenjuniko.ttf");
+  size-adjust: 130%;
 }
 
 body {
-    font-family: 'Noto Sans', sans-serif, 'Fairfax HD';
+    font-family: 'Noto Sans', sans-serif, 'sitelen seli kiwen';
     margin: 0px;
     background-color: #2e2d2b;
     color: #ede4d5;
