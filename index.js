@@ -38,6 +38,8 @@ let text_replacements = {
     ":x:": "❌",
     ":+1:": "👍",
     ":-1:": "👎",
+    ":yuhhuh:": "👍",
+    ":nuhhuh:": "👎",
     ":check:": "✅",
     ":b:": "🅱️"
 };
@@ -417,6 +419,12 @@ function logOut() {
     window.location.reload();
 };
 
+const emojify = (s) => {
+  return s
+    .replace("👍", "<img src=\"https://cdn.discordapp.com/emojis/1227268820213698611.webp?size=24&quality=lossless\" style=\"vertical-align:middle\">")
+    .replace("👎", "<img src=\"https://cdn.discordapp.com/emojis/1233290735999258664.webp?size=24&quality=lossless\" style=\"vertical-align:middle\">");
+}
+
 function loadPost(resf, isFetch, isInbox) {
     if (settings.debug) { console.log("Loading post " + resf.id) };
     var tsr = resf.created
@@ -479,6 +487,7 @@ function loadPost(resf, isFetch, isInbox) {
     if (resf.replies.length != 0) {
         var replyContent = document.createElement("span");
         replyContent.innerText = replies_loaded;
+        replyContent.innerHTML = emojify(replyContent.innerHTML);
         replyContent.classList.add("reply");
         post.appendChild(replyContent);
         
@@ -488,6 +497,7 @@ function loadPost(resf, isFetch, isInbox) {
 
     var postContent = document.createElement("span");
     postContent.innerText = resf.content;
+    postContent.innerHTML = emojify(postContent.innerHTML);
     post.appendChild(postContent);
 
     if (resf.attachments.length != 0) {
