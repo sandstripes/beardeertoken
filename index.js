@@ -41,7 +41,6 @@ let text_replacements = {
     ":check:": "✅",
     ":b:": "🅱️"
 };
-const sitelen_pona = {"a": "󱤀", "akesi": "󱤁", "ala": "󱤂", "alasa": "󱤃", "ale": "󱤄", "anpa": "󱤅", "ante": "󱤆", "anu": "󱤇", "awen": "󱤈", "e": "󱤉", "en": "󱤊", "esun": "󱤋", "ijo": "󱤌", "ike": "󱤍", "ilo": "󱤎", "insa": "󱤏", "jaki": "󱤐", "jan": "󱤑", "jelo": "󱤒", "jo": "󱤓", "kala": "󱤔", "kalama": "󱤕", "kama": "󱤖", "kasi": "󱤗", "ken": "󱤘", "kepeken": "󱤙", "kili": "󱤚", "kiwen": "󱤛", "ko": "󱤜", "kon": "󱤝", "kule": "󱤞", "kulupu": "󱤟", "kute": "󱤠", "la": "󱤡", "lape": "󱤢", "laso": "󱤣", "lawa": "󱤤", "len": "󱤥", "lete": "󱤦", "li": "󱤧", "lili": "󱤨", "linja": "󱤩", "lipu": "󱤪", "loje": "󱤫", "lon": "󱤬", "luka": "󱤭", "lukin": "󱤮", "lupa": "󱤯", "ma": "󱤰", "mama": "󱤱", "mani": "󱤲", "meli": "󱤳", "mi": "󱤴", "mije": "󱤵", "moku": "󱤶", "moli": "󱤷", "monsi": "󱤸", "mu": "󱤹", "mun": "󱤺", "musi": "󱤻", "mute": "󱤼", "nanpa": "󱤽", "nasa": "󱤾", "nasin": "󱤿", "nena": "󱥀", "ni": "󱥁", "nimi": "󱥂", "noka": "󱥃", "o": "󱥄", "olin": "󱥅", "ona": "󱥆", "open": "󱥇", "pakala": "󱥈", "pali": "󱥉", "palisa": "󱥊", "pan": "󱥋", "pana": "󱥌", "pi": "󱥍", "pilin": "󱥎", "pimeja": "󱥏", "pini": "󱥐", "pipi": "󱥑", "poka": "󱥒", "poki": "󱥓", "pona": "󱥔", "pu": "󱥕", "sama": "󱥖", "seli": "󱥗", "selo": "󱥘", "seme": "󱥙", "sewi": "󱥚", "sijelo": "󱥛", "sike": "󱥜", "sin": "󱥝", "sina": "󱥞", "sinpin": "󱥟", "sitelen": "󱥠", "sona": "󱥡", "soweli": "󱥢", "suli": "󱥣", "suno": "󱥤", "supa": "󱥥", "suwi": "󱥦", "tan": "󱥧", "taso": "󱥨", "tawa": "󱥩", "telo": "󱥪", "tenpo": "󱥫", "toki": "󱥬", "tomo": "󱥭", "tu": "󱥮", "unpa": "󱥯", "uta": "󱥰", "utala": "󱥱", "walo": "󱥲", "wan": "󱥳", "waso": "󱥴", "wawa": "󱥵", "weka": "󱥶", "wile": "󱥷", "namako": "󱥸", "kin": "󱥹", "oko": "󱥺", "kipisi": "󱥻", "leko": "󱥼", "monsuta": "󱥽", "tonsi": "󱥾", "jasima": "󱥿", "kijetesantakalu": "󱦀", "soko": "󱦁", "meso": "󱦂", "epiku": "󱦃", "kokosila": "󱦄", "lanpan": "󱦅", "n": "󱦆", "misikeke": "󱦇", "ku": "󱦈"};
 
 if (localStorage.getItem("theme") == null) {
     localStorage.setItem("theme", "deer")
@@ -615,9 +614,6 @@ function sendPost() {
         for (const i in text_replacements) {
             content = content.replaceAll(i, text_replacements[i]);
         };
-        content = content.replace(/\{\{([a-z ]+)\}\}/g, (_, s) =>
-          s.split(" ").map((word) => sitelen_pona[word] ?? word).join("")
-        )
     };
     ws.send(JSON.stringify({command: "post", content: content, replies: replies.map((reply) => reply.id), attachments: attachments}))
     document.getElementById("ms-msg").value = "";
