@@ -18,9 +18,9 @@ button {
     color: #ede4d5;
     border: none;
     border-radius: 4px;
-    padding: 4px 8px;
+    padding: 8px;
     font-family: 'Noto Sans', sans-serif, serif, 'sitelen seli kiwen';
-    margin-bottom: 0;
+    margin-bottom: 4px;
 }
 button:hover {
     background-color: #403d39;
@@ -36,16 +36,13 @@ textarea {
     color: #ede4d5;
     border: none;
     border-radius: 4px;
-    padding: 4px 8px;
+    padding: 8px;
     font-family: 'Noto Sans', sans-serif, serif, 'sitelen seli kiwen';
     font-size: 14px;
     margin-bottom: 4px;
     margin-block: 0;
-    vertical-align: baseline;
+    vertical-align: middle;
     resize: none;
-}
-button, input, textarea {
-  font-size: 1rem;
 }
 #rl-username, #rl-password, #rl-username-s, #rl-password-s, #rl-invitecode, .rl-button {
     width: 175px;
