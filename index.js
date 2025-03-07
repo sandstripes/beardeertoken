@@ -747,10 +747,19 @@ function reply(id) {
     updateDetailsMsg();
 };
 
+function resizePostBox() {
+  const input = document.querySelector("#ms-msg");
+  requestAnimationFrame(() => {
+    input.style.minHeight = "auto";
+    input.style.minHeight = input.scrollHeight + "px";
+  })
+}
+
 function clearAll() {
     replies = [];
     attachments = [];
     updateDetailsMsg();
+    resizePostBox();
 };
 
 function clearHome() {
