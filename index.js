@@ -141,7 +141,7 @@ ws.onmessage = function (event) {
 
     if (incoming.command == "greet") {
         closePopup();
-        document.getElementById("rl-version").innerText = `${version} - ${incoming.version}`;
+        document.getElementById("rl-version").innerText = `BearDeer (based on BossDeer ${version}) - ${incoming.version}`;
         document.getElementById("mc-version").innerText = `${version} - ${incoming.version}`;
         if (incoming.version != serverVersion) {
             displayError(`The server is on a newer version than this version of BossDeer was designed for. You may experience problems. (Expected "${serverVersion}", got "${incoming.version}")`);
