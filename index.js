@@ -511,6 +511,14 @@ function loadPost(resf, isFetch, isInbox) {
     postContent.innerHTML = emojify(postContent.innerHTML);
     post.appendChild(postContent);
 
+    if (resf.author.username === "mybearworld" && resf.content.endsWith("\u200c")) {
+      const reloadButton = document.createElement("button");
+      reloadButton.addEventListener("click", () => location.reload());
+      reloadButton.style.display = "block";
+      reloadButton.textContent = "Reload";
+      post.append(reloadButton)
+    }
+
     if (resf.attachments.length != 0) {
         var horline = document.createElement("hr");
         post.appendChild(horline);
