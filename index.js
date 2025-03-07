@@ -419,8 +419,8 @@ function logIn() {
 };
 
 function logOut() {
-    localStorage.remove("beardeer:username");
-    localStorage.remove("beardeer:token");
+    localStorage.removeItem("beardeer:username");
+    localStorage.removeItem("beardeer:token");
     window.location.reload();
 };
 
