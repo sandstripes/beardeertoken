@@ -415,7 +415,7 @@ function register() {
 function logIn() {
     last_cmd = "login_pswd";
     username = document.getElementById("rl-username").value.toLowerCase();
-    ws.send(JSON.stringify({command: "login_pswd", username: username, password: document.getElementById("rl-password").value, client: `BossDeer ${version}`, listener: "RegisterLoginPswdListener"}))
+    ws.send(JSON.stringify({command: "login_pswd", username: username, password: document.getElementById("rl-password").value, client: `BearDeer ${version}`, listener: "RegisterLoginPswdListener"}))
 };
 
 function logOut() {
