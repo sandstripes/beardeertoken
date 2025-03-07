@@ -48,6 +48,15 @@ if (localStorage.getItem("theme") == null) {
 
 document.getElementById("top-style").href = `/themes/${localStorage.getItem("theme")}.css`;
 
+marked.use({
+  breaks: true,
+  renderer: {
+    image(token) {
+      return token.raw;
+    }
+  }
+});
+
 const settings_template = {"replace_text": true, "detect_file_type": false, "debug": true, "imgbb_key": ""}
 
 if (localStorage.getItem("beardeer:settings") == null) {
@@ -506,8 +515,8 @@ function loadPost(resf, isFetch, isInbox) {
     };
 
     var postContent = document.createElement("span");
-    postContent.innerText = resf.content;
-    postContent.innerHTML = emojify(postContent.innerHTML);
+    postContent.classList.add("md");
+    postContent.innerHTML = emojify(marked.parse(resf.content.replace(/&/g, "&amp;").replace(/(?<!^)>/mg, "&gt;").replace(/</g, "&lt;")));
     post.appendChild(postContent);
 
     if (resf.author.username === "mybearworld" && resf.content.endsWith("\u200c")) {
