@@ -313,6 +313,7 @@ const clientIcon = (c) =>
   c.startsWith("BossDeer ") ? " 🦌"
   : c.startsWith("BearDeer" ) ? " 🐻"
   : c.startsWith("BetterDeer ") ? "✨"
+  : c.startsWith("PresetDeer ") ? "🧩"
   : c === "Unknown" ? "❓"
   : "🤖"
 
