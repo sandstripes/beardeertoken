@@ -452,6 +452,7 @@ function replyText(replies) {
 
 function loadPost(resf, isFetch, isInbox) {
     if (settings.debug) { console.log("Loading post " + resf.id) };
+    if (resf.id === 0 && resf.content === "This message can not be replied to.\nHello, deer! Right now, I am working to try get the new server software (\"SoktDeer Helium\") up and running in any capacity. This current server is causing nothing but problems, and the server actually functioning is far more important than anything else. I don't really have much else to say for now... please be patient! Thanks, @cole") return;
     var tsr = resf.created
     var tsra = tsr * 1000
     var tsrb = Math.trunc(tsra)
