@@ -47,7 +47,7 @@ if (localStorage.getItem("theme") == null) {
     localStorage.setItem("theme", "deer")
 }
 
-document.getElementById("top-style").href = `/themes/${localStorage.getItem("theme")}.css`;
+document.getElementById("top-style").href = `themes/${localStorage.getItem("theme")}.css`;
 
 marked.use({
   breaks: true,
@@ -855,7 +855,7 @@ function textinput() {
 
 function setTheme(theme) {
     localStorage.setItem("theme", theme)
-    document.getElementById("top-style").href = `/themes/${theme}.css`;
+    document.getElementById("top-style").href = `themes/${theme}.css`;
 }
 
 function ping() {
