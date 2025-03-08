@@ -95,12 +95,14 @@ function stgsTriggers() {
     if (settings.presets) {
         presets = true;
         document.getElementById("ms-button-presets").innerText = "Back";
+        document.querySelector("#ms-do-not-the-spamming").toggleAttribute("hidden", false);
         document.querySelector("#ms-msg").toggleAttribute("hidden", true);
         document.querySelector("#ms-button-post").toggleAttribute("hidden", true);
         document.querySelector("#ms-presets").toggleAttribute("hidden", false);
     } else {
         presets = false;
         document.getElementById("ms-button-presets").innerText = "MK8 Presets";
+        document.querySelector("#ms-do-not-the-spamming").toggleAttribute("hidden", true);
         document.querySelector("#ms-msg").toggleAttribute("hidden", false);
         document.querySelector("#ms-button-post").toggleAttribute("hidden", false);
         document.querySelector("#ms-presets").toggleAttribute("hidden", true);
