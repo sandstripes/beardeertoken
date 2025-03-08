@@ -628,6 +628,7 @@ function sendPost() {
     };
     ws.send(JSON.stringify({command: "post", content: content, replies: replies.map((reply) => reply.id), attachments: attachments}))
     document.getElementById("ms-msg").value = "";
+    resizePostBox();
     attachments = [];
     replies = [];
     updateDetailsMsg();
