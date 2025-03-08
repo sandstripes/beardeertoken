@@ -9,7 +9,7 @@
         <meta rel="icon" type="image/x-icon" href="/favicon.ico">
         <meta charset="UTF-8">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,1,200" />
-        <link rel="stylesheet" href="/style.css" />
+        <link id="top-style" rel="stylesheet" href="/themes/deer.css" />
     </head>
     <body>
         <div id="error-bar"><span onclick="closePopup();" class="text-clickable">Close</span> - <span id="error-text">Connecting...<span></div>
@@ -81,6 +81,14 @@
                 <button id="mc-button-detectft" onclick="updateStg('detect_file_type')">(?) Detect file types</button><br><br>
                 <button onclick="logOut();">Log out</button>
             </div>
+            <!--
+            soon!
+
+            <div class="mc-container">
+                <h2 class="header-notop">Theme</h2>
+                <button onclick="setTheme('deer');">Deer</button> <button onclick="setTheme('helium');">Helium</button>
+            </div>
+            -->
             <div id="mc-danger-container">
                 <h2 class="header-notop">Dangerous</h2>
                 <p>Be careful!</p>

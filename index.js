@@ -14,14 +14,15 @@ function closePopup () {
     document.getElementById("error-bar").classList.add("hidden");
 };
 
-const version = "1.5.6b";
-const serverVersion = "Sokt-1.5.3b";
+const version = "1.5.7b";
+const serverVersion = "Sokt-1.5.7b";
 let last_cmd = "";
 let username = "";
 let logged_in = false; // unused?
 let authed = false;
 let scene = "loading";
 let ulist = [];
+let raw_ulist = {};
 let posts = [];
 let replies = [];
 let attachments = [];
@@ -40,6 +41,12 @@ let text_replacements = {
     ":check:": "✅",
     ":b:": "🅱️"
 };
+
+if (localStorage.getItem("theme") == null) {
+    localStorage.setItem("theme", "deer")
+}
+
+document.getElementById("top-style").href = `/themes/${localStorage.getItem("theme")}.css`;
 
 const settings_template = {"replace_text": true, "detect_file_type": false, "debug": true, "imgbb_key": ""}
 
@@ -140,6 +147,7 @@ ws.onmessage = function (event) {
             displayError(`The server is on a newer version than this version of BossDeer was designed for. You may experience problems. (Expected "${serverVersion}", got "${incoming.version}")`);
         };
         ulist = Object.keys(incoming.ulist);
+        raw_ulist = incoming.ulist;
         updateUlist();
         posts = incoming.messages;
         for (const i in incoming.messages) {
@@ -156,6 +164,7 @@ ws.onmessage = function (event) {
         };
     } else if (incoming.command == "ulist") {
         ulist = Object.keys(incoming.ulist);
+        raw_ulist = incoming.ulist;
         updateUlist();
     };
     if ("error" in incoming) {
@@ -187,6 +196,9 @@ ws.onmessage = function (event) {
             ws.send(JSON.stringify({command: "get_inbox"}))
         };
     };
+    if ("disconnected" in incoming && incoming.disconnected) {
+        console.warn(`Shadow disconnected, but the server has re-connected us.\nCPI: ${incoming.cpi}\nProblems: ${JSON.stringify(incoming.problems)}`)
+    }
     if ("token" in incoming && incoming.listener == "RegisterLoginPswdListener") {
         localStorage.setItem("username", username);
         localStorage.setItem("token", incoming.token);
@@ -203,11 +215,13 @@ ws.onmessage = function (event) {
         for (const i in incoming.inbox) {
             loadPost(incoming.inbox[i], true, true);
         };
-        if (localStorage.getItem("last_inbox_id") != incoming.inbox[0].id) {
-            document.getElementById("ms-button-inbox").innerText = "Inbox*";
-            localStorage.setItem("last_inbox_id", incoming.inbox[0].id)
-        } else {
-            document.getElementById("ms-button-inbox").innerText = "Inbox";
+        if (!incoming.inbox.length == 0) {
+            if (localStorage.getItem("last_inbox_id") != incoming.inbox[0].id) {
+                document.getElementById("ms-button-inbox").innerText = "Inbox*";
+                localStorage.setItem("last_inbox_id", incoming.inbox[0].id)
+            } else {
+                document.getElementById("ms-button-inbox").innerText = "Inbox";
+            }
         };
     } else if (last_cmd == "get_user" && "user" in incoming) {
         var bio;
@@ -289,7 +303,7 @@ ws.onerror = function (event) {
 function updateUlist() {
     var ulstring = "";
     for (const i in ulist) {
-        ulstring += `<span class="clickable" onclick="showUser('${ulist[i]}');">${ulist[i]}</span>` //vulnerable!
+        ulstring += `<span class="clickable" title="${raw_ulist[ulist[i]]}" onclick="showUser('${ulist[i]}');">${ulist[i]}</span>` //vulnerable!
         if (i != ulist.length - 1) {
             ulstring += ", "
         };
@@ -766,10 +780,16 @@ function textinput() {
     // TODO
 };
 
+function setTheme(theme) {
+    localStorage.setItem("theme", theme)
+    document.getElementById("top-style").href = `/themes/${theme}.css`;
+}
+
 function ping() {
     ws.send(JSON.stringify({command: "ping", listener: "PingBossDeer"}))
     if (last_ping + 5000 <= Date.now()) {
-        displayError("We appear to have disconnected... {{Reload}}?");
+        console.warn(`No pong in ${Date.now() - (last_ping + 5000)}ms!`)
+        //displayError("We appear to have disconnected... {{Reload}}?");
     }
 };
 
