@@ -202,7 +202,9 @@ a {
 #ms-replies:not(:empty) {
   display: block;
 }
-.md p {
+.md p,
+.md ul,
+.md ol {
   margin-block: 0;
 }
 .md blockquote {
