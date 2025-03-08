@@ -104,6 +104,9 @@ hr {
     width:60vw;
     box-sizing: border-box;
 }
+#ms-presets {
+  margin-left: 0.5rem;
+}
 #ms-button-post {
     box-sizing: border-box;
 }

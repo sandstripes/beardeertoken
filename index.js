@@ -33,6 +33,7 @@ let guest = false;
 
 let replace_text = false;
 let detect_file_type = false;
+let presets = false;
 let text_replacements = {
     "\\n": "\n",
     ":x:": "❌",
@@ -57,7 +58,7 @@ marked.use({
   }
 });
 
-const settings_template = {"replace_text": true, "detect_file_type": false, "debug": true, "imgbb_key": ""}
+const settings_template = {"replace_text": true, "detect_file_type": false, "debug": true, "imgbb_key": "", "presets": false }
 
 if (localStorage.getItem("beardeer:settings") == null) {
     localStorage.setItem("beardeer:settings", JSON.stringify(settings_template))
@@ -91,6 +92,19 @@ function stgsTriggers() {
         detect_file_type = false;
         document.getElementById("mc-button-detectft").innerText = "(disabled) Detect file types";
     };
+    if (settings.presets) {
+        presets = true;
+        document.getElementById("mc-button-presets").innerText = "(enabled) Mario Kart Presets";
+        document.querySelector("#ms-msg").toggleAttribute("hidden", true);
+        document.querySelector("#ms-button-post").toggleAttribute("hidden", true);
+        document.querySelector("#ms-presets").toggleAttribute("hidden", false);
+    } else {
+        presets = false;
+        document.getElementById("mc-button-presets").innerText = "(disabled) Mario Kart Presets";
+        document.querySelector("#ms-msg").toggleAttribute("hidden", false);
+        document.querySelector("#ms-button-post").toggleAttribute("hidden", false);
+        document.querySelector("#ms-presets").toggleAttribute("hidden", true);
+    };
 };
 
 function updateStg(setting) {
@@ -101,7 +115,9 @@ function updateStg(setting) {
         document.getElementById("mc-imgbb-key").value = "";
     } else if (setting == "detect_file_type") {
         settings.detect_file_type = !settings.detect_file_type;
-    };
+    } else if (setting == "presets") {
+        settings.presets = !settings.presets;
+    }
     localStorage.setItem("beardeer:settings", JSON.stringify(settings));
     stgsTriggers();
 };
@@ -618,6 +634,11 @@ function loadPost(resf, isFetch, isInbox) {
         document.getElementById(`${resf.id}-attachment-${Number(x)}`).href = resf.attachments[x];
     }
 };
+
+function sendPreset(el) {
+  document.getElementById("ms-msg").value = el.textContent;
+  sendPost();
+}
 
 function sendPost() {
     last_cmd = "post";

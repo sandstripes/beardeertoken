@@ -58,6 +58,31 @@
                 <button onclick="addAttachment();">URL...</button> 
                 <button onclick="addUpload();">+</button> 
                 <textarea id="ms-msg" maxlength=2000 oninput="textinput();" autocomplete="off" onkeydown="if (event.key === 'Enter' && !event.shiftKey) {event.preventDefault(); sendPost();} if (event.key === 'Escape') { clearAll() }; resizePostBox();" placeholder="What's on your mind?" type="text" rows="1"></textarea>
+                <span hidden id="ms-presets">
+                  <button onclick="sendPreset(this)">Hello!</button>
+                  <button onclick="sendPreset(this)">Good luck!</button>
+                  <button onclick="sendPreset(this)">Welcome!</button>
+                  <button onclick="sendPreset(this)">Go easy on me!</button>
+                  <button onclick="sendPreset(this)">I'll give it my best shot!</button>
+                  <button onclick="sendPreset(this)">Shall we get started?</button>
+                  <button onclick="sendPreset(this)">Let's wait for more players.</button>
+                  <button onclick="sendPreset(this)">OK!</button>
+                  <button onclick="sendPreset(this)">I'm a little nervous...</button>
+                  <button onclick="sendPreset(this)">I'm excited!</button>
+                  <button onclick="sendPreset(this)">I'm using tilt controls!</button>
+                  <button onclick="sendPreset(this)">Hooray!</button>
+                  <button onclick="sendPreset(this)">Good game!</button>
+                  <button onclick="sendPreset(this)">That was fun!</button>
+                  <button onclick="sendPreset(this)">Not fair!</button>
+                  <button onclick="sendPreset(this)">One more time!</button>
+                  <button onclick="sendPreset(this)">I'll get you next time!</button>
+                  <button onclick="sendPreset(this)">This is my last game.</button>
+                  <button onclick="sendPreset(this)">I'm outta here.</button>
+                  <button onclick="sendPreset(this)">Thanks for playing!</button>
+                  <button onclick="sendPreset(this)">Thank you!</button>
+                  <button onclick="sendPreset(this)">Good night!</button>
+                  <button onclick="sendPreset(this)">Bye!</button>
+                </span>
                 <button id="ms-button-post" onclick="sendPost();">Post</button><br>
                 <small id="ms-details"></small>
                 <small id="ms-replies" class="reply"></small>
@@ -80,7 +105,8 @@
                 <h2 class="header-notop">Misc</h2>
                 <input id="mc-imgbb-key" placeholder="ImgBB key..." autocomplete="off" type="text" maxlength=128></input> <button onclick="updateStg('imgbb_key');">Set ImgBB key</button><br>
                 <button id="mc-button-replace" onclick="updateStg('replace_text')">(?) Replace text</button><br>
-                <button id="mc-button-detectft" onclick="updateStg('detect_file_type')">(?) Detect file types</button><br><br>
+                <button id="mc-button-detectft" onclick="updateStg('detect_file_type')">(?) Detect file types</button><br>
+                <button id="mc-button-presets" onclick="updateStg('presets')">(?) Mario Kart Presets</button><br><br>
             </div>
             <!--
             soon!
