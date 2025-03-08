@@ -55,6 +55,7 @@
             <small id="ms-ulist">0 users online ()</small><br><br>
             <div id="ms-make-post">
                 <center>
+                <button id="ms-button-presets" onclick="updateStg('presets')">MK8 Presets</button>
                 <button onclick="addAttachment();">URL...</button> 
                 <button onclick="addUpload();">+</button> 
                 <textarea id="ms-msg" maxlength=2000 oninput="textinput();" autocomplete="off" onkeydown="if (event.key === 'Enter' && !event.shiftKey) {event.preventDefault(); sendPost();} if (event.key === 'Escape') { clearAll() }; resizePostBox();" placeholder="What's on your mind?" type="text" rows="1"></textarea>
@@ -105,8 +106,7 @@
                 <h2 class="header-notop">Misc</h2>
                 <input id="mc-imgbb-key" placeholder="ImgBB key..." autocomplete="off" type="text" maxlength=128></input> <button onclick="updateStg('imgbb_key');">Set ImgBB key</button><br>
                 <button id="mc-button-replace" onclick="updateStg('replace_text')">(?) Replace text</button><br>
-                <button id="mc-button-detectft" onclick="updateStg('detect_file_type')">(?) Detect file types</button><br>
-                <button id="mc-button-presets" onclick="updateStg('presets')">(?) Mario Kart Presets</button><br><br>
+                <button id="mc-button-detectft" onclick="updateStg('detect_file_type')">(?) Detect file types</button><br><br>
             </div>
             <!--
             soon!

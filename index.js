@@ -94,13 +94,13 @@ function stgsTriggers() {
     };
     if (settings.presets) {
         presets = true;
-        document.getElementById("mc-button-presets").innerText = "(enabled) Mario Kart Presets";
+        document.getElementById("ms-button-presets").innerText = "Back";
         document.querySelector("#ms-msg").toggleAttribute("hidden", true);
         document.querySelector("#ms-button-post").toggleAttribute("hidden", true);
         document.querySelector("#ms-presets").toggleAttribute("hidden", false);
     } else {
         presets = false;
-        document.getElementById("mc-button-presets").innerText = "(disabled) Mario Kart Presets";
+        document.getElementById("ms-button-presets").innerText = "MK8 Presets";
         document.querySelector("#ms-msg").toggleAttribute("hidden", false);
         document.querySelector("#ms-button-post").toggleAttribute("hidden", false);
         document.querySelector("#ms-presets").toggleAttribute("hidden", true);
