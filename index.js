@@ -45,6 +45,8 @@ let text_replacements = {
 };
 
 const timeZones = {
+  alwayshavealwayswill: "America/Detroit",
+  cole: "America/Detroit",
   delusions: "Europe/London",
   engineerrunner: "Europe/London",
   mybearworld: "Europe/Berlin",
