@@ -47,7 +47,8 @@ let text_replacements = {
 const timeZones = {
   delusions: "Europe/London",
   engineerrunner: "Europe/London",
-  mybearworld: "Europe/Berlin"
+  mybearworld: "Europe/Berlin",
+  wlodekm: "Europe/Kyiv"
 }
 
 if (localStorage.getItem("theme") == null) {
@@ -265,7 +266,6 @@ ws.onmessage = function (event) {
         document.getElementById("ud-display-name").innerText = incoming.user.display_name;
         document.getElementById("ud-username").innerText = "@" + incoming.user.username;
         if (incoming.user.username in timeZones) {
-          document.getElementById("ud-tz-wrapper").classList.remove("hidden");
           const formatter = new Intl.DateTimeFormat([], {
             timeZone: timeZones[incoming.user.username],
             dateStyle: "short",
@@ -277,7 +277,7 @@ ws.onmessage = function (event) {
           updateTimeZone();
           timeUpdate = setInterval(updateTimeZone, 500);
         } else {
-          document.getElementById("ud-tz-wrapper").classList.add("hidden");
+          document.getElementById("ud-tz").innerText = "Unknown";
         }
         document.getElementById("ud-created").innerText = new Date(incoming.user.created * 1000).toLocaleString();
         document.getElementById("ud-permissions").innerText = `Permissions: ${incoming.user.permissions.toString().toLowerCase().replaceAll(",", ", ")}`;
