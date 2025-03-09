@@ -862,6 +862,13 @@ function forceKick() {
     document.getElementById("mm-username-forcekick").value = "";
 };
 
+function goToUser() {
+  const user = prompt("Which user do you want to go to?")
+  if (user) {
+    showUser(user);
+  }
+}
+
 function showUser(user) {
     last_cmd = "get_user";
     ws.send(JSON.stringify({command: "get_user", username: user}))
