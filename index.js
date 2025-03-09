@@ -48,7 +48,8 @@ const timeZones = {
   delusions: "Europe/London",
   engineerrunner: "Europe/London",
   mybearworld: "Europe/Berlin",
-  wlodekm: "Europe/Kyiv"
+  pkmnq: "+08:00",
+  wlodekm: "Europe/Kyiv",
 }
 
 if (localStorage.getItem("theme") == null) {
