@@ -47,6 +47,7 @@ let text_replacements = {
 const timeZones = {
   delusions: "Europe/London",
   engineerrunner: "Europe/London",
+  notfenixio: "Europe/Madrid",
   mybearworld: "Europe/Berlin",
   noodles: "-06:00",
   pkmnq: "+08:00",
