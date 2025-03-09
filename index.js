@@ -66,7 +66,27 @@ marked.use({
     image(token) {
       return token.raw;
     }
-  }
+  },
+  extensions: [
+    {
+      name: "mention",
+      level: "inline",
+      start(src) { return src.match(/@/)?.index },
+      tokenizer(src, tokens) {
+        const match = src.match(/^@([a-z0-9\-_:]+)/);
+        if (match) {
+          return {
+            type: "mention",
+            raw: match[0],
+            user: match[1]
+          }
+        }
+      },
+      renderer(token) {
+        return `<a href="javascript:void showUser('${token.user}')">${token.raw}</a>`;
+      }
+    }
+  ]
 });
 
 const settings_template = {"replace_text": true, "detect_file_type": false, "debug": true, "imgbb_key": "", "presets": false }
