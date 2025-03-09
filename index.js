@@ -456,7 +456,8 @@ function logOut() {
 const emojify = (s) => {
   return s
     .replace(/:yuhhuh:/g, "<img src=\"https://cdn.discordapp.com/emojis/1227268820213698611.webp?size=24&quality=lossless\" style=\"vertical-align:middle\">")
-    .replace(/:nuhhuh:/g, "<img src=\"https://cdn.discordapp.com/emojis/1233290735999258664.webp?size=24&quality=lossless\" style=\"vertical-align:middle\">");
+    .replace(/:nuhhuh:/g, "<img src=\"https://cdn.discordapp.com/emojis/1233290735999258664.webp?size=24&quality=lossless\" style=\"vertical-align:middle\">")
+    .replace(/:me:/g, "<img src=\"https://cdn.discordapp.com/emojis/1221628997025267752.webp?size=24&quality=lossless\" style=\"vertical-align:middle\">");
 }
 
 function replyText(replies) {
