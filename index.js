@@ -48,6 +48,7 @@ const timeZones = {
   delusions: "Europe/London",
   engineerrunner: "Europe/London",
   mybearworld: "Europe/Berlin",
+  noodles: "-05:00",
   pkmnq: "+08:00",
   wlodekm: "Europe/Kyiv",
 }
