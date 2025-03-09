@@ -30,6 +30,7 @@ let last_ping = Date.now();
 //let buddies = [];
 //let online_buddies = [];
 let guest = false;
+let timeUpdate = null;
 
 let replace_text = false;
 let detect_file_type = false;
@@ -42,6 +43,12 @@ let text_replacements = {
     ":check:": "✅",
     ":b:": "🅱️"
 };
+
+const timeZones = {
+  delusions: "Europe/London",
+  engineerrunner: "Europe/London",
+  mybearworld: "Europe/Berlin"
+}
 
 if (localStorage.getItem("theme") == null) {
     localStorage.setItem("theme", "deer")
@@ -257,6 +264,21 @@ ws.onmessage = function (event) {
         document.getElementById("ud-avatar").src = incoming.user.avatar;
         document.getElementById("ud-display-name").innerText = incoming.user.display_name;
         document.getElementById("ud-username").innerText = "@" + incoming.user.username;
+        if (incoming.user.username in timeZones) {
+          document.getElementById("ud-tz-wrapper").classList.remove("hidden");
+          const formatter = new Intl.DateTimeFormat([], {
+            timeZone: timeZones[incoming.user.username],
+            dateStyle: "short",
+            timeStyle: "medium"
+          });
+          const updateTimeZone = () => {
+            document.getElementById("ud-tz").innerText = formatter.format(new Date());
+          };
+          updateTimeZone();
+          timeUpdate = setInterval(updateTimeZone, 500);
+        } else {
+          document.getElementById("ud-tz-wrapper").classList.add("hidden");
+        }
         document.getElementById("ud-created").innerText = new Date(incoming.user.created * 1000).toLocaleString();
         document.getElementById("ud-permissions").innerText = `Permissions: ${incoming.user.permissions.toString().toLowerCase().replaceAll(",", ", ")}`;
         document.getElementById("ud-special").innerHTML = ""
