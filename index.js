@@ -67,7 +67,7 @@ marked.use({
   breaks: true,
   renderer: {
     html(token) {
-      return token.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+      return token.raw.replace(/</g, "&lt;").replace(/>/g, "&gt;");
     },
     image(token) {
       return token.raw.replace(/</g, "&lt;").replace(/>/g, "&gt;");
