@@ -508,7 +508,8 @@ const emoji = {
   yuhhuh: "https://i.ibb.co/d4VsTJS4/1227268820213698611.webp",
   nuhhuh: "https://i.ibb.co/zHNfVwsF/nuhhuh.webp",
   me: "https://i.ibb.co/204mNMJp/me.webp",
-  keeneThumbsUp: "https://i.ibb.co/gbmr7LPh/keene-Thumbs-Up.png"
+  keeneThumbsUp: "https://i.ibb.co/gbmr7LPh/keene-Thumbs-Up.png",
+  goobert: "https://i.ibb.co/hRFdhGmw/goobert.png",
 }
 const emojify = (s) => {
   return s
