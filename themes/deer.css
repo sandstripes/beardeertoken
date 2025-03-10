@@ -259,3 +259,7 @@ a {
   border: 1px solid currentColor;
   padding: 0.25rem 0.5rem;
 }
+.md small {
+  opacity: .8;
+  font-size: .8rem;
+}

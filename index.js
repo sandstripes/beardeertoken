@@ -91,6 +91,24 @@ marked.use({
       renderer(token) {
         return `<a href="javascript:void showUser('${token.user}')">${token.raw}</a>`;
       }
+    },
+    {
+      name: "smalltext",
+      level: "inline",
+      start(src) { return src.match(/-#/)?.index },
+      tokenizer(src, tokens) {
+        const match = src.match(/^-#(.+?)(?:#-|$|(?=\n))/);
+        if (match) {
+          return {
+            type: "smalltext",
+            raw: match[0],
+            tokens: this.lexer.inlineTokens(match[1].trim()),
+          }
+        }
+      },
+      renderer(token) {
+        return `<small>${this.parser.parseInline(token.tokens)}</small>`;
+      }
     }
   ]
 });
