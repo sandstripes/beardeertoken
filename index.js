@@ -531,7 +531,7 @@ const emoji = {
 }
 const emojify = (s) => {
   return s
-    .replace(/:([a-zA-Z]+):/g, (s, name) =>
+    .replace(/:([a-zA-Z]+):/gi, (s, name) =>
       name in emoji ?
         `<img src=${emoji[name]} style="vertical-align: middle;" />`
       : s);
