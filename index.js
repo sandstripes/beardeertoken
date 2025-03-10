@@ -528,7 +528,8 @@ const emoji = {
   me: "https://i.ibb.co/204mNMJp/me.webp",
   keeneThumbsUp: "https://i.ibb.co/gbmr7LPh/keene-Thumbs-Up.png",
   goobert: "https://i.ibb.co/hRFdhGmw/goobert.png",
-  true: "https://i.ibb.co/kgfz2G6T/Screenshot-2025-03-04-172131.png"
+  true: "https://i.ibb.co/kgfz2G6T/Screenshot-2025-03-04-172131.png",
+  whar: "https://i.ibb.co/cXYmWqRk/1143938761919570000.png",
 }
 const emojify = (s) => {
   return s
