@@ -1,8 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap');
-
 body {
-    font-family: 'Noto Sans', sans-serif;
-    margin: 0px;
     background-color: #303030;
     color: #e6f0f6;
     color-scheme: dark;
@@ -10,181 +6,54 @@ body {
 button {
     background-color: #4c4c4c;
     color: #e6f0f6;
-    border: none;
-    border-radius: 4px;
-    padding: 8px;
-    font-family: 'Noto Sans', sans-serif;
-    margin-bottom: 4px;
 }
 button:hover {
     background-color: #434343;
-    cursor: pointer;
 }
 button:disabled, button[disabled] {
     background-color: #242424;
-    cursor: not-allowed;
 }
 input {
     background-color: #434343;
     color: #e6f0f6;
-    border: none;
-    border-radius: 4px;
-    padding: 8px;
-    font-family: 'Noto Sans', sans-serif;
-    margin-bottom: 4px;
-}
-#rl-username, #rl-password, #rl-username-s, #rl-password-s, #rl-invitecode, .rl-button {
-    width: 175px;
-    box-sizing: border-box;
-}
-.rl-button-a {
-    width: 58.3px;
-    box-sizing: border-box;
-}
-.scene {
-    margin: 8px;
 }
 #error-bar {
     background-color: #5394d2;
     color: #303030;
-    width: 100%;
-    padding: 4px;
-    box-sizing: border-box;
 }
 .ms-seperator {
     color: #4a4a4a;
 }
 hr {
-    display: block;
-    height: 1px;
-    border: 0;
     border-top: 1px solid #747474;
-    padding: 0;
-}
-.text-clickable {
-    text-decoration: underline;
-    cursor: pointer;
-}
-.clickable {
-    cursor: pointer;
-}
-.hidden {
-    display: none;
 }
 .post {
     background-color: #434343;
-    padding: 6px;
-    border-radius: 4px;
-    margin-bottom: 8px;
-    word-break: break-word;
-    overflow-wrap: break-word;
-    box-sizing: border-box;
-    width: 100%;
-}
-.mono {
-    font-family: monospace;
-}
-#ms-msg {
-    width:60vw;
-    box-sizing: border-box;
-}
-#ms-button-post {
-    box-sizing: border-box;
 }
 .pfp {
-    border-radius: 100%;
-    width: 36px;
-    height: 36px;
-    float: left;
-    margin-right: 8px;
-    margin-top: 2px;
     border: 2px #3e3e3e solid;
 }
 .album-cover {
-    border-radius: 4px;
-    width: 62px;
-    height: 62px;
-    float: left;
-    margin-right: 8px;
-    margin-top: 1px;
     border: 2px #3e3e3e solid;
 }
 #ud-lastfm-container {
-    width: 100%;
     background-color: #434343;
-    padding: 6px;
-    border-radius: 4px;
-    margin-top: 8px;
-    word-break: break-word;
-    overflow-wrap: break-word;
-    box-sizing: border-box;
 }
 #ud-bio-container {
-    width: 100%;
     background-color: #434343;
-    padding: 6px;
-    border-radius: 4px;
-    margin-top: 8px;
-    word-break: break-word;
-    overflow-wrap: break-word;
-    box-sizing: border-box;
 }
 .mc-container {
-    width: 100%;
     background-color: #383838;
-    padding: 6px;
-    border-radius: 4px;
-    margin-top: 8px;
-    word-break: break-word;
-    overflow-wrap: break-word;
-    box-sizing: border-box;
 }
 #mc-danger-container {
-    width: 100%;
     background-color: #422b2b;
-    padding: 6px;
-    border-radius: 4px;
-    margin-top: 8px;
-    word-break: break-word;
-    overflow-wrap: break-word;
-    box-sizing: border-box;
-}
-#mm-flex {
-    display: flex;
-    flex-wrap: wrap;
 }
 .mm-container {
-    width: auto;
     background-color: #383838;
-    padding: 12px;
-    border-radius: 4px;
-    margin: 8px;
-    word-break: break-word;
-    overflow-wrap: break-word;
-    box-sizing: border-box;
-    display: inline-block;
-    vertical-align: top;
-    flex: 1;
-}
-.header-notop {
-    margin-top: 0;
 }
 a {
     color: #e6f0f6;
 }
-.attachment {
-    margin-left:4px;
-    margin-right:4px;
-    max-height:25vw;
-    max-width:25vw;
-    width:auto;
-    height:auto;
-}
 .reply {
     color: #c8c8c8;
-    font-style: italic;
-}
-.inline-icon {
-    vertical-align: bottom;
-    font-size: 18px !important;
 }

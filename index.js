@@ -1,3 +1,22 @@
+const md = markdownit({
+    highlight: function (str, lang) {
+      if (lang && hljs.getLanguage(lang)) {
+        try {
+          return hljs.highlight(str, { language: lang }).value;
+        } catch (__) {}
+      }
+  
+      return ''; // use external default escaping
+    },
+    html: false,
+    linkify: true,
+    typographer: false,
+    breaks: true,
+    image: false
+  })
+  .disable('image');
+  
+
 document.getElementById("rl-username").value = "";
 document.getElementById("rl-password").value = "";
 document.getElementById("rl-invitecode").value = "";
@@ -14,8 +33,8 @@ function closePopup () {
     document.getElementById("error-bar").classList.add("hidden");
 };
 
-const version = "1.5.7b";
-const serverVersion = "Sokt-1.5.7b";
+const version = "1.6.0b";
+const serverVersion = "Helium-1.0.0a";
 let last_cmd = "";
 let username = "";
 let logged_in = false; // unused?
@@ -43,7 +62,7 @@ let text_replacements = {
 };
 
 if (localStorage.getItem("theme") == null) {
-    localStorage.setItem("theme", "deer")
+    localStorage.setItem("theme", "helium")
 }
 
 document.getElementById("top-style").href = `/themes/${localStorage.getItem("theme")}.css`;
@@ -55,7 +74,7 @@ if (localStorage.getItem("settings") == null) {
 };
 
 if (localStorage.getItem("last_inbox_id") == null) {
-    localStorage.setItem("last_inbox_id", 0)
+    localStorage.setItem("last_inbox_id", "")
 };
 
 let settings = JSON.parse(localStorage.getItem("settings"));
@@ -127,13 +146,13 @@ async function uploadFile(file) {
 };
 
 const prodUrl = "wss://sokt.fraudulent.loan";
-const loclUrl = "ws://127.0.0.1:3621";
+const loclUrl = "ws://127.0.0.1:3636";
 
 //
 //   DO NOT FORGET TO CHANGE THE URL
 //
 
-const ws = new WebSocket(prodUrl)
+const ws = new WebSocket(loclUrl)
 
 ws.onmessage = function (event) {
     let incoming = JSON.parse(event.data);
@@ -160,7 +179,7 @@ ws.onmessage = function (event) {
         } else {
             username = localStorage.getItem("username").toLowerCase();
             last_cmd = "login_token";
-            ws.send(JSON.stringify({command: "login_token", username: username, token: localStorage.getItem("token"), client: `BossDeer ${version}`}))
+            ws.send(JSON.stringify({command: "login_token", token: localStorage.getItem("token"), client: `BossDeer ${version}`}))
         };
     } else if (incoming.command == "ulist") {
         ulist = Object.keys(incoming.ulist);
@@ -172,7 +191,7 @@ ws.onmessage = function (event) {
             if (incoming.code == "banned") {
                 displayError(`Account is banned until ${new Date(incoming.banned_until * 1000).toLocaleString()} for "${incoming.ban_reason}"`)
             } else {
-                displayError(`We hit an error. ("${incoming.code}" from ${incoming.form})`);
+                displayError(`We hit an error. ${incoming.context} (${incoming.code})`);
             };
         } else if (incoming.listener == "PingBossDeer") {
             last_ping = Date.now();
@@ -216,9 +235,9 @@ ws.onmessage = function (event) {
             loadPost(incoming.inbox[i], true, true);
         };
         if (!incoming.inbox.length == 0) {
-            if (localStorage.getItem("last_inbox_id") != incoming.inbox[0].id) {
+            if (localStorage.getItem("last_inbox_id") != incoming.inbox[0]._id) {
                 document.getElementById("ms-button-inbox").innerText = "Inbox*";
-                localStorage.setItem("last_inbox_id", incoming.inbox[0].id)
+                localStorage.setItem("last_inbox_id", incoming.inbox[0]._id)
             } else {
                 document.getElementById("ms-button-inbox").innerText = "Inbox";
             }
@@ -226,7 +245,7 @@ ws.onmessage = function (event) {
     } else if (last_cmd == "get_user" && "user" in incoming) {
         var bio;
         document.getElementById("ud-d-tags").innerHTML = "";
-        if (incoming.user.bio == "") {bio = "This user does not have a bio."} else {bio = incoming.user.bio};
+        if (incoming.user.profile.bio == "") {bio = "This user does not have a bio."} else {bio = incoming.user.profile.bio};
         document.getElementById("ud-avatar").src = incoming.user.avatar;
         document.getElementById("ud-display-name").innerText = incoming.user.display_name;
         document.getElementById("ud-username").innerText = "@" + incoming.user.username;
@@ -246,7 +265,7 @@ ws.onmessage = function (event) {
             document.getElementById("ud-banned").classList.add("hidden");
         };
         document.getElementById("ud-bio").innerText = bio;
-        if (incoming.user.lastfm) {
+        if (incoming.user.profile.lastfm) {
             document.getElementById("ud-lastfm-container").classList.add("hidden");
             var xhttp = new XMLHttpRequest();
             xhttp.onreadystatechange = function() {
@@ -266,7 +285,7 @@ ws.onmessage = function (event) {
                     };
                 }
             };
-            xhttp.open("GET", `https://lastfm-last-played.biancarosa.com.br/${incoming.user.lastfm}/latest-song`, true);
+            xhttp.open("GET", `https://lastfm-last-played.biancarosa.com.br/${incoming.user.profile.lastfm}/latest-song`, true);
             xhttp.send();
         } else {
             document.getElementById("ud-lastfm-container").classList.add("hidden")
@@ -303,7 +322,7 @@ ws.onerror = function (event) {
 function updateUlist() {
     var ulstring = "";
     for (const i in ulist) {
-        ulstring += `<span class="clickable" title="${raw_ulist[ulist[i]]}" onclick="showUser('${ulist[i]}');">${ulist[i]}</span>` //vulnerable!
+        ulstring += `<span class="clickable" title="${raw_ulist[ulist[i]]['client']}" onclick="showUser('${ulist[i]}');">${ulist[i]}</span>` //vulnerable!
         if (i != ulist.length - 1) {
             ulstring += ", "
         };
@@ -418,7 +437,7 @@ function logOut() {
 };
 
 function loadPost(resf, isFetch, isInbox) {
-    if (settings.debug) { console.log("Loading post " + resf.id) };
+    if (settings.debug) { console.log("Loading post " + resf._id) };
     var tsr = resf.created
     var tsra = tsr * 1000
     var tsrb = Math.trunc(tsra)
@@ -436,58 +455,63 @@ function loadPost(resf, isFetch, isInbox) {
 
     var post = document.createElement("div");
     post.classList.add("post");
+    
+    if (!isInbox) {
+        var avatar = document.createElement("img");
+        if (resf.author.avatar) {
+            avatar.src = resf.author.avatar;
+        } else {
+            avatar.src = "/assets/default.png";
+        };
+        avatar.setAttribute("onerror", "this.src = '/assets/default.png';")
+        avatar.setAttribute("onclick", `showUser("${resf.author.username}");`); // TODO: use this more often
+        avatar.classList.add("clickable");
+        avatar.classList.add("pfp");
+        post.appendChild(avatar);
 
-    var avatar = document.createElement("img");
-    if (resf.author.avatar) {
-        avatar.src = resf.author.avatar;
-    } else {
-        avatar.src = "/assets/default.png";
-    };
-    avatar.setAttribute("onerror", "this.src = '/assets/default.png';")
-    avatar.setAttribute("onclick", `showUser("${resf.author.username}");`); // TODO: use this more often
-    avatar.classList.add("clickable");
-    avatar.classList.add("pfp");
-    post.appendChild(avatar);
+        var postUsername = document.createElement("span");
+        postUsername.innerHTML = `<b>${resf.author.display_name}</b> (<span class="mono">@${resf.author.username}</span>)`;
+        //console.log(`${resf.author.username}: ${resf.author.verified}, ${resf.author.bot}`)
+        if (resf.author.verified) {
+            postUsername.innerHTML += ' <span title="This user is verified." class="inline-icon material-symbols-outlined">check_circle</span>'
+        };
+        if (resf.author.bot) {
+            postUsername.innerHTML += ' <span title="This user is a robot." class="inline-icon material-symbols-outlined">smart_toy</span>'
+        };
+        postUsername.setAttribute("onclick", `showUser("${resf.author.username}");`);
+        postUsername.classList.add("clickable");
+        post.appendChild(postUsername);
 
-    var postUsername = document.createElement("span");
-    postUsername.innerHTML = `<b>${resf.author.display_name}</b> (<span class="mono">@${resf.author.username}</span>)`;
-    //console.log(`${resf.author.username}: ${resf.author.verified}, ${resf.author.bot}`)
-    if (resf.author.verified) {
-        postUsername.innerHTML += ' <span title="This user is verified." class="inline-icon material-symbols-outlined">check_circle</span>'
-    };
-    if (resf.author.bot) {
-        postUsername.innerHTML += ' <span title="This user is a robot." class="inline-icon material-symbols-outlined">smart_toy</span>'
-    };
-    postUsername.setAttribute("onclick", `showUser("${resf.author.username}");`);
-    postUsername.classList.add("clickable");
-    post.appendChild(postUsername);
-
-    var breaklineA = document.createElement("br");
-    post.appendChild(breaklineA);
+        var breaklineA = document.createElement("br");
+        post.appendChild(breaklineA);
+    }
 
     var postDetails = document.createElement("small");
     if (isInbox) {
         postDetails.innerHTML = `${sts}`;
     } else {
-        postDetails.innerHTML = `${sts} - <span class="text-clickable" onclick="reply(${resf.id});">Reply</span>`;
+        postDetails.innerHTML = `${sts} - <span class="text-clickable" onclick="reply('${resf._id}');">Reply</span>`;
     };
     post.appendChild(postDetails);
     
     var breaklineB = document.createElement("br");
     post.appendChild(breaklineB);
     
-    if (resf.replies.length != 0) {
-        var replyContent = document.createElement("span");
-        replyContent.innerText = replies_loaded;
-        replyContent.classList.add("reply");
-        post.appendChild(replyContent);
-        
-        var horlineB = document.createElement("hr");
-        post.appendChild(horlineB);
-    };
+    if (!isInbox) {
+        if (resf.replies.length != 0) {
+            var replyContent = document.createElement("span");
+            replyContent.innerText = replies_loaded;
+            replyContent.classList.add("reply");
+            post.appendChild(replyContent);
+            
+            var horlineB = document.createElement("hr");
+            post.appendChild(horlineB);
+        };
+    }
 
     var postContent = document.createElement("span");
-    postContent.innerText = resf.content;
+    postContent.classList.add("post-content");
+    postContent.innerHTML = md.render(resf.content);
     post.appendChild(postContent);
 
     if (resf.attachments.length != 0) {
@@ -496,7 +520,7 @@ function loadPost(resf, isFetch, isInbox) {
         
         var attachmentDetails = document.createElement("span");
         for (const x in resf.attachments) {
-            attachmentDetails.innerHTML += `<a target="_blank" rel="noopener noreferrer" id="${resf.id}-attachment-${Number(x)}">Loading...</a><br>`
+            attachmentDetails.innerHTML += `<a target="_blank" rel="noopener noreferrer" id="p-${resf._id}-attachment-${Number(x)}">Loading...</a><br>`
         }
         post.appendChild(attachmentDetails)
 
@@ -507,12 +531,12 @@ function loadPost(resf, isFetch, isInbox) {
         for (let i = 0; i < resf.attachments.length; i++) {
             var dft_debug = {
                 "dft_enabled": detect_file_type,
-                "postid": resf.id,
+                "postid": resf._id,
                 "attachment": i,
                 "pth": null,
                 "type": null
             };
-            if (detect_file_type) {
+            if (detect_file_type == "Bypass") {
                 var pth = new URL(resf.attachments[i]).pathname;
                 if (pth[pth.length - 1] == "/") {
                     pth = pth.slice(0, -1)
@@ -522,7 +546,7 @@ function loadPost(resf, isFetch, isInbox) {
                 if (["mp4", "webm", "mov"].includes(pth)) {
                     dft_debug.type = "video";
                     let attachment = document.createElement("video");
-                    attachment.id = `${resf.id}-attachment-${Number(i)}-video`
+                    attachment.id = `p-${resf._id}-attachment-${Number(i)}-video`
                     attachment.classList.add("attachment");
                     attachment.setAttribute("onerror", "this.remove();");
                     attachment.controls = true;
@@ -540,7 +564,7 @@ function loadPost(resf, isFetch, isInbox) {
                 } else if (["mp3", "wav", "ogg"].includes(pth)) {
                     dft_debug.type = "audio";
                     let attachment = document.createElement("audio");
-                    attachment.id = `${resf.id}-attachment-${Number(i)}-audio`
+                    attachment.id = `p-${resf._id}-attachment-${Number(i)}-audio`
                     attachment.classList.add("attachment");
                     attachment.setAttribute("onerror", "this.remove();");
                     attachment.controls = true;
@@ -574,8 +598,8 @@ function loadPost(resf, isFetch, isInbox) {
     }
 
     for (const x in resf.attachments) {
-        document.getElementById(`${resf.id}-attachment-${Number(x)}`).innerText = `Attachment ${Number(x) + 1} (${resf.attachments[x]})`
-        document.getElementById(`${resf.id}-attachment-${Number(x)}`).href = resf.attachments[x];
+        document.getElementById(`p-${resf._id}-attachment-${Number(x)}`).innerText = `Attachment ${Number(x) + 1} (${resf.attachments[x]})`
+        document.getElementById(`p-${resf._id}-attachment-${Number(x)}`).href = resf.attachments[x];
     }
 };
 
@@ -625,13 +649,13 @@ function resetInvites() {
 
 function setDisplayName() {
     last_cmd = "set_display_name";
-    ws.send(JSON.stringify({command: "set_display_name", display_name: document.getElementById("mc-display-name").value}))
+    ws.send(JSON.stringify({command: "set_property", property: "display_name", value: document.getElementById("mc-display-name").value}))
     document.getElementById("mc-display-name").value = "";
 };
 
 function setAvatar() {
     last_cmd = "set_avatar";
-    ws.send(JSON.stringify({command: "set_avatar", avatar: document.getElementById("mc-avatar").value}))
+    ws.send(JSON.stringify({command: "set_property", property: "avatar", value: document.getElementById("mc-avatar").value}))
     document.getElementById("mc-avatar").value = "";
 };
 
@@ -643,13 +667,13 @@ function setBio() {
             bio = bio.replaceAll(i, text_replacements[i]);
         };
     };
-    ws.send(JSON.stringify({command: "set_bio", bio: bio}))
+    ws.send(JSON.stringify({command: "set_property", property: "bio", value: bio}))
     document.getElementById("mc-bio").value = "";
 };
 
 function setLastfm() {
     last_cmd = "set_lastfm";
-    ws.send(JSON.stringify({command: "set_lastfm", lastfm: document.getElementById("mc-lastfm").value}))
+    ws.send(JSON.stringify({command: "set_property", property: "lastfm", value: document.getElementById("mc-lastfm").value}))
     document.getElementById("mc-lastfm").value = "";
 };
 
@@ -787,10 +811,6 @@ function setTheme(theme) {
 
 function ping() {
     ws.send(JSON.stringify({command: "ping", listener: "PingBossDeer"}))
-    if (last_ping + 5000 <= Date.now()) {
-        console.warn(`No pong in ${Date.now() - (last_ping + 5000)}ms!`)
-        //displayError("We appear to have disconnected... {{Reload}}?");
-    }
 };
 
 setInterval(ping, 2500)
