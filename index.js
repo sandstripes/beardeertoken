@@ -508,10 +508,11 @@ const emoji = {
   yuhhuh: "https://i.ibb.co/d4VsTJS4/1227268820213698611.webp",
   nuhhuh: "https://i.ibb.co/zHNfVwsF/nuhhuh.webp",
   me: "https://i.ibb.co/204mNMJp/me.webp",
+  keeneThumbsUp: "https://i.ibb.co/gbmr7LPh/keene-Thumbs-Up.png"
 }
 const emojify = (s) => {
   return s
-    .replace(/:([a-z]+):/g, (s, name) =>
+    .replace(/:([a-zA-Z]+):/g, (s, name) =>
       name in emoji ?
         `<img src=${emoji[name]} style="vertical-align: middle;" />`
       : s);
