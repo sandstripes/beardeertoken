@@ -61,25 +61,3 @@ a {
 #ms-replies:not(:empty) {
   display: block;
 }
-.md p,
-.md ul,
-.md ol {
-  margin-block: 0;
-}
-.md blockquote {
-  margin-inline: 0;
-  margin-block: 0;
-  border-left: 2px solid currentcolor;
-  padding-left: 5px;
-}
-.md table {
-  border-collapse: collapse;
-}
-.md th, .md td {
-  border: 1px solid currentColor;
-  padding: 0.25rem 0.5rem;
-}
-.md small {
-  opacity: .8;
-  font-size: .8rem;
-}
