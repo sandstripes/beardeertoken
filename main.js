@@ -290,6 +290,7 @@ ws.onmessage = function (event) {
           const updateTimeZone = () => {
             document.getElementById("ud-tz").innerText = formatter.format(new Date());
           };
+          clearInterval(timeUpdate);
           updateTimeZone();
           timeUpdate = setInterval(updateTimeZone, 500);
         } else {
