@@ -1,0 +1,184 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+
+@font-face {
+  font-family: "sitelen seli kiwen";
+  src: url("assets/sitelenselikiwen/sitelenselikiwenjuniko.ttf");
+  size-adjust: 130%;
+}
+
+body {
+    font-family: 'Noto Sans', sans-serif, serif, 'sitelen seli kiwen';
+    margin: 0px;
+}
+button {
+    border: none;
+    border-radius: 4px;
+    padding: 8px;
+    font-family: 'Noto Sans', sans-serif, serif, 'sitelen seli kiwen';
+    margin-bottom: 4px;
+}
+button:hover {
+    cursor: pointer;
+}
+button:disabled, button[disabled] {
+    cursor: not-allowed;
+}
+input, textarea {
+    border: none;
+    border-radius: 4px;
+    padding: 8px;
+    font-family: 'Noto Sans', sans-serif, serif, 'sitelen seli kiwen';
+    margin-bottom: 4px;
+    font-size: 14px;
+    margin-bottom: 4px;
+    margin-block: 0;
+    vertical-align: middle;
+    resize: none;
+}
+#rl-username, #rl-password, #rl-username-s, #rl-password-s, #rl-invitecode, .rl-button {
+    width: 175px;
+    box-sizing: border-box;
+}
+.rl-button-a {
+    width: 58.3px;
+    box-sizing: border-box;
+}
+.scene {
+    margin: 8px;
+}
+#error-bar {
+    width: 100%;
+    padding: 4px;
+    box-sizing: border-box;
+}
+hr {
+    display: block;
+    height: 1px;
+    border: 0;
+    border-top: 1px solid;
+    padding: 0;
+}
+.text-clickable {
+    text-decoration: underline;
+    cursor: pointer;
+}
+.clickable {
+    cursor: pointer;
+}
+.hidden {
+    display: none;
+}
+.post {
+    padding: 6px;
+    border-radius: 4px;
+    margin-bottom: 8px;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    box-sizing: border-box;
+    width: 100%;
+}
+.mono {
+    font-family: monospace;
+}
+#ms-msg {
+    width:60vw;
+    box-sizing: border-box;
+}
+#ms-button-post {
+    box-sizing: border-box;
+}
+.pfp {
+    border-radius: 100%;
+    width: 36px;
+    height: 36px;
+    float: left;
+    margin-right: 8px;
+    margin-top: 2px;
+    border: 2px solid;
+}
+.album-cover {
+    border-radius: 4px;
+    width: 62px;
+    height: 62px;
+    float: left;
+    margin-right: 8px;
+    margin-top: 1px;
+    border: 2px solid;
+}
+#ud-lastfm-container {
+    width: 100%;
+    padding: 6px;
+    border-radius: 4px;
+    margin-top: 8px;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    box-sizing: border-box;
+}
+#ud-bio-container {
+    width: 100%;
+    padding: 6px;
+    border-radius: 4px;
+    margin-top: 8px;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    box-sizing: border-box;
+}
+.mc-container {
+    width: 100%;
+    padding: 6px;
+    border-radius: 4px;
+    margin-top: 8px;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    box-sizing: border-box;
+}
+#mc-danger-container {
+    width: 100%;
+    padding: 6px;
+    border-radius: 4px;
+    margin-top: 8px;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    box-sizing: border-box;
+}
+#mm-flex {
+    display: flex;
+    flex-wrap: wrap;
+}
+.mm-container {
+    width: auto;
+    padding: 12px;
+    border-radius: 4px;
+    margin: 8px;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    box-sizing: border-box;
+    display: inline-block;
+    vertical-align: top;
+    flex: 1;
+}
+.header-notop {
+    margin-top: 0;
+}
+.attachment {
+    margin-left:4px;
+    margin-right:4px;
+    max-height:25vw;
+    max-width:25vw;
+    width:auto;
+    height:auto;
+}
+.reply {
+    font-style: italic;
+}
+.inline-icon {
+    vertical-align: bottom;
+    font-size: 18px !important;
+}
+.post-content p {
+    padding: 0;
+    margin: 0;
+}
+.post-content h1, h2, h3, h4, h5, h6 {
+    margin: 2px;
+}
