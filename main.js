@@ -694,7 +694,7 @@ function sendPost() {
             content = content.replaceAll(i, text_replacements[i]);
         };
     };
-    ws.send(JSON.stringify({command: "post", content: content, replies: replies.map((reply) => reply.id), attachments: attachments}))
+    ws.send(JSON.stringify({command: "post", content: content, replies: replies.map((reply) => reply._id), attachments: attachments}))
     document.getElementById("ms-msg").value = "";
     resizePostBox();
     attachments = [];
