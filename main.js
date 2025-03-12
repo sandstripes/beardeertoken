@@ -14,7 +14,8 @@ const md = markdownit({
     breaks: true,
     image: false
   })
-  .disable('image');
+  .disable('image')
+  .disable('code');
   
 
 document.getElementById("rl-username").value = "";
@@ -33,7 +34,7 @@ function closePopup () {
     document.getElementById("error-bar").classList.add("hidden");
 };
 
-const version = "1.6.0b";
+const version = "1.6.1b";
 const serverVersion = "Helium-1.0.0a";
 let last_cmd = "";
 let username = "";
