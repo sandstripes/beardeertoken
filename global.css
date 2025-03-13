@@ -4,6 +4,7 @@
   font-family: "sitelen seli kiwen";
   src: url("assets/sitelenselikiwen/sitelenselikiwenjuniko.ttf");
   size-adjust: 130%;
+  unicode-range: U+F????;
 }
 
 body {
