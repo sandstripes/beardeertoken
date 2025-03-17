@@ -370,8 +370,8 @@ ws.onerror = function (event) {
 const clientIcon = (c) =>
   c.startsWith("BossDeer ") ? " 🦌"
   : c.startsWith("BearDeer" ) ? " 🐻"
-  : c.startsWith("BetterDeer ") ? "✨"
-  : c.startsWith("PresetDeer ") ? "🧩"
+  : c.startsWith("BetterDeer ") ? " ✨"
+  : c.startsWith("PresetDeer ") ? " 🧩"
   : c.startsWith("Kansas") ? " 🇺🇸"
   : c === "Unknown" ? "❓"
   : "🤖"
