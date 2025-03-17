@@ -7,8 +7,13 @@
   unicode-range: U+F????;
 }
 
+@font-face {
+  font-family: "Noto Color Emoji";
+  src: url("assets/notocoloremoji/NotoColorEmoji-Regular-NoSVG.ttf");
+}
+
 body {
-    font-family: 'Noto Sans', sans-serif, serif, 'sitelen seli kiwen';
+    font-family: 'Noto Sans', sans-serif, serif, "Noto Color Emoji", 'sitelen seli kiwen';
     margin: 0px;
 }
 button {
