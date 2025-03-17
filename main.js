@@ -907,7 +907,80 @@ function toggleLock() {
 
 function textinput() {
     // TODO
+}
+
+const suggestionsEl = document.querySelector("#ms-suggestions");
+function selection(el) {
+  const suggestions = determineSuggestions(el);
+  suggestionsEl.innerHTML = "";
+  if (suggestions === null) return;
+  suggestionsEl.append(...suggestions.map(({ desc, string, newPos }) => {
+    const btn = document.createElement("button");
+    btn.textContent = desc;
+    btn.addEventListener("click", () => {
+      el.value = string;
+      el.setSelectionRange(newPos, newPos);
+      el.focus();
+      selection(el);
+    })
+    return btn;
+  }))
 };
+
+function determineSuggestions(el) {
+  suggestionsEl.classList.remove("hidden");
+  if (el.selectionStart !== el.selectionEnd) return null;
+  const botSuggestions = determineBotSuggestions(el);
+  if (botSuggestions !== null) return botSuggestions;
+  const pre = el.value.slice(0, el.selectionStart);
+  const post = el.value.slice(el.selectionStart);
+  const mentionMatch = pre.match(/@([a-zA-Z\-_0-9]*)$/);
+  if (mentionMatch) {
+    const usernamePrefix = mentionMatch[1];
+    const matchingUsers = ulist.filter((username) => username !== usernamePrefix && username.startsWith(usernamePrefix));
+    return matchingUsers.map((user) => ({
+      desc: "@" + user,
+      string: pre.slice(0, -mentionMatch[0].length) + "@" + user +
+        (post.startsWith(" ") ? "" : " ") + post,
+      newPos: el.selectionStart + (user.length - usernamePrefix.length)
+    }));
+  }
+  return null;
+}
+
+
+const BOTS = [
+  {
+    showIf: () => ulist.includes("bot"),
+    prefix: "/",
+    commands: ["help", "ping", "whoami", "dice", "expose ", "grrr", "me", "orange", "work", "fish", "about", "gold", "glungus", "thesoupiscoldandthesaladishot"],
+  },
+  {
+    showIf: () => ulist.includes("h"),
+    prefix: "@h ",
+    commands: ["elp", "quote", "cat", "death", "math "]
+  }
+]
+function determineBotSuggestions(el) {
+  if (el.selectionStart !== el.value.length) return null;
+  const bot = BOTS.find(
+    (bot) => el.value.startsWith(bot.prefix) && bot.showIf()
+  );
+  if (!bot) return null;
+  return bot.commands
+    .map((command) => bot.prefix + command)
+    .filter((command) => command !== el.value && command.startsWith(el.value))
+    .map((command) => ({
+      desc: command.trim(),
+      string: command,
+      newPos: command.length,
+    }));
+}
+
+const msgBox = document.querySelector("#ms-msg");
+["touchstart", "keyup", "mouseup", "keydown", "focus"].forEach((e) => {
+  msgBox.addEventListener(e, () => selection(msgBox));
+})
 
 function setTheme(theme) {
     localStorage.setItem("theme", theme)

@@ -61,7 +61,10 @@
                 <button id="ms-button-presets" onclick="updateStg('presets')">MK8 Presets</button>
                 <button onclick="addAttachment();">URL...</button> 
                 <button onclick="addUpload();">+</button> 
-                <textarea id="ms-msg" maxlength=2000 oninput="textinput();" autocomplete="off" onkeydown="if (event.key === 'Enter' && !event.shiftKey) {event.preventDefault(); sendPost();} if (event.key === 'Escape') { clearAll() }; resizePostBox();" placeholder="What's on your mind?" type="text" rows="1"></textarea>
+                <div id="ms-msg-wrapper">
+                  <textarea id="ms-msg" maxlength=2000 oninput="textinput()" autocomplete="off" onkeydown="if (event.key === 'Enter' && !event.shiftKey) {event.preventDefault(); sendPost();} if (event.key === 'Escape') { clearAll() }; if (event.key === 'Tab') { const btn = document.querySelector('#ms-suggestions').firstChild; if (btn) { btn.click(); event.preventDefault(); } } resizePostBox();" placeholder="What's on your mind?" type="text" rows="1"></textarea>
+                  <div id="ms-suggestions"></div>
+                </div>
                 <span hidden id="ms-presets">
                   <button onclick="sendPreset(this)">Hello!</button>
                   <button onclick="sendPreset(this)">Good luck!</button>
