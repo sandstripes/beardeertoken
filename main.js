@@ -934,6 +934,7 @@ function determineSuggestions(el) {
   if (botSuggestions !== null) return botSuggestions;
   const pre = el.value.slice(0, el.selectionStart);
   const post = el.value.slice(el.selectionStart);
+  console.log(el.selectionStart, JSON.stringify(pre), JSON.stringify(post));
   const mentionMatch = pre.match(/@([a-zA-Z\-_0-9]*)$/);
   if (mentionMatch) {
     const usernamePrefix = mentionMatch[1];
@@ -942,7 +943,7 @@ function determineSuggestions(el) {
       desc: "@" + user,
       string: pre.slice(0, -mentionMatch[0].length) + "@" + user +
         (post.startsWith(" ") ? "" : " ") + post,
-      newPos: el.selectionStart + (user.length - usernamePrefix.length)
+      newPos: el.selectionStart + 1 + (user.length - usernamePrefix.length)
     }));
   }
   return null;
