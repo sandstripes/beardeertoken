@@ -57,7 +57,3 @@ a {
 .reply {
     color: #c8c8c8;
 }
-
-#ms-replies:not(:empty) {
-  display: block;
-}

@@ -227,3 +227,7 @@ hr {
   opacity: .8;
   font-size: .8rem;
 }
+
+#ms-replies:not(:empty) {
+  display: block;
+}
