@@ -34,7 +34,7 @@ function closePopup () {
     document.getElementById("error-bar").classList.add("hidden");
 };
 
-const version = "1.6.2b";
+const version = "1.6.3b";
 const serverVersion = "Helium-1.0.0a";
 let last_cmd = "";
 let username = "";
@@ -77,11 +77,16 @@ const timeZones = {
   wlodekm: "Europe/Kyiv",
 }
 
-if (localStorage.getItem("theme") == null) {
-    localStorage.setItem("theme", "helium")
+if (localStorage.getItem("beardeer:theme") == null) {
+    localStorage.setItem("beardeer:theme", "helium")
 }
 
-document.getElementById("top-style").href = `themes/${localStorage.getItem("theme")}.css`;
+if (localStorage.getItem("customCSS")) {
+    document.getElementById("custom-style").innerText = localStorage.getItem("beardeer:customCSS");
+    document.getElementById("mc-theme-custom").value = localStorage.getItem("beardeer:customCSS");
+}
+
+document.getElementById("top-style").href = `/themes/${localStorage.getItem("beardeer:theme")}.css`;
 
 const settings_template = {"replace_text": true, "detect_file_type": false, "debug": true, "imgbb_key": "", "presets": false }
 
@@ -179,8 +184,13 @@ async function uploadFile(file) {
 };
 
 document.getElementById("mw-new").innerHTML = md.render(
-`*Version 1.6.2b - March 22nd*
+`*Version 1.6.3b - March 22nd*
 
+## 1.6.3b additions
+### Custom CSS
+You can put custom CSS in settings under Theme.
+
+## 1.6.2b additions
 ### Post editing and deletion
 You can now edit and delete posts! Simply use the respective "Edit" and "Delete" buttons on your posts.
 Please note that this does *not* update the contents of replies in real-time just yet!
@@ -404,16 +414,6 @@ function updateUlist() {
         if (i != ulist.length - 1) {
             ulstring += ", "
         };
-        //if (guest == false) {
-            //console.log("buddy");
-            //var old_online_buddies = online_buddies;
-            //online_buddies = [];
-            //console.log(ulist[i]);
-            //console.log(ulist[i] in buddies);
-            //if (buddies.includes(ulist[i])) {
-                //online_buddies.push(ulist[i]);
-            //};
-        //}
     };
     if (!(ulist.includes(username)) && ulist.length != 0 && guest == false) {
         document.getElementById("ms-ulist").innerHTML = `${ulist.length} user online (${ulstring})❓ (Try <a href='javascript:window.location.reload();'>refreshing the page</a>?)`;
@@ -430,20 +430,6 @@ function updateUlist() {
     } else {
         document.getElementById("ms-ulist").innerHTML = `${ulist.length} users online (${ulstring})`;
     };
-    //if (guest == false) {
-        //for (const i in online_buddies) {
-            //if (!old_online_buddies.includes(i)) {
-                //var audio = new Audio('nudge.mp3');
-                //audio.play();
-                //break;
-            //}
-        //}
-        //if (buddies.length == 0) {
-            //document.getElementById("ms-button-buddies").innerText = `Buddies`;
-        //} else {
-            //document.getElementById("ms-button-buddies").innerText = `Buddies (${online_buddies.length} online)`;
-        //};
-    //};
 }
 
 function switchScene (newScene, isguest) {
@@ -655,9 +641,8 @@ function loadPost(resf, isFetch, isInbox) {
                     attachment.setAttribute("onerror", "this.remove();");
                     post.appendChild(attachment);
         }
-
+    }
         // End of provided code
-    };
     
     var postboxid;
     if (isInbox) {postboxid = "mi-posts"} else {postboxid = "ms-posts"}; // this oneliner is ugly imo
@@ -672,7 +657,7 @@ function loadPost(resf, isFetch, isInbox) {
         document.getElementById(`p-${resf._id}-attachment-${Number(x)}`).innerText = `Attachment ${Number(x) + 1} (${resf.attachments[x]})`
         document.getElementById(`p-${resf._id}-attachment-${Number(x)}`).href = resf.attachments[x];
     }
-};
+}
 
 function sendPreset(el) {
   document.getElementById("ms-msg").value = el.textContent;
@@ -1035,8 +1020,14 @@ const msgBox = document.querySelector("#ms-msg");
 })
 
 function setTheme(theme) {
-    localStorage.setItem("theme", theme)
+    localStorage.setItem("beardeer:theme", theme)
     document.getElementById("top-style").href = `themes/${theme}.css`;
+}
+
+function setCustomTheme() {
+    var ccss = document.getElementById("mc-theme-custom").value;
+    localStorage.setItem("customCSS", ccss);
+    document.getElementById("custom-style").innerText = ccss;
 }
 
 function ping() {

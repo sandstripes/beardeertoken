@@ -1,59 +1,20 @@
-body {
-    background-color: #303030;
-    color: #e6f0f6;
-    color-scheme: dark;
-}
-button {
-    background-color: #4c4c4c;
-    color: #e6f0f6;
-}
-button:hover {
-    background-color: #434343;
-}
-button:disabled, button[disabled] {
-    background-color: #242424;
-}
-input, textarea {
-    background-color: #434343;
-    color: #e6f0f6;
-}
-#error-bar {
-    background-color: #5394d2;
-    color: #303030;
-}
-.ms-seperator {
-    color: #4a4a4a;
-}
-hr {
-    border-top: 1px solid #747474;
-}
-.post {
-    background-color: #434343;
-}
-.pfp {
-    border: 2px #3e3e3e solid;
-}
-.album-cover {
-    border: 2px #3e3e3e solid;
-}
-#ud-lastfm-container {
-    background-color: #434343;
-}
-#ud-bio-container {
-    background-color: #434343;
-}
-.mc-container {
-    background-color: #383838;
-}
-#mc-danger-container {
-    background-color: #422b2b;
-}
-.mm-container {
-    background-color: #383838;
-}
-a {
-    color: #e6f0f6;
-}
-.reply {
-    color: #c8c8c8;
+:root {
+    --deer-background: #303030;
+
+    --deer-foreground: #e6f0f6;
+    --deer-reply: #c8c8c8;
+
+    --deer-button: #4c4c4c;
+    --deer-button-hover: #434343;
+    --deer-button-disabled: #242424;
+
+    --deer-error: #5394d2;
+
+    --deer-seperator: #4a4a4a;
+    --deer-horizontalrule: #747474;
+
+    --deer-image-border: #3e3e3e;
+
+    --deer-container-background: #383838;
+    --deer-danger-background: #422b2b;
 }

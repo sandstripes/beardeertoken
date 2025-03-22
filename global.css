@@ -210,6 +210,71 @@ hr {
 .post-content h1, h2, h3, h4, h5, h6 {
     margin: 2px;
 }
+
+/* copied theme stuff */
+
+body {
+    background-color: var(--deer-background);
+    color: var(--deer-foreground);
+    color-scheme: dark;
+}
+button {
+    background-color: var(--deer-button);
+    color: var(--deer-foreground);
+}
+button:hover {
+    background-color: var(--deer-button-hover);
+}
+button:disabled, button[disabled] {
+    background-color: var(--deer-button-disabled);
+}
+input, textarea {
+    background-color: var(--deer-button-hover);
+    color: var(--deer-foreground);
+}
+#error-bar {
+    background-color: var(--deer-error);
+    color: var(--deer-background);
+}
+.ms-seperator {
+    color: var(--deer-seperator);
+}
+hr {
+    border-top: 1px solid var(--deer-horizontalrule);
+}
+.post {
+    background-color: var(--deer-button-hover);
+}
+.pfp {
+    border: 2px var(--deer-image-border) solid;
+}
+.album-cover {
+    border: 2px var(--deer-image-border) solid;
+}
+#ud-lastfm-container {
+    background-color: var(--deer-button-hover);
+}
+#ud-bio-container {
+    background-color: var(--deer-button-hover);
+}
+.mc-container {
+    background-color: var(--deer-container-background);
+}
+#mc-danger-container {
+    background-color: var(--deer-danger-background);
+}
+.mm-container {
+    background-color: var(--deer-container-background);
+}
+a {
+    color: var(--deer-foreground);
+}
+.reply {
+    color: var(--deer-reply);
+}
+
+
+/* markdown */
 .post-content blockquote {
   margin-inline: 0;
   margin-block: 0;
