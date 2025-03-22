@@ -545,7 +545,7 @@ function replyElement(replies) {
       replyContent.innerText = reply_loaded;
       replyContent.classList.add("reply");
       replyContent.classList.add("clickable");
-      replyContent.setAttribute("onclick", `document.getElementById("${replies[i]._id}").scrollIntoView();`)
+      replyContent.setAttribute("onclick", `document.getElementById("${replies[i]._id}").scrollIntoView({ behavior: "smooth" });`)
       el.appendChild(replyContent);
 
       let brl = document.createElement("br");
