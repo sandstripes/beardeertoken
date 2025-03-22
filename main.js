@@ -284,9 +284,6 @@ ws.onmessage = function (event) {
         document.getElementById("ud-created").innerText = new Date(incoming.user.created * 1000).toLocaleString();
         document.getElementById("ud-permissions").innerText = `Permissions: ${incoming.user.permissions.toString().toLowerCase().replaceAll(",", ", ")}`;
         document.getElementById("ud-special").innerHTML = ""
-        if (incoming.user.verified) {
-            document.getElementById("ud-d-tags").innerHTML += ' <span title="This user is verified." class="inline-icon material-symbols-outlined">check_circle</span>'
-        };
         if (incoming.user.bot) {
             document.getElementById("ud-d-tags").innerHTML += ' <span title="This user is a robot." class="inline-icon material-symbols-outlined">smart_toy</span>'
         };
@@ -471,10 +468,6 @@ function loadPost(resf, isFetch, isInbox) {
 
         var postUsername = document.createElement("span");
         postUsername.innerHTML = `<b>${resf.author.display_name}</b> (<span class="mono">@${resf.author.username}</span>)`;
-        //console.log(`${resf.author.username}: ${resf.author.verified}, ${resf.author.bot}`)
-        if (resf.author.verified) {
-            postUsername.innerHTML += ' <span title="This user is verified." class="inline-icon material-symbols-outlined">check_circle</span>'
-        };
         if (resf.author.bot) {
             postUsername.innerHTML += ' <span title="This user is a robot." class="inline-icon material-symbols-outlined">smart_toy</span>'
         };
