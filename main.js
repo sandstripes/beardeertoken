@@ -509,7 +509,7 @@ const emojify = (s) => {
     .replace(/:([a-zA-Z]+):/gi, (s, name) =>
       name in emoji ?
         `<img src=${emoji[name]} style="vertical-align: middle;" />`
-      : "noodlespfp" === name ? "this" : "");
+      : name);
 }
 
 function replyText(replies) {
