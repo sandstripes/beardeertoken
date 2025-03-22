@@ -503,6 +503,7 @@ const emoji = {
   theProfilePictureThatNoodlesUsedOnTheTwentyFirstOfMarchTwentyTwentyFive: "https://i.ibb.co/rR9J3L47/wink.png",
   true: "https://i.ibb.co/kgfz2G6T/Screenshot-2025-03-04-172131.png",
   whar: "https://i.ibb.co/cXYmWqRk/1143938761919570000.png",
+  wink: "https://i.ibb.co/rR9J3L47/wink.png",
 }
 const emojify = (s) => {
   return s
