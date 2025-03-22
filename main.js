@@ -540,9 +540,9 @@ const emojify = (s) => {
 function replyElement(replies) {
   const el = document.createElement("div");
   for (const i in replies) {
-      let reply_loaded = emojify(`→ ${replies[i].author.display_name} (@${replies[i].author.username}): ${replies[i].content}`)
+      let reply_loaded = `→ ${replies[i].author.display_name} (@${replies[i].author.username}): ${emojify(md.renderInline(replies[i].content))}`
       let replyContent = document.createElement("span");
-      replyContent.innerText = reply_loaded;
+      replyContent.innerHTML = reply_loaded;
       replyContent.classList.add("reply");
       replyContent.classList.add("clickable");
       replyContent.setAttribute("onclick", `document.getElementById("${replies[i]._id}").scrollIntoView({ behavior: "smooth" });`)
