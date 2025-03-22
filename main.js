@@ -34,7 +34,7 @@ function closePopup () {
     document.getElementById("error-bar").classList.add("hidden");
 };
 
-const version = "1.6.2b";
+const version = "1.6.3b";
 const serverVersion = "Helium-1.0.0a";
 let last_cmd = "";
 let username = "";
