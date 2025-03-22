@@ -500,6 +500,7 @@ const emoji = {
   me: "https://i.ibb.co/204mNMJp/me.webp",
   keeneThumbsUp: "https://i.ibb.co/gbmr7LPh/keene-Thumbs-Up.png",
   goobert: "https://i.ibb.co/hRFdhGmw/goobert.png",
+  theProfilePictureThatNoodlesUsedOnTheTwentyFirstOfMarchTwentyTwentyFive: "https://i.ibb.co/rR9J3L47/wink.png",
   true: "https://i.ibb.co/kgfz2G6T/Screenshot-2025-03-04-172131.png",
   whar: "https://i.ibb.co/cXYmWqRk/1143938761919570000.png",
 }
@@ -508,7 +509,7 @@ const emojify = (s) => {
     .replace(/:([a-zA-Z]+):/gi, (s, name) =>
       name in emoji ?
         `<img src=${emoji[name]} style="vertical-align: middle;" />`
-      : s);
+      : "noodlespfp" === name ? "this" : "");
 }
 
 function replyText(replies) {
