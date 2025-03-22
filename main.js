@@ -66,6 +66,11 @@ if (localStorage.getItem("theme") == null) {
     localStorage.setItem("theme", "helium")
 }
 
+if (localStorage.getItem("customCSS")) {
+    document.getElementById("custom-style").innerText = localStorage.getItem("customCSS");
+    document.getElementById("mc-theme-custom").value = localStorage.getItem("customCSS");
+}
+
 document.getElementById("top-style").href = `/themes/${localStorage.getItem("theme")}.css`;
 
 const settings_template = {"replace_text": true, "detect_file_type": false, "debug": true, "imgbb_key": ""}
@@ -147,8 +152,13 @@ async function uploadFile(file) {
 };
 
 document.getElementById("mw-new").innerHTML = md.render(
-`*Version 1.6.2b - March 22nd*
+`*Version 1.6.3b - March 22nd*
 
+## 1.6.3b additions
+### Custom CSS
+You can put custom CSS in settings under Theme.
+
+## 1.6.2b additions
 ### Post editing and deletion
 You can now edit and delete posts! Simply use the respective "Edit" and "Delete" buttons on your posts.
 Please note that this does *not* update the contents of replies in real-time just yet!
@@ -348,16 +358,6 @@ function updateUlist() {
         if (i != ulist.length - 1) {
             ulstring += ", "
         };
-        //if (guest == false) {
-            //console.log("buddy");
-            //var old_online_buddies = online_buddies;
-            //online_buddies = [];
-            //console.log(ulist[i]);
-            //console.log(ulist[i] in buddies);
-            //if (buddies.includes(ulist[i])) {
-                //online_buddies.push(ulist[i]);
-            //};
-        //}
     };
     if (!(ulist.includes(username)) && ulist.length != 0 && guest == false) {
         document.getElementById("ms-ulist").innerHTML = `${ulist.length} user online (${ulstring})❓ (Try <a href='javascript:window.location.reload();'>refreshing the page</a>?)`;
@@ -374,20 +374,6 @@ function updateUlist() {
     } else {
         document.getElementById("ms-ulist").innerHTML = `${ulist.length} users online (${ulstring})`;
     };
-    //if (guest == false) {
-        //for (const i in online_buddies) {
-            //if (!old_online_buddies.includes(i)) {
-                //var audio = new Audio('/nudge.mp3');
-                //audio.play();
-                //break;
-            //}
-        //}
-        //if (buddies.length == 0) {
-            //document.getElementById("ms-button-buddies").innerText = `Buddies`;
-        //} else {
-            //document.getElementById("ms-button-buddies").innerText = `Buddies (${online_buddies.length} online)`;
-        //};
-    //};
 }
 
 function switchScene (newScene, isguest) {
@@ -457,7 +443,8 @@ function logIn() {
 };
 
 function logOut() {
-    localStorage.clear();
+    localStorage.removeItem("token");
+    localStorage.removeItem("username");
     window.location.reload();
 };
 
@@ -504,13 +491,13 @@ function loadPost(resf, isFetch, isInbox) {
         postDetails.innerHTML = `${sts}`;
     } else {
         postDetails.innerHTML = `${sts} - <span class="text-clickable" onclick="reply('${resf._id}');">Reply</span>`;
+        if (resf.author.username == username) {
+            postDetails.innerHTML += ` - <span class="text-clickable" onclick="editer('${resf._id}');">Edit</span>`
+        }
+        if (resf.author.username == username || delete_all) {
+            postDetails.innerHTML += ` - <span class="text-clickable" onclick="deletepost('${resf._id}');">Delete</span>`
+        }
     };
-    if (resf.author.username == username) {
-        postDetails.innerHTML += ` - <span class="text-clickable" onclick="editer('${resf._id}');">Edit</span>`
-    }
-    if (resf.author.username == username || delete_all) {
-        postDetails.innerHTML += ` - <span class="text-clickable" onclick="deletepost('${resf._id}');">Delete</span>`
-    }
     post.appendChild(postDetails);
     
     var breaklineB = document.createElement("br");
@@ -860,6 +847,12 @@ function textinput() {
 function setTheme(theme) {
     localStorage.setItem("theme", theme)
     document.getElementById("top-style").href = `/themes/${theme}.css`;
+}
+
+function setCustomTheme() {
+    var ccss = document.getElementById("mc-theme-custom").value;
+    localStorage.setItem("customCSS", ccss);
+    document.getElementById("custom-style").innerText = ccss;
 }
 
 function ping() {
