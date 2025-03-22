@@ -34,7 +34,7 @@ function closePopup () {
     document.getElementById("error-bar").classList.add("hidden");
 };
 
-const version = "1.6.1b";
+const version = "1.6.2b";
 const serverVersion = "Helium-1.0.0a";
 let last_cmd = "";
 let username = "";
@@ -46,9 +46,9 @@ let raw_ulist = {};
 let posts = [];
 let replies = [];
 let attachments = [];
-let last_ping = Date.now();
-//let buddies = [];
-//let online_buddies = [];
+let editing = false;
+let edit_id = "";
+let delete_all = false;
 let guest = false;
 let timeUpdate = null;
 
@@ -110,13 +110,13 @@ function stgsTriggers() {
         replace_text = false;
         document.getElementById("mc-button-replace").innerText = "(disabled) Replace text";
     };
-    if (settings.detect_file_type) {
-        detect_file_type = true;
-        document.getElementById("mc-button-detectft").innerText = "(enabled) Detect file types";
-    } else {
-        detect_file_type = false;
-        document.getElementById("mc-button-detectft").innerText = "(disabled) Detect file types";
-    };
+    //if (settings.detect_file_type) {
+        //detect_file_type = true;
+        //document.getElementById("mc-button-detectft").innerText = "(enabled) Detect file types";
+    //} else {
+    //     detect_file_type = false;
+    //     document.getElementById("mc-button-detectft").innerText = "(disabled) Detect file types";
+    // };
     if (settings.presets) {
         presets = true;
         document.getElementById("ms-button-presets").innerText = "Back";
@@ -178,6 +178,20 @@ async function uploadFile(file) {
         };
 };
 
+document.getElementById("mw-new").innerHTML = md.render(
+`*Version 1.6.2b - March 22nd*
+
+### Post editing and deletion
+You can now edit and delete posts! Simply use the respective "Edit" and "Delete" buttons on your posts.
+Please note that this does *not* update the contents of replies in real-time just yet!
+
+### Jump to replies
+You can now click on a reply in a post to jump to it!
+
+### Show a user...
+There is now a "Show a user..." button! Type in a username, and it will take you to their profile.`
+)
+
 const prodUrl = "wss://sokt.fraudulent.loan";
 const loclUrl = "ws://127.0.0.1:3636";
 
@@ -202,9 +216,6 @@ ws.onmessage = function (event) {
         raw_ulist = incoming.ulist;
         updateUlist();
         posts = incoming.messages;
-        for (const i in incoming.messages) {
-            loadPost(incoming.messages[i], true, false);
-        };
         if (localStorage.getItem("beardeer:username") == null || localStorage.getItem("beardeer:token") == null) {
             scene = "register-login";
             document.getElementById("loading").classList.toggle("hidden");
@@ -235,22 +246,25 @@ ws.onmessage = function (event) {
                 document.getElementById("loading").classList.toggle("hidden");
             };
             scene = "main-scene";
-            if ([JSON.stringify([]), JSON.stringify(["POST"])].includes(JSON.stringify(incoming.user.permissions))) {
+            if ([JSON.stringify([]), JSON.stringify(["PROTECTED"])].includes(JSON.stringify(incoming.user.permissions))) {
                 document.getElementById("ms-button-mod").classList.add("hidden");
             } else {
                 document.getElementById("ms-button-mod").classList.remove("hidden");
             };
+            if (incoming.user.permissions.includes("DELETE")) {
+                delete_all = true;
+            }
             buddies = incoming.user.buddies;
             document.getElementById("main-scene").classList.toggle("hidden");
             document.getElementById("ms-name").innerText = `@${username}`
             last_cmd = "get_inbox"
             authed = true;
+            for (const i in posts) {
+                loadPost(posts[i], true, false);
+            };
             ws.send(JSON.stringify({command: "get_inbox"}))
         };
     };
-    if ("disconnected" in incoming && incoming.disconnected) {
-        console.warn(`Shadow disconnected, but the server has re-connected us.\nCPI: ${incoming.cpi}\nProblems: ${JSON.stringify(incoming.problems)}`)
-    }
     if ("token" in incoming && incoming.listener == "RegisterLoginPswdListener") {
         localStorage.setItem("beardeer:username", username);
         localStorage.setItem("beardeer:token", incoming.token);
@@ -259,7 +273,14 @@ ws.onmessage = function (event) {
         };
         logged_in = true;
     } else if (incoming.command == "new_post") {
+        posts.splice(0, 0, incoming.data);
+        if (authed || guest) {
         loadPost(incoming.data, false, false);
+        }
+    } else if (incoming.command == "deleted_post") {
+        removepost(incoming._id, incoming.deleted_by_author)
+    } else if (incoming.command == "edited_post") {
+        editedpost(incoming._id, incoming.content)
     } else if (last_cmd == "gen_invite" && "invite_code" in incoming) {
         document.getElementById("mm-invite-code").innerText = `Your invite code is "${incoming.invite_code}". Use it on any SoktDeer client to sign up!\nhttps://deer.fraudulent.loan/\n\nCodes: ${incoming.invite_codes}`
     } else if (last_cmd == "get_inbox" && "inbox" in incoming) {
@@ -434,6 +455,9 @@ function switchScene (newScene, isguest) {
         document.getElementById("ud-avatar").src = "assets/default.png";
     };
     if (newScene == "main-scene" && isguest == true) {
+        for (const i in posts) {
+            loadPost(posts[i], true, false);
+        };
         document.getElementById("ms-hide-guest-nav").classList.toggle("hidden");
         document.getElementById("ms-show-guest-nav").classList.toggle("hidden");
         document.getElementById("ms-name").innerText = "Guest";
@@ -526,17 +550,13 @@ function replyText(replies) {
 
 function loadPost(resf, isFetch, isInbox) {
     if (settings.debug) { console.log("Loading post " + resf._id) };
-    var tsr = resf.created
-    var tsra = tsr * 1000
-    var tsrb = Math.trunc(tsra)
-    var ts = new Date();
-    ts.setTime(tsrb);
-    var sts = ts.toLocaleString();
 
+    var sts = new Date(resf.created * 1000).toLocaleString();
     var replies_loaded = replyText(resf.replies)
 
     var post = document.createElement("div");
     post.classList.add("post");
+    post.setAttribute("id", resf._id)
 
     if (!isInbox) {
     var avatar = document.createElement("img");
@@ -574,6 +594,12 @@ function loadPost(resf, isFetch, isInbox) {
     } else {
         postDetails.innerHTML = `${sts} - <span class="text-clickable" onclick="reply(${JSON.stringify(resf).replace(/"/g, "&quot;")});">Reply</span>`;
     };
+    if (resf.author.username == username) {
+        postDetails.innerHTML += ` - <span class="text-clickable" onclick="editer('${resf._id}');">Edit</span>`
+    }
+    if (resf.author.username == username || delete_all) {
+        postDetails.innerHTML += ` - <span class="text-clickable" onclick="deletepost('${resf._id}');">Delete</span>`
+    }
     post.appendChild(postDetails);
     
     var breaklineB = document.createElement("br");
@@ -585,8 +611,12 @@ function loadPost(resf, isFetch, isInbox) {
         replyContent.innerText = replies_loaded;
         replyContent.innerHTML = emojify(replyContent.innerHTML);
         replyContent.classList.add("reply");
+        // TODO implement into  beardeer 
+        //         replyContent.classList.add("clickable");
+        //         replyContent.setAttribute("onclick", `document.getElementById("${resf.replies[i]._id}").scrollIntoView();`)
         post.appendChild(replyContent);
-        
+            
+            
         var horlineB = document.createElement("hr");
         post.appendChild(horlineB);
     };
@@ -594,6 +624,7 @@ function loadPost(resf, isFetch, isInbox) {
 
     var postContent = document.createElement("span");
     postContent.classList.add("post-content");
+    postContent.setAttribute("id", "content-" + resf._id)
     postContent.innerHTML = emojify(md.render(resf.content));
     post.appendChild(postContent);
 
@@ -619,53 +650,11 @@ function loadPost(resf, isFetch, isInbox) {
                 "pth": null,
                 "type": null
             };
-            if (detect_file_type == "Bypass") {
-                var pth = new URL(resf.attachments[i]).pathname;
-                if (pth[pth.length - 1] == "/") {
-                    pth = pth.slice(0, -1)
-                }
-                pth = pth.split(".")[self.length + 1]
-                dft_debug.pth = pth;
-                if (["mp4", "webm", "mov"].includes(pth)) {
-                    dft_debug.type = "video";
-                    let attachment = document.createElement("video");
-                    attachment.id = `p-${resf._id}-attachment-${Number(i)}-video`
-                    attachment.classList.add("attachment");
-                    attachment.setAttribute("onerror", "this.remove();");
-                    attachment.controls = true;
-                    let source = document.createElement("source");
-                    source.src = resf.attachments[i];
-                    attachment.appendChild(source);
-                    post.appendChild(attachment);
-                } else if (["png", "jpg", "jpeg", "webp", "gif", "heic"].includes(pth)) {
-                    dft_debug.type = "image";
                     let attachment = document.createElement("img");
                     attachment.src = resf.attachments[i];
                     attachment.classList.add("attachment");
                     attachment.setAttribute("onerror", "this.remove();");
                     post.appendChild(attachment);
-                } else if (["mp3", "wav", "ogg"].includes(pth)) {
-                    dft_debug.type = "audio";
-                    let attachment = document.createElement("audio");
-                    attachment.id = `p-${resf._id}-attachment-${Number(i)}-audio`
-                    attachment.classList.add("attachment");
-                    attachment.setAttribute("onerror", "this.remove();");
-                    attachment.controls = true;
-                    let source = document.createElement("source");
-                    source.src = resf.attachments[i];
-                    attachment.appendChild(source);
-                    post.appendChild(attachment);
-                } else {
-                    dft_debug.type = "none";
-                };
-                console.log(dft_debug);
-            } else {
-                let attachment = document.createElement("img");
-                attachment.src = resf.attachments[i];
-                attachment.classList.add("attachment");
-                attachment.setAttribute("onerror", "this.remove();");
-                post.appendChild(attachment);
-            };
         }
 
         // End of provided code
@@ -692,6 +681,7 @@ function sendPreset(el) {
 }
 
 function sendPost() {
+    if (!editing) {
     last_cmd = "post";
     var content = document.getElementById("ms-msg").value;
     if (replace_text) {
@@ -705,6 +695,9 @@ function sendPost() {
     attachments = [];
     replies = [];
     updateDetailsMsg();
+    } else {
+        editpost(edit_id);
+    }
 };
 
 function postInbox() {
@@ -767,7 +760,9 @@ function setLastfm() {
 };
 
 function updateDetailsMsg() {
-    if (replies.length == 0 && attachments.length == 0) {
+    if (editing) {
+        document.getElementById("ms-details").innerHTML = `Editing post ${edit_id} - <span class="text-clickable" onclick="clearAll();">Quit editing</span>`
+    } else if (replies.length == 0 && attachments.length == 0) {
         document.getElementById("ms-details").innerText = ""
     } else if (replies.length == 0) {
         if (attachments.length == 1) {var plurals = ""} else {var plurals = "s"}
@@ -785,6 +780,7 @@ function updateDetailsMsg() {
 };
 
 function addAttachment() {
+    if (!editing) {
     var ata = window.prompt("Add an attachment via whitelisted URL")
     if (![null,""].includes(ata)) {
         if (attachments.length != 3) {
@@ -792,14 +788,17 @@ function addAttachment() {
         };
     };
     updateDetailsMsg();
+    };
 };
 
 function addUpload() {
+    if (!editing) {
     if (settings.imgbb_key) {
         document.getElementById("ms-attach").click()
     } else {
         displayError("Please set an ImgBB API key!");
     };
+    }
 };
 
 async function attachFile() {
@@ -834,11 +833,13 @@ async function attachFile() {
 };
 
 function reply(id) {
+    if (!editing) {
     if (replies.length != 3) {
         replies.push(id);
     };
     document.getElementById("ms-msg").focus();
     updateDetailsMsg();
+    }
 };
 
 function resizePostBox() {
@@ -849,16 +850,63 @@ function resizePostBox() {
   })
 }
 
-function clearAll() {
-    replies = [];
-    attachments = [];
+function deletepost(id) {
+    var wdp = confirm("Are you sure you want to delete this post?")
+    if (wdp) { 
+        last_cmd = "delete_post";
+        ws.send(JSON.stringify({command: "delete_post", id: id}))
+    }
+};
+
+function editer(id) {
+    edit_id = id;
+    editing = true;
+    document.getElementById("ms-msg").focus();
     updateDetailsMsg();
     resizePostBox();
 };
 
-function clearHome() {
-    last_cmd = "clear_home";
-    ws.send(JSON.stringify({command: "clear_home"}))
+function editpost(id) {
+    last_cmd = "edit_post";
+    var content = document.getElementById("ms-msg").value;
+    if (replace_text) {
+        for (const i in text_replacements) {
+            content = content.replaceAll(i, text_replacements[i]);
+        };
+    };
+    ws.send(JSON.stringify({command: "edit_post", id: id, content: content}))
+    document.getElementById("ms-msg").value = "";
+    attachments = [];
+    replies = [];
+    editing = false;
+    updateDetailsMsg();
+};
+
+function removepost(id, dba) {
+    try {
+        document.getElementById(id).classList.remove("post");
+        if (dba) {
+            document.getElementById(id).innerHTML = "<small class='reply' style='vertical-align:top;'><i>post deleted by author</i></small>";
+        } else {
+            document.getElementById(id).innerHTML = "<small class='reply' style='vertical-align:top;'><i>post deleted by moderator</i></small>";
+        }
+    } catch {}
+}
+
+function editedpost(id, content) {
+    try {
+        document.getElementById("content-" + id).innerHTML = md.render(content);
+    } catch {}
+}
+
+function clearAll() {
+    if (editing) {
+        document.getElementById("ms-msg").value = "";
+    }
+    editing = false;
+    replies = [];
+    attachments = [];
+    updateDetailsMsg();
 };
 
 function forceKick() {
@@ -867,10 +915,11 @@ function forceKick() {
     document.getElementById("mm-username-forcekick").value = "";
 };
 
-function goToUser() {
-  const user = prompt("Which user do you want to go to?")
-  if (user) {
-    showUser(user);
+
+function showUserPrompt() {
+    var un = prompt("Username?") 
+    if (un) {
+        showUser(un);
   }
 }
 

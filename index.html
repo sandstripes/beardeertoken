@@ -43,8 +43,7 @@
                     <button onclick="window.location.reload();" id="ms-button-reload">Return to menu</button> 
                 </span>
                 <span id="ms-hide-guest-nav">
-                    <button onclick="switchScene('main-inbox');" id="ms-button-inbox">Inbox</button> 
-                    <button onclick="goToUser()">Go to user</button>
+                    <button onclick="switchScene('main-inbox');" id="ms-button-inbox">Inbox</button>
                     <!--<button onclick="switchScene('main-buddies');" id="ms-button-buddies">Buddies (0 online)</button>--> 
                     <button id="ms-button-mod" class="hidden" onclick="switchScene('main-moderation');">Moderation</button>
                 </span>
@@ -53,6 +52,8 @@
                 <button onclick="showUser(username);">Profile</button> 
                 <button onclick="switchScene('main-config');">Settings</button>
                 <button onclick="logOut();">Log out</button>
+                <button onclick="showUserPrompt();">Show a user...</button> 
+                <button onclick="switchScene('main-whatsnew');">What's new?</button>
             </div>
             <small id="ms-ulist">0 users online ()</small><br><br>
             <div id="ms-make-post">
@@ -112,7 +113,7 @@
                 <h2 class="header-notop">Misc</h2>
                 <input id="mc-imgbb-key" placeholder="ImgBB key..." autocomplete="off" type="text" maxlength=128></input> <button onclick="updateStg('imgbb_key');">Set ImgBB key</button><br>
                 <button id="mc-button-replace" onclick="updateStg('replace_text')">(?) Replace text</button><br>
-                <button id="mc-button-detectft" onclick="updateStg('detect_file_type')">(?) Detect file types</button><br><br>
+                <button onclick="logOut();">Log out</button>
             </div>
             <div class="mc-container">
                 <h2 class="header-notop">Theme</h2>
@@ -121,15 +122,21 @@
             <div id="mc-danger-container">
                 <h2 class="header-notop">Dangerous</h2>
                 <p>Be careful!</p>
-                <span id="mc-support"><button onclick="getSupportCode();">Show support code</button></span><br>
+                <small>These functions have not yet been re-implemented into SoktDeer Helium.</small><br>
+                <span id="mc-support"><button onclick="getSupportCode();" disabled>Show support code</button></span><br>
                 <input id="mc-da-password" placeholder="Password..." autocomplete="off" type="password"></input> 
-                <button onclick="deleteAcc();">Delete account</button><br><br>
+                <button onclick="deleteAcc();" disabled>Delete account</button><br><br>
                 <h3 class="header-notop">Change password</h3>
                 <input id="mc-pw-password" placeholder="Current password..." autocomplete="off" type="password"></input><br>
                 <input id="mc-pw-new-password" placeholder="New password..." autocomplete="off" type="password"></input><br>
-                <button onclick="changePswd();">Change password</button>
+                <button onclick="changePswd();" disabled>Change password</button>
             </div><br><br>
             <small id="mc-version"></small>
+        </div>
+        <div id="main-whatsnew" class="hidden">
+            <button onclick="switchScene('main-scene');">Return to Home</button><br>
+            <h2>What's new?</h2>
+            <div id="mw-new"></div>
         </div>
         <div id="main-inbox" class="hidden">
             <button onclick="switchScene('main-scene');">Return to Home</button><br>
@@ -163,10 +170,6 @@
                 <button onclick="resetInvites();">Reset invite codes</button>
             </div>
             <div class="mm-container">
-                <h3 class="header-notop">Clear home</h3>
-                <button onclick="clearHome();">Clear home</button>
-            </div>
-            <div class="mm-container">
                 <h3 class="header-notop">Forcekick</h3>
                 <input id="mm-username-forcekick" placeholder="Username..." type="text"></input><br>
                 <button onclick="forceKick();">Forcekick</button>
@@ -177,15 +180,17 @@
                 <button onclick="postInbox();">Post inbox</button>
             </div>
             <div class="mm-container">
+                <small>This function has not yet been re-implemented into SoktDeer Helium.</small><br>
                 <h3 class="header-notop">Support Code</h3>
                 <input id="mm-username-support" placeholder="Username..." type="text"></input><br>
                 <input id="mm-content-support" placeholder="Code..." type="text"></input><br>
-                <button onclick="getSupportCodeUser();">Verify</button><br>
+                <button onclick="getSupportCodeUser();" disabled>Verify</button><br>
                 <span id="mm-support-verify"></span>
             </div>
             <div class="mm-container">
+                <small>This function has not yet been re-implemented into SoktDeer Helium.</small><br>
                 <h3 class="header-notop">Lockdown server</h3>
-                <button onclick="toggleLock();">Toggle lock</button>
+                <button onclick="toggleLock();" disabled>Toggle lock</button>
             </div>
             </div>
         </div>
@@ -211,7 +216,7 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/default.min.css">
         <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/markdown-it@14.1.0/dist/markdown-it.min.js"></script>
-        <script type="text/javascript" src="main.js"></script>
+        <script type="text/javascript" src="main.js?ihatecache1234"></script>
     </body>
     <!-- <script type="text/javascript" src="purify.min.js"></script> -->
 </html>
