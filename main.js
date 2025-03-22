@@ -537,22 +537,28 @@ const emojify = (s) => {
       : name);
 }
 
-function replyText(replies) {
-  var replies_loaded = ""
+function replyElement(replies) {
+  const el = document.createElement("div");
   for (const i in replies) {
-      replies_loaded += `→ ${replies[i].author.display_name} (@${replies[i].author.username}): ${replies[i].content}`
-      if (i != replies.length - 1) {
-          replies_loaded += "\n"
-      };
+      let reply_loaded = emojify(`→ ${replies[i].author.display_name} (@${replies[i].author.username}): ${replies[i].content}`)
+      let replyContent = document.createElement("span");
+      replyContent.innerText = reply_loaded;
+      replyContent.classList.add("reply");
+      replyContent.classList.add("clickable");
+      replyContent.setAttribute("onclick", `document.getElementById("${replies[i]._id}").scrollIntoView();`)
+      el.appendChild(replyContent);
+
+      let brl = document.createElement("br");
+      el.appendChild(brl);
   };
-  return replies_loaded
+  return el;
 }
 
 function loadPost(resf, isFetch, isInbox) {
     if (settings.debug) { console.log("Loading post " + resf._id) };
 
     var sts = new Date(resf.created * 1000).toLocaleString();
-    var replies_loaded = replyText(resf.replies)
+    var replies_loaded = replyElement(resf.replies)
 
     var post = document.createElement("div");
     post.classList.add("post");
@@ -607,14 +613,7 @@ function loadPost(resf, isFetch, isInbox) {
     
     if (!isInbox) {
     if (resf.replies.length != 0) {
-        var replyContent = document.createElement("span");
-        replyContent.innerText = replies_loaded;
-        replyContent.innerHTML = emojify(replyContent.innerHTML);
-        replyContent.classList.add("reply");
-        // TODO implement into  beardeer 
-        //         replyContent.classList.add("clickable");
-        //         replyContent.setAttribute("onclick", `document.getElementById("${resf.replies[i]._id}").scrollIntoView();`)
-        post.appendChild(replyContent);
+        post.appendChild(replies_loaded);
             
             
         var horlineB = document.createElement("hr");
@@ -776,7 +775,8 @@ function updateDetailsMsg() {
         document.getElementById("ms-details").innerHTML = `${replies.length} repl${plurals}, ${attachments.length} attachment${plurals_b} - <span class="text-clickable" onclick="clearAll();">Remove all</span>`
     };
     console.log("hi?")
-    document.getElementById("ms-replies").innerText = replyText(replies);
+    document.getElementById("ms-replies").innerHTML = "";
+    document.getElementById("ms-replies").append(replyElement(replies));
 };
 
 function addAttachment() {
