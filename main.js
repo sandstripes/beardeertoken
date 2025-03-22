@@ -600,10 +600,10 @@ function loadPost(resf, isFetch, isInbox) {
     } else {
         postDetails.innerHTML = `${sts} - <span class="text-clickable" onclick="reply(${JSON.stringify(resf).replace(/"/g, "&quot;")});">Reply</span>`;
     };
-    if (resf.author.username == username) {
+    if (resf.author?.username == username) {
         postDetails.innerHTML += ` - <span class="text-clickable" onclick="editer('${resf._id}');">Edit</span>`
     }
-    if (resf.author.username == username || delete_all) {
+    if (resf.author?.username == username || delete_all) {
         postDetails.innerHTML += ` - <span class="text-clickable" onclick="deletepost('${resf._id}');">Delete</span>`
     }
     post.appendChild(postDetails);
