@@ -86,7 +86,7 @@ if (localStorage.getItem("customCSS")) {
     document.getElementById("mc-theme-custom").value = localStorage.getItem("beardeer:customCSS");
 }
 
-document.getElementById("top-style").href = `/themes/${localStorage.getItem("beardeer:theme")}.css`;
+document.getElementById("top-style").href = `themes/${localStorage.getItem("beardeer:theme")}.css`;
 
 const settings_template = {"replace_text": true, "detect_file_type": false, "debug": true, "imgbb_key": "", "presets": false }
 
