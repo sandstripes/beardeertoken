@@ -580,7 +580,7 @@ function loadPost(resf, isFetch, isInbox) {
         postDetails.innerHTML = `${sts} - <span class="text-clickable" onclick="reply(${JSON.stringify(resf).replace(/"/g, "&quot;")});">Reply</span>`;
     };
     if (resf.author?.username == username) {
-        postDetails.innerHTML += ` - <span class="text-clickable" onclick="editer('${resf._id}');">Edit</span>`
+        postDetails.innerHTML += ` - <span class="text-clickable" onclick="editer('${resf._id}', ${JSON.stringify(resf.content).replace(/"/g, "&quot;")});">Edit</span>`
     }
     if (resf.author?.username == username || delete_all) {
         postDetails.innerHTML += ` - <span class="text-clickable" onclick="deletepost('${resf._id}');">Delete</span>`
@@ -836,10 +836,12 @@ function deletepost(id) {
     }
 };
 
-function editer(id) {
+function editer(id, post) {
     edit_id = id;
     editing = true;
-    document.getElementById("ms-msg").focus();
+    const msg = document.getElementById("ms-msg");
+    msg.value = post;
+    msg.focus();
     updateDetailsMsg();
     resizePostBox();
 };
