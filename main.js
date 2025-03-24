@@ -523,12 +523,16 @@ const emojify = (s) => {
 function replyElement(replies) {
   const el = document.createElement("div");
   for (const i in replies) {
-      let reply_loaded = `→ ${replies[i].author.display_name} (@${replies[i].author.username}): ${emojify(md.renderInline(replies[i].content))}`
+      let reply_loaded = `→ ${replies[i].author.display_name} (@${replies[i].author.username}): `
       let replyContent = document.createElement("span");
       replyContent.innerHTML = reply_loaded;
       replyContent.classList.add("reply");
       replyContent.classList.add("clickable");
       replyContent.setAttribute("onclick", `document.getElementById("${replies[i]._id}").scrollIntoView({ behavior: "smooth" });`)
+      const replyText = document.createElement("span");
+      replyText.innerHTML = emojify(md.renderInline(replies[i].content));
+      replyText.dataset.reply = replies[i]._id;
+      replyContent.appendChild(replyText)
       el.appendChild(replyContent);
 
       let brl = document.createElement("br");
@@ -877,6 +881,9 @@ function editedpost(id, content) {
     try {
         document.getElementById("content-" + id).innerHTML = md.render(content);
     } catch {}
+    document.querySelectorAll(`[data-reply="${id}"]`).forEach((reply) => {
+      reply.innerHTML = emojify(md.renderInline(content));
+    })
 }
 
 function clearAll() {
