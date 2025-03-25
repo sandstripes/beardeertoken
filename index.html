@@ -64,7 +64,7 @@
                 <button onclick="addAttachment();">URL...</button> 
                 <button onclick="addUpload();">+</button> 
                 <div id="ms-msg-wrapper">
-                  <textarea id="ms-msg" maxlength=2000 oninput="textinput()" autocomplete="off" onkeydown="if (event.key === 'Enter' && !event.shiftKey) {event.preventDefault(); sendPost();} if (event.key === 'Escape') { clearAll() }; if (event.key === 'Tab') { const btn = document.querySelector('#ms-suggestions').firstChild; if (btn) { btn.click(); event.preventDefault(); } } resizePostBox();" placeholder="What's on your mind?" type="text" rows="1"></textarea>
+                  <textarea id="ms-msg" maxlength=2000 oninput="textinput()" autocomplete="off" onkeydown="if (enter_send && event.key === 'Enter' && !event.shiftKey) {event.preventDefault(); sendPost();} if (event.key === 'Escape') { clearAll() }; if (event.key === 'Tab') { const btn = document.querySelector('#ms-suggestions').firstChild; if (btn) { btn.click(); event.preventDefault(); } } resizePostBox();" placeholder="What's on your mind?" type="text" rows="1"></textarea>
                   <div id="ms-suggestions"></div>
                 </div>
                 <span hidden id="ms-presets">
@@ -114,6 +114,7 @@
                 <h2 class="header-notop">Misc</h2>
                 <input id="mc-imgbb-key" placeholder="ImgBB key..." autocomplete="off" type="text" maxlength=128></input> <button onclick="updateStg('imgbb_key');">Set ImgBB key</button><br>
                 <button id="mc-button-replace" onclick="updateStg('replace_text')">(?) Replace text</button><br>
+                <button id="mc-button-enter-send" onclick="updateStg('enter_send')">(?) Enter sends post</button><br>
                 <button onclick="logOut();">Log out</button>
             </div>
             <div class="mc-container">

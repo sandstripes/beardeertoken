@@ -54,6 +54,7 @@ let timeUpdate = null;
 
 let replace_text = false;
 let detect_file_type = false;
+let enter_send = true;
 let presets = false;
 let text_replacements = {
     "\\n": "\n",
@@ -88,7 +89,7 @@ if (localStorage.getItem("customCSS")) {
 
 document.getElementById("top-style").href = `themes/${localStorage.getItem("beardeer:theme")}.css`;
 
-const settings_template = {"replace_text": true, "detect_file_type": false, "debug": true, "imgbb_key": "", "presets": false }
+const settings_template = {"replace_text": true, "detect_file_type": false, "debug": true, "imgbb_key": "", "presets": false, "enter_send": true }
 
 if (localStorage.getItem("beardeer:settings") == null) {
     localStorage.setItem("beardeer:settings", JSON.stringify(settings_template))
@@ -101,7 +102,7 @@ if (localStorage.getItem("beardeer:last_inbox_id") == null) {
 let settings = JSON.parse(localStorage.getItem("beardeer:settings"));
 
 for (const i in settings_template) {
-    if (!i in settings) {
+    if (!(i in settings)) {
         settings[i] = settings_template[i]
         localStorage.setItem("beardeer:settings", JSON.stringify(settings))
     }
@@ -115,6 +116,13 @@ function stgsTriggers() {
         replace_text = false;
         document.getElementById("mc-button-replace").innerText = "(disabled) Replace text";
     };
+    if (settings.enter_send) {
+      enter_send = true;
+      document.getElementById("mc-button-enter-send").innerText = "(enabled) Enter sends post"
+    }  else {
+      enter_send = false;
+      document.getElementById("mc-button-enter-send").innerText = "(disabled) Enter sends post"
+    }
     //if (settings.detect_file_type) {
         //detect_file_type = true;
         //document.getElementById("mc-button-detectft").innerText = "(enabled) Detect file types";
@@ -149,6 +157,8 @@ function updateStg(setting) {
         settings.detect_file_type = !settings.detect_file_type;
     } else if (setting == "presets") {
         settings.presets = !settings.presets;
+    } else if (setting == "enter_send") {
+        settings.enter_send = !settings.enter_send;
     }
     localStorage.setItem("beardeer:settings", JSON.stringify(settings));
     stgsTriggers();
