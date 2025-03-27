@@ -14,8 +14,7 @@ const md = markdownit({
     breaks: true,
     image: false
   })
-  .disable('image')
-  .disable('code');
+  .disable('image');
   
 
 document.getElementById("rl-username").value = "";
@@ -34,7 +33,7 @@ function closePopup () {
     document.getElementById("error-bar").classList.add("hidden");
 };
 
-const version = "1.6.3b";
+const version = "1.7.0b";
 const serverVersion = "Helium-1.0.0a";
 let last_cmd = "";
 let username = "";
@@ -43,7 +42,8 @@ let authed = false;
 let scene = "loading";
 let ulist = [];
 let raw_ulist = {};
-let posts = [];
+let posts = {};
+let posts_list = [];
 let replies = [];
 let attachments = [];
 let editing = false;
@@ -51,6 +51,14 @@ let edit_id = "";
 let delete_all = false;
 let guest = false;
 let timeUpdate = null;
+
+let themes = {
+    "deer": "Deer",
+    "helium": "Helium",
+    "midnight": "Midnight",
+    "bright": "Bright",
+    "cosmic-latte": "Cosmic Latte"
+}
 
 let replace_text = false;
 let detect_file_type = false;
@@ -80,6 +88,8 @@ const timeZones = {
 
 if (localStorage.getItem("beardeer:theme") == null) {
     localStorage.setItem("beardeer:theme", "helium")
+} else if (!localStorage.getItem("beardeer:theme") in themes) {
+    localStorage.setItem("beardeer:theme", "helium")
 }
 
 if (localStorage.getItem("customCSS")) {
@@ -107,6 +117,12 @@ for (const i in settings_template) {
         localStorage.setItem("beardeer:settings", JSON.stringify(settings))
     }
 }
+
+for (const i in themes) {
+    document.getElementById("mc-theme-buttons").innerHTML += `<button onclick="setTheme('${i}');">${themes[i]}</button> `
+}
+
+document.getElementById("mc-theme-name").innerText = themes[localStorage.getItem("theme")];
 
 function stgsTriggers() {
     if (settings.replace_text) {
@@ -168,9 +184,9 @@ stgsTriggers();
 
 async function uploadFile(file) {
     // ORIGINAL CREDIT TO:
-    // @:3 on SoktDeer
-    // @ArrowAced on GitHub
-    // https://gist.github.com/ArrowAced/7d342a06cc8325f272cd42d6442f6466 // note: gone?
+    // @stripes on SoktDeer
+    // @sandstripes on GitHub
+    // https://gist.github.com/sandstripes/7d342a06cc8325f272cd42d6442f6466
     // note: very much so modified since then, mainly because i need to use imgbb because cors sucks
     const data = new FormData();
     data.set('key', settings.imgbb_key);
@@ -194,32 +210,41 @@ async function uploadFile(file) {
 };
 
 document.getElementById("mw-new").innerHTML = md.render(
-`*Version 1.6.3b - March 22nd*
+`*Version 1.7.0b - March 26nd*
 
-## 1.6.3b additions
-### Custom CSS
-You can put custom CSS in settings under Theme.
+### New themes
+There are a few new themes!
 
-## 1.6.2b additions
-### Post editing and deletion
-You can now edit and delete posts! Simply use the respective "Edit" and "Delete" buttons on your posts.
-Please note that this does *not* update the contents of replies in real-time just yet!
+### Edits and deletions in replies
+Replies now reflect edits and deletions!
 
-### Jump to replies
-You can now click on a reply in a post to jump to it!
+### Editing messages
+Editing a message now automatically fills the content of the message.
 
-### Show a user...
-There is now a "Show a user..." button! Type in a username, and it will take you to their profile.`
+### URLs updated
+URLs have been updated to point to soktdeer.com!
+
+### Markdown in bios
+Markdown can now be entered in bios!
+
+### And more!
+I forgot`
 )
 
-const prodUrl = "wss://sokt.fraudulent.loan";
+const prodUrl = "wss://ws.soktdeer.com";
 const loclUrl = "ws://127.0.0.1:3636";
 
 //
 //   DO NOT FORGET TO CHANGE THE URL
 //
 
-const ws = new WebSocket(prodUrl)
+let wsurl = prodUrl;
+
+if (localStorage.getItem("serverurl")) {
+    wsurl = localStorage.getItem("serverurl");
+}
+
+const ws = new WebSocket(wsurl)
 
 ws.onmessage = function (event) {
     let incoming = JSON.parse(event.data);
@@ -235,7 +260,10 @@ ws.onmessage = function (event) {
         ulist = Object.keys(incoming.ulist);
         raw_ulist = incoming.ulist;
         updateUlist();
-        posts = incoming.messages;
+        for (const x in incoming.messages) {
+            posts[incoming.messages[x]._id] = incoming.messages[x]
+        }
+        posts_list = incoming.messages
         if (localStorage.getItem("beardeer:username") == null || localStorage.getItem("beardeer:token") == null) {
             scene = "register-login";
             document.getElementById("loading").classList.toggle("hidden");
@@ -279,9 +307,10 @@ ws.onmessage = function (event) {
             document.getElementById("ms-name").innerText = `@${username}`
             last_cmd = "get_inbox"
             authed = true;
-            for (const i in posts) {
-                loadPost(posts[i], true, false);
+            for (const i in posts_list) {
+                loadPost(posts_list[i], true, false);
             };
+            posts_list = undefined;
             ws.send(JSON.stringify({command: "get_inbox"}))
         };
     };
@@ -293,16 +322,22 @@ ws.onmessage = function (event) {
         };
         logged_in = true;
     } else if (incoming.command == "new_post") {
-        posts.splice(0, 0, incoming.data);
+        posts[incoming.data._id] = incoming.data;
+        if (posts_list) {
+            posts_list.splice(0, 0, incoming.data);
+        }
         if (authed || guest) {
         loadPost(incoming.data, false, false);
         }
     } else if (incoming.command == "deleted_post") {
         removepost(incoming._id, incoming.deleted_by_author)
+        if (incoming._id in posts) {
+            delete posts[incoming._id];
+        }
     } else if (incoming.command == "edited_post") {
         editedpost(incoming._id, incoming.content)
     } else if (last_cmd == "gen_invite" && "invite_code" in incoming) {
-        document.getElementById("mm-invite-code").innerText = `Your invite code is "${incoming.invite_code}". Use it on any SoktDeer client to sign up!\nhttps://deer.fraudulent.loan/\n\nCodes: ${incoming.invite_codes}`
+        document.getElementById("mm-invite-code").innerText = `Your invite code is "${incoming.invite_code}". Use it on any SoktDeer client to sign up!\nhttps://soktdeer.com/\n\nCodes: ${incoming.invite_codes}`
     } else if (last_cmd == "get_inbox" && "inbox" in incoming) {
         document.getElementById("mi-posts").innerHTML = ""
         for (const i in incoming.inbox) {
@@ -350,7 +385,7 @@ ws.onmessage = function (event) {
         } else {
             document.getElementById("ud-banned").classList.add("hidden");
         };
-        document.getElementById("ud-bio").innerText = bio;
+        document.getElementById("ud-bio").innerHTML = md.render(bio);
         if (incoming.user.profile.lastfm) {
             document.getElementById("ud-lastfm-container").classList.add("hidden");
             var xhttp = new XMLHttpRequest();
@@ -448,8 +483,8 @@ function switchScene (newScene, isguest) {
         document.getElementById("ud-avatar").src = "assets/default.png";
     };
     if (newScene == "main-scene" && isguest == true) {
-        for (const i in posts) {
-            loadPost(posts[i], true, false);
+        for (const i in posts_list) {
+            loadPost(posts_list[i], true, false);
         };
         document.getElementById("ms-hide-guest-nav").classList.toggle("hidden");
         document.getElementById("ms-show-guest-nav").classList.toggle("hidden");
@@ -607,8 +642,7 @@ function loadPost(resf, isFetch, isInbox) {
     if (!isInbox) {
     if (resf.replies.length != 0) {
         post.appendChild(replies_loaded);
-            
-            
+
         var horlineB = document.createElement("hr");
         post.appendChild(horlineB);
     };
@@ -617,7 +651,11 @@ function loadPost(resf, isFetch, isInbox) {
     var postContent = document.createElement("span");
     postContent.classList.add("post-content");
     postContent.setAttribute("id", "content-" + resf._id)
-    postContent.innerHTML = emojify(md.render(resf.content));
+    if (!isInbox) {
+        postContent.innerHTML = emojify(md.render(resf.content));
+    } else {
+        postContent.innerText = resf.content;
+    }
     post.appendChild(postContent);
 
     if (resf.attachments.length != 0) {
@@ -853,9 +891,10 @@ function deletepost(id) {
 function editer(id, post) {
     edit_id = id;
     editing = true;
-    const msg = document.getElementById("ms-msg");
-    msg.value = post;
-    msg.focus();
+    if (id in posts) {
+        document.getElementById("ms-msg").value = posts[id].content;
+    }
+    document.getElementById("ms-msg").focus();
     updateDetailsMsg();
     resizePostBox();
 };
@@ -884,12 +923,23 @@ function removepost(id, dba) {
         } else {
             document.getElementById(id).innerHTML = "<small class='reply' style='vertical-align:top;'><i>post deleted by moderator</i></small>";
         }
+        var repliesMade = document.getElementsByClassName("reply-" + id);
+        for (const x in repliesMade) {
+            repliesMade[x].innerText = `→ post deleted`;
+        }
     } catch {}
 }
 
 function editedpost(id, content) {
     try {
         document.getElementById("content-" + id).innerHTML = md.render(content);
+        if (id in posts) {
+            posts[id].content = content;
+            var repliesMade = document.getElementsByClassName("reply-" + id);
+            for (const x in repliesMade) {
+                repliesMade[x].innerText = `→ ${posts[id].author.display_name} (@${posts[id].author.username}): ${content}`;
+            }
+        }
     } catch {}
     document.querySelectorAll(`[data-reply="${id}"]`).forEach((reply) => {
       reply.innerHTML = emojify(md.renderInline(content));
@@ -918,6 +968,18 @@ function showUserPrompt() {
     if (un) {
         showUser(un);
   }
+}
+
+function setServerPrompt() {
+    var un = prompt("Server URL?") 
+    if (un) {
+        localStorage.setItem("serverurl", un);
+    } else {
+        if (localStorage.getItem("serverurl")) {
+            localStorage.removeItem("serverurl");
+        }
+    }
+    window.location.reload();
 }
 
 function showUser(user) {
@@ -1034,6 +1096,7 @@ const msgBox = document.querySelector("#ms-msg");
 function setTheme(theme) {
     localStorage.setItem("beardeer:theme", theme)
     document.getElementById("top-style").href = `themes/${theme}.css`;
+    document.getElementById("mc-theme-name").innerText = themes[localStorage.getItem("beardeer:theme")];
 }
 
 function setCustomTheme() {
@@ -1043,7 +1106,9 @@ function setCustomTheme() {
 }
 
 function ping() {
+    if (ws.status == WebSocket.OPEN) {
     ws.send(JSON.stringify({command: "ping", listener: "PingBossDeer"}))
+    }
 };
 
 setInterval(ping, 2500)
