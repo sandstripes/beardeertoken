@@ -46,7 +46,6 @@ input, textarea {
     margin-bottom: 4px;
     vertical-align: middle;
     resize: none;
-    display: inline-block;
 }
 textarea.big-textarea {
     min-width: 180px;
