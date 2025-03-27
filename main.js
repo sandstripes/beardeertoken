@@ -92,7 +92,7 @@ if (localStorage.getItem("beardeer:theme") == null) {
     localStorage.setItem("beardeer:theme", "helium")
 }
 
-if (localStorage.getItem("customCSS")) {
+if (localStorage.getItem("beardeer:customCSS")) {
     document.getElementById("custom-style").innerText = localStorage.getItem("beardeer:customCSS");
     document.getElementById("mc-theme-custom").value = localStorage.getItem("beardeer:customCSS");
 }
@@ -122,7 +122,7 @@ for (const i in themes) {
     document.getElementById("mc-theme-buttons").innerHTML += `<button onclick="setTheme('${i}');">${themes[i]}</button> `
 }
 
-document.getElementById("mc-theme-name").innerText = themes[localStorage.getItem("theme")];
+document.getElementById("mc-theme-name").innerText = themes[localStorage.getItem("beardeer:theme")];
 
 function stgsTriggers() {
     if (settings.replace_text) {
@@ -240,8 +240,8 @@ const loclUrl = "ws://127.0.0.1:3636";
 
 let wsurl = prodUrl;
 
-if (localStorage.getItem("serverurl")) {
-    wsurl = localStorage.getItem("serverurl");
+if (localStorage.getItem("beardeer:serverurl")) {
+    wsurl = localStorage.getItem("beardeer:serverurl");
 }
 
 const ws = new WebSocket(wsurl)
@@ -973,10 +973,10 @@ function showUserPrompt() {
 function setServerPrompt() {
     var un = prompt("Server URL?") 
     if (un) {
-        localStorage.setItem("serverurl", un);
+        localStorage.setItem("beardeer:serverurl", un);
     } else {
-        if (localStorage.getItem("serverurl")) {
-            localStorage.removeItem("serverurl");
+        if (localStorage.getItem("beardeer:serverurl")) {
+            localStorage.removeItem("beardeer:serverurl");
         }
     }
     window.location.reload();
@@ -1101,7 +1101,7 @@ function setTheme(theme) {
 
 function setCustomTheme() {
     var ccss = document.getElementById("mc-theme-custom").value;
-    localStorage.setItem("customCSS", ccss);
+    localStorage.setItem("beardeer:customCSS", ccss);
     document.getElementById("custom-style").innerText = ccss;
 }
 
