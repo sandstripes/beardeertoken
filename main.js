@@ -215,7 +215,7 @@ ws.onmessage = function (event) {
         if (incoming.server_contributors) {
             document.getElementById("mc-contributors").innerText = `Server contributors\n`
             for (const x in incoming.server_contributors) {
-                document.getElementById("mc-contributors").innerText += `\n${server_contributors[x]}`
+                document.getElementById("mc-contributors").innerText += `\n${incoming.server_contributors[x]}`
             }
         }
         if (incoming.version != serverVersion) {
