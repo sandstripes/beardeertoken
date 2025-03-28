@@ -254,6 +254,11 @@ ws.onmessage = function (event) {
         closePopup();
         document.getElementById("rl-version").innerText = `BearDeer (based on BossDeer ${version}) - ${incoming.version}`;
         document.getElementById("mc-version").innerText = `${version} - ${incoming.version}`;
+        if (incoming.server_contributors) {
+            for (const x in incoming.server_contributors) {
+                document.getElementById("mc-contributors").innerText += `\n${incoming.server_contributors[x]}`;
+            }
+        }
         if (incoming.version != serverVersion) {
             displayError(`The server is on a newer version than this version of BossDeer was designed for. You may experience problems. (Expected "${serverVersion}", got "${incoming.version}")`);
         };
