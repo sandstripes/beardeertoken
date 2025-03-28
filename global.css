@@ -16,11 +16,16 @@ body {
     font-family: 'Noto Sans', sans-serif, serif, "Noto Color Emoji", 'sitelen seli kiwen';
     margin: 0px;
 }
+pre {
+  margin-block: 0;
+}
+pre > code {
+  display: block;
+}
 code {
     overflow: auto;
     background-color: #282c34;
     color: #abb2bf;
-    display: block;
     padding: 4px;
     border-radius: 4px;
 }
