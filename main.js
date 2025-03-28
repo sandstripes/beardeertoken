@@ -213,9 +213,8 @@ ws.onmessage = function (event) {
         document.getElementById("rl-version").innerText = `${version} - ${incoming.version}`;
         document.getElementById("mc-version").innerText = `${version} - ${incoming.version}`;
         if (incoming.server_contributors) {
-            document.getElementById("mc-contributors").innerText = `Server contributors\n`
             for (const x in incoming.server_contributors) {
-                document.getElementById("mc-contributors").innerText += `\n${incoming.server_contributors[x]}`
+                document.getElementById("mc-contributors").innerText += `\n${incoming.server_contributors[x]}`;
             }
         }
         if (incoming.version != serverVersion) {
