@@ -12,7 +12,7 @@ const md = markdownit({
     linkify: true,
     typographer: false,
     breaks: true,
-    image: false
+    image: false // i dont remember typing this
   })
   .disable('image');
   
@@ -33,8 +33,8 @@ function closePopup () {
     document.getElementById("error-bar").classList.add("hidden");
 };
 
-const version = "1.7.0b";
-const serverVersion = "Helium-1.0.0a";
+const version = "1.7.2b";
+const serverVersion = "Helium-1.0.1a";
 let last_cmd = "";
 let username = "";
 let logged_in = false; // unused?
@@ -210,8 +210,12 @@ async function uploadFile(file) {
 };
 
 document.getElementById("mw-new").innerHTML = md.render(
-`*Version 1.7.0b - March 26nd*
+`*Version 1.7.2b - March 28th*
 
+### Account deletion
+Account deletion is available.
+
+## Version 1.7.0b
 ### New themes
 There are a few new themes!
 
@@ -457,7 +461,11 @@ const clientIcon = (c) =>
 function updateUlist() {
     var ulstring = "";
     for (const i in ulist) {
-        ulstring += `<span class="clickable" title="${raw_ulist[ulist[i]]['client']}" onclick="showUser('${ulist[i]}');">${ulist[i]} ${clientIcon(raw_ulist[ulist[i]].client)}</span>` //vulnerable!
+        var ba = ""
+        if (raw_ulist[ulist[i]]['bot']) {
+            ba += ` <span title="This user is a robot." class="inline-icon-u material-symbols-outlined">smart_toy</span>`
+        }
+        ulstring += `<span class="clickable" title="${raw_ulist[ulist[i]]['client']}" onclick="showUser('${ulist[i]}');">${ulist[i]}${ba || (" " + clientIcon(raw_ulist[ulist[i]].client))}</span>` //vulnerable!
         if (i != ulist.length - 1) {
             ulstring += ", "
         };
