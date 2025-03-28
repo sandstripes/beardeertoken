@@ -12,7 +12,7 @@ const md = markdownit({
     linkify: true,
     typographer: false,
     breaks: true,
-    image: false
+    image: false // i dont remember typing this
   })
   .disable('image');
   
@@ -33,7 +33,7 @@ function closePopup () {
     document.getElementById("error-bar").classList.add("hidden");
 };
 
-const version = "1.7.0b";
+const version = "1.7.1b";
 const serverVersion = "Helium-1.0.0a";
 let last_cmd = "";
 let username = "";
@@ -168,7 +168,7 @@ async function uploadFile(file) {
 };
 
 document.getElementById("mw-new").innerHTML = md.render(
-`*Version 1.7.0b - March 26nd*
+`*Version 1.7.0b - March 26th*
 
 ### New themes
 There are a few new themes!
@@ -391,7 +391,11 @@ ws.onerror = function (event) {
 function updateUlist() {
     var ulstring = "";
     for (const i in ulist) {
-        ulstring += `<span class="clickable" title="${raw_ulist[ulist[i]]['client']}" onclick="showUser('${ulist[i]}');">${ulist[i]}</span>` //vulnerable!
+        var ba = ""
+        if (raw_ulist[ulist[i]]['bot']) {
+            ba += ` <span title="This user is a robot." class="inline-icon-u material-symbols-outlined">smart_toy</span>`
+        }
+        ulstring += `<span class="clickable" title="${raw_ulist[ulist[i]]['client']}" onclick="showUser('${ulist[i]}');">${ulist[i]}${ba}</span>` //vulnerable!
         if (i != ulist.length - 1) {
             ulstring += ", "
         };

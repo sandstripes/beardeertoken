@@ -242,8 +242,12 @@ hr {
     font-style: italic;
 }
 .inline-icon {
-    vertical-align: bottom;
+    vertical-align: sub;
     font-size: 18px !important;
+}
+.inline-icon-u {
+    vertical-align: sub;
+    font-size: 16.3333px !important;
 }
 .post-content p {
     padding: 0;
