@@ -945,14 +945,7 @@ function removepost(id, dba) {
 
 function editedpost(id, content) {
     try {
-        document.getElementById("content-" + id).innerHTML = md.render(content);
-        if (id in posts) {
-            posts[id].content = content;
-            var repliesMade = document.getElementsByClassName("reply-" + id);
-            for (const x in repliesMade) {
-                repliesMade[x].innerText = `→ ${posts[id].author.display_name} (@${posts[id].author.username}): ${content}`;
-            }
-        }
+        document.getElementById("content-" + id).innerHTML = emojify(md.render(content));
     } catch {}
     document.querySelectorAll(`[data-reply="${id}"]`).forEach((reply) => {
       reply.innerHTML = emojify(md.renderInline(content));
