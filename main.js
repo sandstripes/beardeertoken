@@ -817,7 +817,6 @@ function updateDetailsMsg() {
         if (attachments.length == 1) {var plurals_b = ""} else {var plurals_b = "s"}
         document.getElementById("ms-details").innerHTML = `${replies.length} repl${plurals}, ${attachments.length} attachment${plurals_b} - <span class="text-clickable" onclick="clearAll();">Remove all</span>`
     };
-    console.log("hi?")
     document.getElementById("ms-replies").innerHTML = "";
     document.getElementById("ms-replies").append(replyElement(replies));
 };
@@ -1050,7 +1049,6 @@ function determineSuggestions(el) {
   if (botSuggestions !== null) return botSuggestions;
   const pre = el.value.slice(0, el.selectionStart);
   const post = el.value.slice(el.selectionStart);
-  console.log(el.selectionStart, JSON.stringify(pre), JSON.stringify(post));
   const mentionMatch = pre.match(/@([a-zA-Z\-_0-9]*)$/);
   if (mentionMatch) {
     const usernamePrefix = mentionMatch[1];
