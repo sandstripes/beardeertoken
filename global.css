@@ -254,7 +254,8 @@ hr {
     box-sizing: border-box;
     display: inline-block;
     vertical-align: top;
-    flex: 1;
+    flex-grow: 1;
+    flex-shrink: 0;
 }
 .header-notop {
     margin-top: 0;
