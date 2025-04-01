@@ -74,7 +74,6 @@ let text_replacements = {
 };
 
 const timeZones = {
-  alwayshavealwayswill: "America/Detroit",
   cole: "America/Detroit",
   delusions: "Europe/London",
   engineerrunner: "Europe/London",
@@ -83,6 +82,7 @@ const timeZones = {
   notfenixio: "Europe/Madrid",
   pix: "America/Detroit",
   pkmnq: "+08:00",
+  stripes: "America/Detroit",
   wlodekm: "Europe/Kyiv",
 }
 
