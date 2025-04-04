@@ -270,6 +270,10 @@ hr {
 }
 .reply {
     font-style: italic;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }
 .inline-icon {
     vertical-align: sub;

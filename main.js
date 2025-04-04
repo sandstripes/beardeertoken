@@ -592,9 +592,6 @@ function replyElement(replies) {
       replyText.dataset.reply = replies[i]._id;
       replyContent.appendChild(replyText)
       el.appendChild(replyContent);
-
-      let brl = document.createElement("br");
-      el.appendChild(brl);
   };
   return el;
 }
