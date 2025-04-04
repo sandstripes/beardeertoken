@@ -777,7 +777,7 @@ async function attachFile() {
     for (const i in fl) {
         if (fl[i] instanceof File) {
             iter += 1;
-            if (1 + attachments.length <= 3) {
+            if (1 + attachments.length <= 5) {
                 try {
                     if (settings.upload_service == "imgbb") {
                         var f = await uploadFile(fl[i]);
