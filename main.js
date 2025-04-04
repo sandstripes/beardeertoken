@@ -33,7 +33,7 @@ function closePopup () {
     document.getElementById("error-bar").classList.add("hidden");
 };
 
-const version = "1.7.3b";
+const version = "1.7.4b";
 const serverVersion = "Helium-1.0.1a";
 let last_cmd = "";
 let username = "";
@@ -747,7 +747,7 @@ function addAttachment() {
     if (!editing) {
         var ata = window.prompt("Add an attachment via whitelisted URL")
         if (![null,""].includes(ata)) {
-            if (attachments.length != 3) {
+            if (attachments.length != 5) {
                 attachments.push(ata);
             };
         };
@@ -804,7 +804,7 @@ async function attachFile() {
 
 function reply(id) {
     if (!editing) {
-        if (replies.length != 3) {
+        if (replies.length != 5) {
             replies.push(id);
         };
         document.getElementById("ms-msg").focus();
