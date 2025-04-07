@@ -33,7 +33,7 @@ function closePopup () {
     document.getElementById("error-bar").classList.add("hidden");
 };
 
-const version = "1.7.2b";
+const version = "1.7.4b";
 const serverVersion = "Helium-1.0.1a";
 let last_cmd = "";
 let username = "";
@@ -98,8 +98,7 @@ if (localStorage.getItem("beardeer:customCSS")) {
 }
 
 document.getElementById("top-style").href = `themes/${localStorage.getItem("beardeer:theme")}.css`;
-
-const settings_template = {"replace_text": true, "detect_file_type": false, "debug": true, "imgbb_key": "", "presets": false, "enter_send": true }
+const settings_template = {"replace_text": true, "detect_file_type": false, "debug": true, "upload_key": "", "upload_service": "", "enter_send": true }
 
 if (localStorage.getItem("beardeer:settings") == null) {
     localStorage.setItem("beardeer:settings", JSON.stringify(settings_template))
@@ -123,6 +122,7 @@ for (const i in themes) {
 }
 
 document.getElementById("mc-theme-name").innerText = themes[localStorage.getItem("beardeer:theme")];
+document.getElementById("mc-upload-service").value = settings.upload_service;
 
 function stgsTriggers() {
     if (settings.replace_text) {
@@ -166,9 +166,13 @@ function stgsTriggers() {
 function updateStg(setting) {
     if (setting == "replace_text") {
         settings.replace_text = !settings.replace_text;
-    } else if (setting == "imgbb_key") {
-        settings.imgbb_key = document.getElementById("mc-imgbb-key").value;
-        document.getElementById("mc-imgbb-key").value = "";
+    } else if (setting == "upload_key") {
+        settings.upload_key = document.getElementById("mc-upload-key").value;
+        document.getElementById("mc-upload-key").value = "";
+    } else if (setting == "upload_service") {
+        console.log(document.getElementById("mc-upload-service").value);
+        settings.upload_service = document.getElementById("mc-upload-service").value;
+        document.getElementById("mc-upload-service").value = settings.upload_service;
     } else if (setting == "detect_file_type") {
         settings.detect_file_type = !settings.detect_file_type;
     } else if (setting == "presets") {
@@ -189,7 +193,7 @@ async function uploadFile(file) {
     // https://gist.github.com/sandstripes/7d342a06cc8325f272cd42d6442f6466
     // note: very much so modified since then, mainly because i need to use imgbb because cors sucks
     const data = new FormData();
-    data.set('key', settings.imgbb_key);
+    data.set('key', settings.upload_key);
     data.set('image', file);
 
     const init = {
@@ -207,6 +211,25 @@ async function uploadFile(file) {
     } else {
             throw new Error(rsp);
         };
+};
+
+async function uploadFileFraud(file) {
+    // Edited version of above
+    const data = new FormData();
+    data.set('file', file);
+
+    const init = {
+        method: 'POST',
+        headers: {'Key': settings.upload_key},
+        body: data
+    };
+    const res = await fetch("https://u.fraudulent.loan/upload", init);
+    const rsp = await res.json()
+    if ("urls" in rsp && rsp.urls.length != 0) {
+        return "https://u.fraudulent.loan/" + rsp.urls[0];
+    } else {
+        throw new Error(rsp);
+    };
 };
 
 document.getElementById("mw-new").innerHTML = md.render(
@@ -822,7 +845,7 @@ function addAttachment() {
     if (!editing) {
     var ata = window.prompt("Add an attachment via whitelisted URL")
     if (![null,""].includes(ata)) {
-        if (attachments.length != 3) {
+            if (attachments.length != 5) {
             attachments.push(ata);
         };
     };
@@ -832,10 +855,10 @@ function addAttachment() {
 
 function addUpload() {
     if (!editing) {
-    if (settings.imgbb_key) {
+        if (settings.upload_key && settings.upload_service) {
         document.getElementById("ms-attach").click()
     } else {
-        displayError("Please set an ImgBB API key!");
+            displayError("Please set up uploading in settings!");
     };
     }
 };
@@ -852,14 +875,20 @@ async function attachFile() {
     for (const i in fl) {
         if (fl[i] instanceof File) {
             iter += 1;
-            if (1 + attachments.length <= 3) {
+            if (1 + attachments.length <= 5) {
                 try {
+                    if (settings.upload_service == "imgbb") {
                     var f = await uploadFile(fl[i]);
+                    } else if (settings.upload_service == "fraud") {
+                        var f = await uploadFileFraud(fl[i]);
+                    } else {
+                        throw "No service";
+                    }
                     attachments.push(f);
                 } catch(err) {
                     uploaded = false;
                     console.warn(err);
-                    displayError("Couldn't upload file to ImgBB.");
+                    displayError("Couldn't upload file.");
                 };
             };
         };
@@ -873,7 +902,7 @@ async function attachFile() {
 
 function reply(id) {
     if (!editing) {
-    if (replies.length != 3) {
+        if (replies.length != 5) {
         replies.push(id);
     };
     document.getElementById("ms-msg").focus();

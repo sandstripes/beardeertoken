@@ -9,7 +9,7 @@
         <meta rel="icon" type="image/x-icon" href="favicon.ico">
         <meta charset="UTF-8">
         <link rel="stylesheet" href="icons.css" />
-        <link rel="stylesheet" href="global.css?10584" />
+        <link rel="stylesheet" href="global.css?92999" />
         <link id="top-style" rel="stylesheet" href="themes/helium.css" />
         <style id="custom-style"></style>
     </head>
@@ -113,7 +113,13 @@
             </div>
             <div class="mc-container">
                 <h2 class="header-notop">Misc</h2>
-                <input id="mc-imgbb-key" placeholder="ImgBB key..." autocomplete="off" type="text" maxlength=128></input> <button onclick="updateStg('imgbb_key');">Set ImgBB key</button><br>
+                <h3 class="header-notop">Uploads</h3>
+                <select id="mc-upload-service">
+                    <option value="imgbb">ImgBB</option>
+                    <option value="fraud">Fraudulent Uploads</option>
+                </select><br>
+                <input id="mc-upload-key" placeholder="Service key..." autocomplete="off" type="text" maxlength=128></input><br><button onclick="updateStg('upload_key');updateStg('upload_service');">Set key and service</button><br>
+                <h3 class="header-notop">Other</h3>
                 <button id="mc-button-replace" onclick="updateStg('replace_text')">(?) Replace text</button><br>
                 <button id="mc-button-enter-send" onclick="updateStg('enter_send')">(?) Enter sends post</button><br>
                 <button onclick="logOut();">Log out</button>
@@ -224,7 +230,7 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/atom-one-dark.css">
         <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/markdown-it@14.1.0/dist/markdown-it.min.js"></script>
-        <script type="text/javascript" src="main.js?10599"></script>
+        <script type="text/javascript" src="main.js?92999"></script>
     </body>
     <!-- <script type="text/javascript" src="purify.min.js"></script> -->
 </html>
