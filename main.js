@@ -33,7 +33,7 @@ function closePopup () {
     document.getElementById("error-bar").classList.add("hidden");
 };
 
-const version = "1.7.4b";
+const version = "1.7.5b";
 const serverVersion = "Helium-1.0.1a";
 let last_cmd = "";
 let username = "";
@@ -382,7 +382,7 @@ ws.onmessage = function (event) {
                     };
                 }
             };
-            xhttp.open("GET", `https://lastfm-last-played.biancarosa.com.br/${incoming.user.profile.lastfm}/latest-song`, true);
+            xhttp.open("GET", `https://lastfm.kije.workers.dev/${incoming.user.profile.lastfm}`, true);
             xhttp.send();
         } else {
             document.getElementById("ud-lastfm-container").classList.add("hidden")
