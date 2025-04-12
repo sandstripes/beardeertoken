@@ -57,7 +57,7 @@ a, #nav button, #ms-userbox button, #ms-ulist > span {
   text-decoration: underline;
   padding: 0;
   background: 0;
-  font-size: 14px;
+  font-size: 1rem;
 }
 #ms-ulist > span > .client-icon {
   display: none;
