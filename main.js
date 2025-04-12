@@ -487,9 +487,9 @@ function updateUlist() {
     for (const i in ulist) {
         var ba = ""
         if (raw_ulist[ulist[i]]['bot']) {
-            ba += ` <span title="This user is a robot." class="inline-icon-u material-symbols-outlined">smart_toy</span>`
+            ba += `<span class="client-icon"> <span title="This user is a robot." class="inline-icon-u material-symbols-outlined">smart_toy</span></span>`
         }
-        ulstring += `<span class="clickable" title="${raw_ulist[ulist[i]]['client']}" onclick="showUser('${ulist[i]}');">${ulist[i]}${ba || (" " + clientIcon(raw_ulist[ulist[i]].client))}</span>` //vulnerable!
+        ulstring += `<span class="clickable" title="${raw_ulist[ulist[i]]['client']}" onclick="showUser('${ulist[i]}');">${ulist[i]}${ba || ("<span class=\"client-icon\"> " + clientIcon(raw_ulist[ulist[i]].client)) + "</span>"}</span>` //vulnerable!
         if (i != ulist.length - 1) {
             ulstring += ", "
         };

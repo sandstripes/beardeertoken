@@ -47,12 +47,15 @@ code, button, input, textarea, .post, .album-cover, #ud-lastfm-container, #ud-bi
   border-radius: 0.75rem;
 }
 
-a, #nav button, #ms-userbox button {
+a, #nav button, #ms-userbox button, #ms-ulist > span {
   color: #38bdf8;
   text-decoration: underline;
   padding: 0;
   background: 0;
   font-size: 14px;
+}
+#ms-ulist > span > .client-icon {
+  display: none;
 }
 #nav, #ms-userbox {
   display: flex;
