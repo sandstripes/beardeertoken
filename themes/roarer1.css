@@ -114,3 +114,7 @@ hr {
 [id^="p-"][id*="-attachment"] + br {
   display: none;
 }
+
+#ms-replies {
+  display: none;
+}
