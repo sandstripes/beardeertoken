@@ -79,7 +79,29 @@ a, #nav button, #ms-userbox button, #ms-ulist > span {
 
 #ms-make-post > center {
   display: flex;
+  text-align: center;
   gap: 0.5ch;
+}
+.ms-replies-wrapper {
+  flex-direction: column;
+  gap: 0;
+}
+.ms-replies-wrapper br {
+  display: none;
+}
+#ms-replies:empty {
+  display: none;
+}
+#ms-replies {
+  background-color: var(--deer-button);
+  border-radius: 0.75rem;
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+#ms-replies .reply:last-child {
+  margin: 0;
 }
 
 #ms-msg-wrapper {
@@ -90,7 +112,7 @@ a, #nav button, #ms-userbox button, #ms-ulist > span {
   width: 100%;
 }
 
-.reply {
+.reply.clickable {
   opacity: 40%;
   margin-bottom: 0.5rem;
 }
@@ -115,9 +137,5 @@ hr {
 
 [id^="p-"][id*="-attachment"],
 [id^="p-"][id*="-attachment"] + br {
-  display: none;
-}
-
-#ms-replies:not(:empty) {
   display: none;
 }
