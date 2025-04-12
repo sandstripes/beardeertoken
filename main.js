@@ -603,6 +603,7 @@ const emojify = (s) => {
 }
 
 function replyElement(replies) {
+  if (replies.length === 0) return "";
   const el = document.createElement("div");
   for (const i in replies) {
       let reply_loaded = `→ ${replies[i].author.display_name} (@${replies[i].author.username}): `
