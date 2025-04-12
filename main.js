@@ -57,7 +57,8 @@ let themes = {
     "helium": "Helium",
     "midnight": "Midnight",
     "bright": "Bright",
-    "cosmic-latte": "Cosmic Latte"
+    "cosmic-latte": "Cosmic Latte",
+    "roarer1": "Roarer 1"
 }
 
 let replace_text = false;
