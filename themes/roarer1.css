@@ -115,6 +115,6 @@ hr {
   display: none;
 }
 
-#ms-replies {
+#ms-replies:not(:empty) {
   display: none;
 }
