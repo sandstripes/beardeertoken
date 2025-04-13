@@ -9,7 +9,7 @@
         <meta rel="icon" type="image/x-icon" href="/favicon.ico">
         <meta charset="UTF-8">
         <link rel="stylesheet" href="/icons.css" />
-        <link rel="stylesheet" href="/global.css?92199" />
+        <link rel="stylesheet" href="/global.css?92109" />
         <link id="top-style" rel="stylesheet" href="/themes/helium.css" />
         <style id="custom-style"></style>
     </head>
@@ -111,7 +111,6 @@
                 <h2 class="header-notop">Dangerous</h2>
                 <p>Be careful!</p>
                 <small>Some functions have not yet been re-implemented into SoktDeer Helium.</small><br>
-                <span id="mc-support"><button onclick="getSupportCode();" disabled>Show support code</button></span><br>
                 <input id="mc-da-password" placeholder="Password..." autocomplete="off" type="password"></input> 
                 <button onclick="deleteAcc();">Delete account</button><br><br>
                 <h3 class="header-notop">Change password</h3>
@@ -162,12 +161,11 @@
                 <button onclick="postInbox();">Post inbox</button>
             </div>
             <div class="mm-container">
-                <small>This function has not yet been re-implemented into SoktDeer Helium.</small><br>
-                <h3 class="header-notop">Support Code</h3>
-                <input id="mm-username-support" placeholder="Username..." type="text"></input><br>
-                <input id="mm-content-support" placeholder="Code..." type="text"></input><br>
-                <button onclick="getSupportCodeUser();" disabled>Verify</button><br>
-                <span id="mm-support-verify"></span>
+                <h3 class="header-notop">User IPs</h3>
+                <input id="mm-username-ip" placeholder="Username..." type="text"></input><br>
+                <button onclick="getIPs();">Get recent IPs</button> 
+                <button onclick="clearIPs();">Clear</button><br>
+                <span id="mm-ips"></span>
             </div>
             <div class="mm-container">
                 <small>This function has not yet been re-implemented into SoktDeer Helium.</small><br>
@@ -197,7 +195,7 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/atom-one-dark.css">
         <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/markdown-it@14.1.0/dist/markdown-it.min.js"></script>
-        <script type="text/javascript" src="/main.js?92199"></script>
+        <script type="text/javascript" src="/main.js?92109"></script>
     </body>
     <!-- <script type="text/javascript" src="/purify.min.js"></script> -->
 </html>

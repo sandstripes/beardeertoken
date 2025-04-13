@@ -33,7 +33,7 @@ function closePopup () {
     document.getElementById("error-bar").classList.add("hidden");
 };
 
-const version = "1.7.5b";
+const version = "1.7.6b";
 const serverVersion = "Helium-1.0.1a";
 let last_cmd = "";
 let username = "";
@@ -388,17 +388,8 @@ ws.onmessage = function (event) {
             document.getElementById("ud-lastfm-container").classList.add("hidden")
         };
         switchScene('user-display');
-    } else if (last_cmd == "get_support_code" && "user" in incoming) {
-        document.getElementById("mc-support").innerHTML = "";
-        document.getElementById("mc-support").innerText = "Support code: " + incoming.code + "\nDO NOT SHARE!";
-    } else if (last_cmd == "get_support_codeUser" && "user" in incoming) {
-        if (document.getElementById("mm-content-support").value == incoming["code"]) {
-            document.getElementById("mm-support-verify").innerText = incoming["user"] + "'s support code is valid!"
-            document.getElementById("mm-content-support").value = "";
-        } else {
-            document.getElementById("mm-support-verify").innerText = incoming["user"] + "'s support code is NOT valid."
-            document.getElementById("mm-content-support").value = "";
-        }
+    } else if (last_cmd == "get_ips" && "ips" in incoming) {
+        document.getElementById("mm-ips").innerText = incoming.ips.toString().replaceAll(",", "\n");
     } else if (incoming["listener"] == "daAccountBossDeer" && incoming.error == false) {
         logOut();
     } else if (incoming["listener"] == "pwAccountBossDeer" && incoming.error == false) {
@@ -914,15 +905,15 @@ function showUser(user) {
     ws.send(JSON.stringify({command: "get_user", username: user}))
 };
 
-function getSupportCode() {
-    last_cmd = "get_support_code";
-    ws.send(JSON.stringify({command: "get_support_code", username: ""}))
+function getIPs() {
+    last_cmd = "get_ips";
+    ws.send(JSON.stringify({command: "get_ips", username: document.getElementById("mm-username-ip").value}))
 };
 
-function getSupportCodeUser() {
-    last_cmd = "get_support_codeUser";
-    ws.send(JSON.stringify({command: "get_support_code", username: document.getElementById("mm-username-support").value}))
-};
+function clearIPs() {
+    document.getElementById("mm-ips").innerText = "";
+    document.getElementById("mm-username-ip").value = "";
+}
 
 function deleteAcc() {
     last_cmd = "delete_account";
