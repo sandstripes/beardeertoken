@@ -259,7 +259,7 @@ Markdown can now be entered in bios!
 I forgot`
 )
 
-const prodUrl = "wss://ws.soktdeer.com";
+const prodUrl = "wss://chaos.goog-search.eu.org";
 const loclUrl = "ws://127.0.0.1:3636";
 
 //
