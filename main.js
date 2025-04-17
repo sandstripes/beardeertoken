@@ -1033,3 +1033,57 @@ setInterval(ping, 2500);
         e.preventDefault();
     })
 })();
+// ==UserScript==
+// @name         bossdeer notifications
+// @namespace    wlod
+// @version      2025-03-28
+// @description  shows you dleted posts the history of edited posts
+// @author       berry :3
+// @match        https://deer.fraudulent.loan/
+// @match        https://boss.soktdeer.com/
+// @match        https://deer.goog-search.eu.org/
+// @grant        none
+// ==/UserScript==
+
+// https://files.catbox.moe/62fie9.wav
+
+(function() {
+    'use strict';
+
+    window.actuallyLoadPost = loadPost;
+    let notifPerms = '';
+    let requested = false
+
+    Notification.requestPermission().then((result) => {
+        notifPerms = result
+        if (result != 'granted') {
+            document.addEventListener('click', () => {
+                if (requested) return;
+                requested = true
+                Notification.requestPermission().then((result) => {
+                    console.log(result);
+                    notifPerms = result
+                });
+            })
+        } else {
+            console.log(result)
+            requested = true;
+        }
+    });
+
+    loadPost = function (resf, isFetch, isInbox) {
+        if (isFetch) return actuallyLoadPost(resf, isFetch, isInbox);
+
+        if (resf.content.includes(`@${username}`)) {
+            const audio = document.createElement('audio');
+            audio.src = 'https://files.catbox.moe/62fie9.wav'
+            audio.play();
+            if (notifPerms == 'granted')
+                new Notification(resf?.author.display_name ?? resf?.author.username, { body: resf.content, icon: resf.author.avatar ?? "/assets/default.png" });
+        }
+
+        actuallyLoadPost(resf, isFetch, isInbox);
+    }
+
+    // Your code here...
+})();
