@@ -318,3 +318,4 @@ a {
 .reply {
     color: var(--deer-reply);
 }
+code:not(pre>code){display:initial;}

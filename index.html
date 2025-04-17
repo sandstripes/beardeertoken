@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en-US">
     <head>
-        <title>BossDeer</title>
+        <title>chaosdeer</title>
         <meta name="apple-mobile-web-app-capable" content="yes">
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
         <link rel="apple-touch-icon" type="image/png" href="/assets/icon256.png">
@@ -30,7 +30,7 @@
             <div id="rl-signup-container" class="hidden">
                 <input id="rl-username-s" autocomplete="off" placeholder="Username..." type="text" maxlength=20></input><br>
                 <input id="rl-password-s" autocomplete="off" placeholder="Password..." type="password"></input><br>
-                <input id="rl-invitecode" autocomplete="off" placeholder="Invite code..." type="text" maxlength=16></input><br>
+                <!-- <input id="rl-invitecode" autocomplete="off" placeholder="Invite code..." type="text" maxlength=16></input><br> -->
                 <button class="rl-button" onclick="register();">Sign up</button><br>
             </div><br><br>
             <span>Please ensure you have read the <a href="https://soktdeer.com/guidelines">GUIDELINES</a>.</span><br>
@@ -46,6 +46,7 @@
                 </span>
                 <span id="ms-hide-guest-nav">
                     <button onclick="switchScene('main-inbox');" id="ms-button-inbox">Inbox</button> 
+                    <button onclick="switchScene('main-livechat');" id="ms-button-livechat">Livechat</button> 
                     <!--<button onclick="switchScene('main-buddies');" id="ms-button-buddies">Buddies (0 online)</button>--> 
                     <button id="ms-button-mod" class="hidden" onclick="switchScene('main-moderation');">Moderation</button>
                 </span>
@@ -132,6 +133,21 @@
             <button onclick="switchScene('main-scene');">Return to Home</button><br>
             <h2>Inbox</h2>
             <div id="mi-posts"></div>
+        </div>
+        <div id="main-livechat" class="hidden">
+            <button onclick="switchScene('main-scene');">Return to Home</button><br>
+            <h2>Livechat</h2>
+            <small id="ml-ulist">0 users online (?)</small><br><br>
+            <div id="ml-make-post">
+                <center>
+                <button onclick="addAttachment();">URL...</button> 
+                <button onclick="addUpload();">+</button> 
+                <input id="ml-msg" maxlength=2000 oninput="textinput();" autocomplete="off" onkeydown="if (event.keyCode == 13) {sendLcPost();}" placeholder="What's on your mind?" type="text"></input> 
+                <button id="ml-button-post" onclick="sendLcPost();">Post</button><br>
+                <small id="ms-details"></small>
+                </center>
+            </div>
+            <div id="ml-posts"></div>
         </div>
         <div id="main-moderation" class="hidden">
             <button onclick="switchScene('main-scene');">Return to Home</button><br>

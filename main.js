@@ -19,7 +19,7 @@ const md = markdownit({
 
 document.getElementById("rl-username").value = "";
 document.getElementById("rl-password").value = "";
-document.getElementById("rl-invitecode").value = "";
+// document.getElementById("rl-invitecode").value = "";
 
 function displayError (errText) {
     document.getElementById("error-text").innerText = errText;
@@ -43,7 +43,9 @@ let scene = "loading";
 let ulist = [];
 let raw_ulist = {};
 let posts = {};
+let lcPosts = {};
 let posts_list = [];
+let lcPosts_list = [];
 let replies = [];
 let attachments = [];
 let editing = false;
@@ -217,7 +219,7 @@ Markdown can now be entered in bios!
 I forgot`
 )
 
-const prodUrl = "wss://ws.soktdeer.com";
+const prodUrl = "wss://chaos.goog-search.eu.org/";
 const loclUrl = "ws://127.0.0.1:3636";
 
 //
@@ -305,6 +307,7 @@ ws.onmessage = function (event) {
             ws.send(JSON.stringify({command: "get_inbox"}))
         };
     };
+    commandHandler:
     if ("token" in incoming && incoming.listener == "RegisterLoginPswdListener") {
         localStorage.setItem("username", username);
         localStorage.setItem("token", incoming.token);
@@ -313,6 +316,16 @@ ws.onmessage = function (event) {
         };
         logged_in = true;
     } else if (incoming.command == "new_post") {
+    	if (incoming.origin == 'livechat') {
+   	        lcPosts[incoming.data._id] = incoming.data;
+   	        if (lcPosts_list) {
+   	            lcPosts_list.splice(0, 0, incoming.data);
+   	        }
+   	        if (authed || guest) {
+   	            loadPost(incoming.data, false, false);
+   	        }
+    		break commandHandler
+    	}
         posts[incoming.data._id] = incoming.data;
         if (posts_list) {
             posts_list.splice(0, 0, incoming.data);
@@ -421,18 +434,24 @@ function updateUlist() {
     };
     if (!(ulist.includes(username)) && ulist.length != 0 && guest == false) {
         document.getElementById("ms-ulist").innerHTML = `${ulist.length} user online (${ulstring})❓ (Try <a href='javascript:window.location.reload();'>refreshing the page</a>?)`;
+        document.getElementById("ml-ulist").innerHTML = `${ulist.length} user online (${ulstring})❓ (Try <a href='javascript:window.location.reload();'>refreshing the page</a>?)`;
     } else if (ulist.length == 1 && guest == false) {
         document.getElementById("ms-ulist").innerHTML = "You are the only user online. 😥🦌";
+        document.getElementById("ml-ulist").innerHTML = "You are the only user online. 😥🦌";
     } else if (ulist.length == 1) {
         document.getElementById("ms-ulist").innerHTML = `${ulist.length} user online (${ulstring})`;
+        document.getElementById("ml-ulist").innerHTML = `${ulist.length} user online (${ulstring})`;
     } else if (ulist.length == 0) {
         if (guest) {
             document.getElementById("ms-ulist").innerHTML = "Nobody is online. 😥🦌";
+            document.getElementById("ml-ulist").innerHTML = "Nobody is online. 😥🦌";
         } else {
             document.getElementById("ms-ulist").innerHTML = "Nobody is online. 😥❓ (Try <a href='javascript:window.location.reload();'>refreshing the page</a>?)";
+            document.getElementById("ml-ulist").innerHTML = "Nobody is online. 😥❓ (Try <a href='javascript:window.location.reload();'>refreshing the page</a>?)";
         };
     } else {
         document.getElementById("ms-ulist").innerHTML = `${ulist.length} users online (${ulstring})`;
+        document.getElementById("ml-ulist").innerHTML = `${ulist.length} users online (${ulstring})`;
     };
 }
 
@@ -462,7 +481,7 @@ function switchScene (newScene, isguest) {
     document.getElementById("rl-username").value = "";
     document.getElementById("rl-password-s").value = "";
     document.getElementById("rl-password").value = "";
-    document.getElementById("rl-invitecode").value = "";
+    // document.getElementById("rl-invitecode").value = "";
 };
 
 function rltab (tab) {
@@ -470,7 +489,7 @@ function rltab (tab) {
     document.getElementById("rl-username").value = "";
     document.getElementById("rl-password-s").value = "";
     document.getElementById("rl-password").value = "";
-    document.getElementById("rl-invitecode").value = "";
+    // document.getElementById("rl-invitecode").value = "";
     if (tab == "login") {
         document.getElementById("rl-signup-container").classList.add("hidden");
         document.getElementById("rl-login-container").classList.remove("hidden");
@@ -493,7 +512,7 @@ rltab('login');
 function register() {
     last_cmd = "register";
     username = document.getElementById("rl-username-s").value.toLowerCase();
-    ws.send(JSON.stringify({command: "register", username: username, password: document.getElementById("rl-password-s").value, invite_code: document.getElementById("rl-invitecode").value, listener: "RegisterLoginPswdListener"}))
+    ws.send(JSON.stringify({command: "register", username: username, password: document.getElementById("rl-password-s").value, invite_code: '', listener: "RegisterLoginPswdListener"}))
 };
 
 function logIn() {
@@ -624,7 +643,14 @@ function loadPost(resf, isFetch, isInbox) {
     };
     
     var postboxid;
-    if (isInbox) {postboxid = "mi-posts"} else {postboxid = "ms-posts"}; // this oneliner is ugly imo
+    if (isInbox) {
+    	postboxid = "mi-posts"
+   	} else if (resf.origin == "livechat") {
+   		postboxid = "ml-posts"
+   	} else {
+   		postboxid = "ms-posts"
+  	}; // this oneliner is ugly imo
+  	// :true:
 
     if (isFetch) {
         document.getElementById(postboxid).appendChild(post);
@@ -654,6 +680,23 @@ function sendPost() {
         updateDetailsMsg();
     } else {
         editpost(edit_id);
+    }
+};
+
+function sendLcPost() {
+    if (!editing) {
+        last_cmd = "post";
+        var content = document.getElementById("ml-msg").value;
+        if (replace_text) {
+            for (const i in text_replacements) {
+                content = content.replaceAll(i, text_replacements[i]);
+            };
+        };
+        ws.send(JSON.stringify({command: "post", content: content, replies: replies, attachments: attachments, chat: 'livechat'}))
+        document.getElementById("ml-msg").value = "";
+        attachments = [];
+        replies = [];
+        updateDetailsMsg();
     }
 };
 
@@ -955,4 +998,38 @@ function ping() {
     }
 };
 
-setInterval(ping, 2500)
+setInterval(ping, 2500);
+
+// ==UserScript==
+// @name         bossdeer betterInput™
+// @namespace    wlod
+// @version      2025-03-28
+// @description  makes the message input be a textarea
+// @author       WlodekM
+// @match        https://deer.fraudulent.loan/
+// @match        https://boss.soktdeer.com/
+// @grant        none
+// ==/UserScript==
+
+(function() {
+    'use strict';
+    console.log('a', document.getElementById('ms-msg'))
+    document.getElementById('ms-msg').outerHTML = document.getElementById('ms-msg').outerHTML.replace(/<(\/?)input/g, '<$1textarea')
+        .replace(/onkeydown=".*?"/g, 'onkeydown=""');
+    // min-height
+    document.getElementById('ms-msg').style.minHeight = '35px';
+    document.getElementById('ms-msg').style.height = '35px';
+    let shift = false;
+    document.addEventListener('keydown', (e) => {
+        if (e.key == 'Shift') shift = true;
+    })
+    document.addEventListener('keyup', (e) => {
+        if (e.key == 'Shift') shift = false;
+    })
+    document.getElementById('ms-msg').addEventListener('keydown', (e) => {
+        if (e.key != 'Enter') return;
+        if (shift) return;
+        document.getElementById('ms-button-post').click()
+        e.preventDefault();
+    })
+})();
