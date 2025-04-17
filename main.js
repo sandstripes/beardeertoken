@@ -1013,25 +1013,29 @@ setInterval(ping, 2500);
 
 (function() {
     'use strict';
-    console.log('a', document.getElementById('ms-msg'))
-    document.getElementById('ms-msg').outerHTML = document.getElementById('ms-msg').outerHTML.replace(/<(\/?)input/g, '<$1textarea')
-        .replace(/onkeydown=".*?"/g, 'onkeydown=""');
-    // min-height
-    document.getElementById('ms-msg').style.minHeight = '35px';
-    document.getElementById('ms-msg').style.height = '35px';
-    let shift = false;
-    document.addEventListener('keydown', (e) => {
-        if (e.key == 'Shift') shift = true;
-    })
-    document.addEventListener('keyup', (e) => {
-        if (e.key == 'Shift') shift = false;
-    })
-    document.getElementById('ms-msg').addEventListener('keydown', (e) => {
-        if (e.key != 'Enter') return;
-        if (shift) return;
-        document.getElementById('ms-button-post').click()
-        e.preventDefault();
-    })
+    function thing (id) {
+	    console.log('a', document.getElementById(id))
+	    document.getElementById(id).outerHTML = document.getElementById(id).outerHTML.replace(/<(\/?)input/g, '<$1textarea')
+	        .replace(/onkeydown=".*?"/g, 'onkeydown=""');
+	    // min-height
+	    document.getElementById(id).style.minHeight = '35px';
+	    document.getElementById(id).style.height = '35px';
+	    let shift = false;
+	    document.addEventListener('keydown', (e) => {
+	        if (e.key == 'Shift') shift = true;
+	    })
+	    document.addEventListener('keyup', (e) => {
+	        if (e.key == 'Shift') shift = false;
+	    })
+	    document.getElementById(id).addEventListener('keydown', (e) => {
+	        if (e.key != 'Enter') return;
+	        if (shift) return;
+	        document.getElementById('ms-button-post').click()
+	        e.preventDefault();
+	    })
+    }
+    thing('ms-msg')
+    thing('ml-msg')
 })();
 // ==UserScript==
 // @name         bossdeer notifications
