@@ -1227,9 +1227,6 @@ setInterval(ping, 2500);
         if (isFetch) return actuallyLoadPost(resf, isFetch, isInbox);
 
         if (resf.content.includes(`@${username}`)) {
-            const audio = document.createElement('audio');
-            audio.src = 'https://files.catbox.moe/62fie9.wav'
-            audio.play();
             if (notifPerms == 'granted')
                 new Notification(resf?.author.display_name ?? resf?.author.username, { body: resf.content, icon: resf.author.avatar ?? "/assets/default.png" });
         }
