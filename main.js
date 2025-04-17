@@ -19,7 +19,7 @@ const md = markdownit({
 
 document.getElementById("rl-username").value = "";
 document.getElementById("rl-password").value = "";
-document.getElementById("rl-invitecode").value = "";
+// document.getElementById("rl-invitecode").value = "";
 
 function displayError (errText) {
     document.getElementById("error-text").innerText = errText;
@@ -33,7 +33,7 @@ function closePopup () {
     document.getElementById("error-bar").classList.add("hidden");
 };
 
-const version = "1.7.4b";
+const version = "1.7.6b";
 const serverVersion = "Helium-1.0.1a";
 let last_cmd = "";
 let username = "";
@@ -43,7 +43,9 @@ let scene = "loading";
 let ulist = [];
 let raw_ulist = {};
 let posts = {};
+let lcPosts = {};
 let posts_list = [];
+let lcPosts_list = [];
 let replies = [];
 let attachments = [];
 let editing = false;
@@ -259,7 +261,7 @@ Markdown can now be entered in bios!
 I forgot`
 )
 
-const prodUrl = "wss://chaos.goog-search.eu.org";
+const prodUrl = "wss://chaos.goog-search.eu.org/";
 const loclUrl = "ws://127.0.0.1:3636";
 
 //
@@ -347,6 +349,7 @@ ws.onmessage = function (event) {
             ws.send(JSON.stringify({command: "get_inbox"}))
         };
     };
+    commandHandler:
     if ("token" in incoming && incoming.listener == "RegisterLoginPswdListener") {
         localStorage.setItem("beardeer:username", username);
         localStorage.setItem("beardeer:token", incoming.token);
@@ -355,6 +358,16 @@ ws.onmessage = function (event) {
         };
         logged_in = true;
     } else if (incoming.command == "new_post") {
+    	if (incoming.origin == 'livechat') {
+   	        lcPosts[incoming.data._id] = incoming.data;
+   	        if (lcPosts_list) {
+   	            lcPosts_list.splice(0, 0, incoming.data);
+   	        }
+   	        if (authed || guest) {
+   	            loadPost(incoming.data, false, false);
+   	        }
+    		break commandHandler
+    	}
         posts[incoming.data._id] = incoming.data;
         if (posts_list) {
             posts_list.splice(0, 0, incoming.data);
@@ -439,23 +452,14 @@ ws.onmessage = function (event) {
                     };
                 }
             };
-            xhttp.open("GET", `https://lastfm-last-played.biancarosa.com.br/${incoming.user.profile.lastfm}/latest-song`, true);
+            xhttp.open("GET", `https://lastfm.kije.workers.dev/${incoming.user.profile.lastfm}`, true);
             xhttp.send();
         } else {
             document.getElementById("ud-lastfm-container").classList.add("hidden")
         };
         switchScene('user-display');
-    } else if (last_cmd == "get_support_code" && "user" in incoming) {
-        document.getElementById("mc-support").innerHTML = "";
-        document.getElementById("mc-support").innerText = "Support code: " + incoming.code + "\nDO NOT SHARE!";
-    } else if (last_cmd == "get_support_codeUser" && "user" in incoming) {
-        if (document.getElementById("mm-content-support").value == incoming["code"]) {
-            document.getElementById("mm-support-verify").innerText = incoming["user"] + "'s support code is valid!"
-            document.getElementById("mm-content-support").value = "";
-        } else {
-            document.getElementById("mm-support-verify").innerText = incoming["user"] + "'s support code is NOT valid."
-            document.getElementById("mm-content-support").value = "";
-        }
+    } else if (last_cmd == "get_ips" && "ips" in incoming) {
+        document.getElementById("mm-ips").innerText = incoming.ips.toString().replaceAll(",", "\n");
     } else if (incoming["listener"] == "daAccountBossDeer" && incoming.error == false) {
         logOut();
     } else if (incoming["listener"] == "pwAccountBossDeer" && incoming.error == false) {
@@ -497,18 +501,24 @@ function updateUlist() {
     };
     if (!(ulist.includes(username)) && ulist.length != 0 && guest == false) {
         document.getElementById("ms-ulist").innerHTML = `${ulist.length} user online (${ulstring})❓ (Try <a href='javascript:window.location.reload();'>refreshing the page</a>?)`;
+        document.getElementById("ml-ulist").innerHTML = `${ulist.length} user online (${ulstring})❓ (Try <a href='javascript:window.location.reload();'>refreshing the page</a>?)`;
     } else if (ulist.length == 1 && guest == false) {
         document.getElementById("ms-ulist").innerHTML = "You are the only user online. 😥🦌";
+        document.getElementById("ml-ulist").innerHTML = "You are the only user online. 😥🦌";
     } else if (ulist.length == 1) {
         document.getElementById("ms-ulist").innerHTML = `${ulist.length} user online (${ulstring})`;
+        document.getElementById("ml-ulist").innerHTML = `${ulist.length} user online (${ulstring})`;
     } else if (ulist.length == 0) {
         if (guest) {
             document.getElementById("ms-ulist").innerHTML = "Nobody is online. 😥🦌";
+            document.getElementById("ml-ulist").innerHTML = "Nobody is online. 😥🦌";
         } else {
             document.getElementById("ms-ulist").innerHTML = "Nobody is online. 😥❓ (Try <a href='javascript:window.location.reload();'>refreshing the page</a>?)";
+            document.getElementById("ml-ulist").innerHTML = "Nobody is online. 😥❓ (Try <a href='javascript:window.location.reload();'>refreshing the page</a>?)";
         };
     } else {
         document.getElementById("ms-ulist").innerHTML = `${ulist.length} users online (${ulstring})`;
+        document.getElementById("ml-ulist").innerHTML = `${ulist.length} users online (${ulstring})`;
     };
 }
 
@@ -538,7 +548,7 @@ function switchScene (newScene, isguest) {
     document.getElementById("rl-username").value = "";
     document.getElementById("rl-password-s").value = "";
     document.getElementById("rl-password").value = "";
-    document.getElementById("rl-invitecode").value = "";
+    // document.getElementById("rl-invitecode").value = "";
 };
 
 function rltab (tab) {
@@ -546,7 +556,7 @@ function rltab (tab) {
     document.getElementById("rl-username").value = "";
     document.getElementById("rl-password-s").value = "";
     document.getElementById("rl-password").value = "";
-    document.getElementById("rl-invitecode").value = "";
+    // document.getElementById("rl-invitecode").value = "";
     if (tab == "login") {
         document.getElementById("rl-signup-container").classList.add("hidden");
         document.getElementById("rl-login-container").classList.remove("hidden");
@@ -569,7 +579,7 @@ rltab('login');
 function register() {
     last_cmd = "register";
     username = document.getElementById("rl-username-s").value.toLowerCase();
-    ws.send(JSON.stringify({command: "register", username: username, password: document.getElementById("rl-password-s").value, invite_code: document.getElementById("rl-invitecode").value, listener: "RegisterLoginPswdListener"}))
+    ws.send(JSON.stringify({command: "register", username: username, password: document.getElementById("rl-password-s").value, invite_code: '', listener: "RegisterLoginPswdListener"}))
 };
 
 function logIn() {
@@ -726,7 +736,14 @@ function loadPost(resf, isFetch, isInbox) {
         // End of provided code
     
     var postboxid;
-    if (isInbox) {postboxid = "mi-posts"} else {postboxid = "ms-posts"}; // this oneliner is ugly imo
+    if (isInbox) {
+    	postboxid = "mi-posts"
+   	} else if (resf.origin == "livechat") {
+   		postboxid = "ml-posts"
+   	} else {
+   		postboxid = "ms-posts"
+  	}; // this oneliner is ugly imo
+  	// :true:
 
     if (isFetch) {
         document.getElementById(postboxid).appendChild(post);
@@ -762,6 +779,23 @@ function sendPost() {
     updateDetailsMsg();
     } else {
         editpost(edit_id);
+    }
+};
+
+function sendLcPost() {
+    if (!editing) {
+        last_cmd = "post";
+        var content = document.getElementById("ml-msg").value;
+        if (replace_text) {
+            for (const i in text_replacements) {
+                content = content.replaceAll(i, text_replacements[i]);
+            };
+        };
+        ws.send(JSON.stringify({command: "post", content: content, replies: replies, attachments: attachments, chat: 'livechat'}))
+        document.getElementById("ml-msg").value = "";
+        attachments = [];
+        replies = [];
+        updateDetailsMsg();
     }
 };
 
@@ -1021,15 +1055,15 @@ function showUser(user) {
     ws.send(JSON.stringify({command: "get_user", username: user}))
 };
 
-function getSupportCode() {
-    last_cmd = "get_support_code";
-    ws.send(JSON.stringify({command: "get_support_code", username: ""}))
+function getIPs() {
+    last_cmd = "get_ips";
+    ws.send(JSON.stringify({command: "get_ips", username: document.getElementById("mm-username-ip").value}))
 };
 
-function getSupportCodeUser() {
-    last_cmd = "get_support_codeUser";
-    ws.send(JSON.stringify({command: "get_support_code", username: document.getElementById("mm-username-support").value}))
-};
+function clearIPs() {
+    document.getElementById("mm-ips").innerText = "";
+    document.getElementById("mm-username-ip").value = "";
+}
 
 function deleteAcc() {
     last_cmd = "delete_account";
@@ -1149,4 +1183,4 @@ function ping() {
     }
 };
 
-setInterval(ping, 2500)
+setInterval(ping, 2500);
