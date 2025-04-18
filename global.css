@@ -105,6 +105,7 @@ hr {
     overflow-wrap: break-word;
     box-sizing: border-box;
     width: 100%;
+    overflow: hidden;
 }
 .mono {
     font-family: monospace;
