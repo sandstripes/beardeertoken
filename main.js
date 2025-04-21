@@ -712,28 +712,33 @@ function loadPost(resf, isFetch, isInbox) {
         for (const x in resf.attachments) {
             attachmentDetails.innerHTML += `<a target="_blank" rel="noopener noreferrer" id="p-${resf._id}-attachment-${Number(x)}">Loading...</a><br>`
         }
-        post.appendChild(attachmentDetails)
-
-
-        // Code below provided by SpeedBee411 (@speedbee411)
-        // note: modified
+        post.appendChild(attachmentDetails);
 
         for (let i = 0; i < resf.attachments.length; i++) {
-            var dft_debug = {
-                "dft_enabled": detect_file_type,
-                "postid": resf._id,
-                "attachment": i,
-                "pth": null,
-                "type": null
-            };
-                    let attachment = document.createElement("img");
-                    attachment.src = resf.attachments[i];
-                    attachment.classList.add("attachment");
-                    attachment.setAttribute("onerror", "this.remove();");
-                    post.appendChild(attachment);
+          const attachment = document.createElement("div");
+          attachment.classList.add("attachment")
+          post.appendChild(attachment);
+          const url = resf.attachments[i];
+          fetch(url, {
+            method: "HEAD"
+          }).then(async (response) => {
+            if (response.headers.get("content-type").startsWith("video/")) {
+              const v = document.createElement("video");
+              v.src = url;
+              v.addEventListener("loadeddata", () => {
+                v.height = v.clientHeight;
+                v.width = v.clientWidth;
+              });
+              v.controls = true;
+              attachment.append(v);
+            } else {
+              const i = document.createElement("img");
+              i.src = url;
+              attachment.append(i);
+            }
+          })
         }
     }
-        // End of provided code
     
     var postboxid;
     if (isInbox) {

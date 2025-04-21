@@ -262,12 +262,17 @@ hr {
     margin-top: 0;
 }
 .attachment {
+  display: inline-block;
+}
+.attachment img,
+.attachment video {
     margin-left:4px;
     margin-right:4px;
     max-height:25vw;
     max-width:25vw;
     width:auto;
     height:auto;
+    vertical-align: middle;
 }
 .reply {
     font-style: italic;
