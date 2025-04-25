@@ -1013,7 +1013,7 @@ setInterval(ping, 2500);
 
 (function() {
     'use strict';
-    function thing (id) {
+    function thing (id, click) {
 	    console.log('a', document.getElementById(id))
 	    document.getElementById(id).outerHTML = document.getElementById(id).outerHTML.replace(/<(\/?)input/g, '<$1textarea')
 	        .replace(/onkeydown=".*?"/g, 'onkeydown=""');
@@ -1030,12 +1030,13 @@ setInterval(ping, 2500);
 	    document.getElementById(id).addEventListener('keydown', (e) => {
 	        if (e.key != 'Enter') return;
 	        if (shift) return;
-	        document.getElementById('ms-button-post').click()
-	        e.preventDefault();
+	        document.getElementById(click).click()
+	        if (click)e.preventDefault();
 	    })
     }
-    thing('ms-msg')
-    thing('ml-msg')
+    thing('ms-msg', 'ms-button-post');
+    thing('ml-msg', 'ml-button-post');
+	thing('mm-content-inbox', '');
 })();
 // ==UserScript==
 // @name         bossdeer notifications
