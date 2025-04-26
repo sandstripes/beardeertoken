@@ -1058,6 +1058,8 @@ setInterval(ping, 2500);
     window.actuallyLoadPost = loadPost;
     let notifPerms = '';
     let requested = false
+    let lePinged = false;
+    let pings = 0;
 
     Notification.requestPermission().then((result) => {
         notifPerms = result
@@ -1076,11 +1078,22 @@ setInterval(ping, 2500);
         }
     });
 
+    document.addEventListener('focus', e => {
+    	if (!lePinged) return;
+    	pings = 0;
+    	lePinged = false;
+        document.title = 'chaosdeer'
+    })
+
     loadPost = function (resf, isFetch, isInbox) {
         if (isFetch) return actuallyLoadPost(resf, isFetch, isInbox);
+		if (document.hasFocus()) return; // do not the ping if focused
 
-        if (resf.content.includes(`@${username}`)) {
+        if (resf.content.includes(`@${username}`) || resf.replies.find(r => r.author.username == username)) {
             const audio = document.createElement('audio');
+            lePinged = true;
+            pings++;
+            document.title = `(${pings}) chaosdeer`
             audio.src = 'https://files.catbox.moe/62fie9.wav'
             audio.play();
             if (notifPerms == 'granted')
