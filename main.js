@@ -1087,7 +1087,7 @@ setInterval(ping, 2500);
 
     loadPost = function (resf, isFetch, isInbox) {
         if (isFetch) return actuallyLoadPost(resf, isFetch, isInbox);
-		if (document.hasFocus()) return; // do not the ping if focused
+		if (document.hasFocus()) return actuallyLoadPost(resf, isFetch, isInbox);; // do not the ping if focused
 
         if (resf.content.includes(`@${username}`) || resf.replies.find(r => r.author.username == username)) {
             const audio = document.createElement('audio');
