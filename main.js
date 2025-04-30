@@ -19,7 +19,7 @@ const md = markdownit({
 
 document.getElementById("rl-username").value = "";
 document.getElementById("rl-password").value = "";
-// document.getElementById("rl-invitecode").value = "";
+document.getElementById("rl-invitecode").value = "";
 
 function displayError (errText) {
     document.getElementById("error-text").innerText = errText;
@@ -481,7 +481,7 @@ function switchScene (newScene, isguest) {
     document.getElementById("rl-username").value = "";
     document.getElementById("rl-password-s").value = "";
     document.getElementById("rl-password").value = "";
-    // document.getElementById("rl-invitecode").value = "";
+    document.getElementById("rl-invitecode").value = "";
 };
 
 function rltab (tab) {
@@ -489,7 +489,7 @@ function rltab (tab) {
     document.getElementById("rl-username").value = "";
     document.getElementById("rl-password-s").value = "";
     document.getElementById("rl-password").value = "";
-    // document.getElementById("rl-invitecode").value = "";
+    document.getElementById("rl-invitecode").value = "";
     if (tab == "login") {
         document.getElementById("rl-signup-container").classList.add("hidden");
         document.getElementById("rl-login-container").classList.remove("hidden");
@@ -512,7 +512,13 @@ rltab('login');
 function register() {
     last_cmd = "register";
     username = document.getElementById("rl-username-s").value.toLowerCase();
-    ws.send(JSON.stringify({command: "register", username: username, password: document.getElementById("rl-password-s").value, invite_code: '', listener: "RegisterLoginPswdListener"}))
+    ws.send(JSON.stringify({
+        command: "register",
+        username,
+        password: document.getElementById("rl-password-s").value,
+        invite_code: document.getElementById("rl-invitecode").value,
+        listener: "RegisterLoginPswdListener"
+    }))
 };
 
 function logIn() {
@@ -923,6 +929,12 @@ function forceKick() {
     ws.send(JSON.stringify({command: "force_kick", username: document.getElementById("mm-username-forcekick").value}))
     document.getElementById("mm-username-forcekick").value = "";
 };
+
+function banish() {
+    last_cmd = "banish_to_the_SHADOW_REALM"
+    ws.send(JSON.stringify({command: "banish_to_the_SHADOW_REALM", ip: document.getElementById("mm-ip-banish").value}))
+    document.getElementById("mm-ip-banish").value = "";
+}
 
 function showUserPrompt() {
     var un = prompt("Username?") 
