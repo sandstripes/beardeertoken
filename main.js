@@ -576,7 +576,7 @@ function loadPost(resf, isFetch, isInbox) {
             postDetails.innerHTML += ` - <span class="text-clickable" onclick="editer('${resf._id}');">Edit</span>`
         }
         if (resf.author.username == username || delete_all) {
-            postDetails.innerHTML += ` - <span class="text-clickable" onclick="deletepost('${resf._id}');">Delete</span>`
+            postDetails.innerHTML += ` - <span class="text-clickable" onclick="if (confirm('delete post?')) {deletepost('${resf._id}');};">Delete</span>`
         }
     };
     post.appendChild(postDetails);
