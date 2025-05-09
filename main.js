@@ -52,6 +52,13 @@ let editing = false;
 let edit_id = "";
 let delete_all = false;
 let guest = false;
+let shift = false;
+document.addEventListener('keydown', (e) => {
+    if (e.key == 'Shift') shift = true;
+})
+document.addEventListener('keyup', (e) => {
+    if (e.key == 'Shift') shift = false;
+})
 
 let themes = {
     "deer": "Deer",
@@ -85,7 +92,14 @@ if (localStorage.getItem("customCSS")) {
 
 document.getElementById("top-style").href = `/themes/${localStorage.getItem("theme")}.css`;
 
-const settings_template = {"replace_text": true, "detect_file_type": false, "debug": true, "upload_key": "", "upload_service": ""}
+const settings_template = {
+    replace_text: true,
+    detect_file_type: false,
+    debug: true,
+    upload_key: "",
+    upload_service: "",
+    enter_to_send: false, //TODO: implement this
+}
 
 if (localStorage.getItem("settings") == null) {
     localStorage.setItem("settings", JSON.stringify(settings_template))
@@ -1010,46 +1024,15 @@ function ping() {
     }
 };
 
+function doInputEnterThingy(e, click) {
+    if (e.key != 'Enter') return;
+    if (shift) return;
+    document.getElementById(click).click()
+    if (click)e.preventDefault();
+}
+
 setInterval(ping, 2500);
 
-// ==UserScript==
-// @name         bossdeer betterInput™
-// @namespace    wlod
-// @version      2025-03-28
-// @description  makes the message input be a textarea
-// @author       WlodekM
-// @match        https://deer.fraudulent.loan/
-// @match        https://boss.soktdeer.com/
-// @grant        none
-// ==/UserScript==
-
-(function() {
-    'use strict';
-    function thing (id, click) {
-	    console.log('a', document.getElementById(id))
-	    document.getElementById(id).outerHTML = document.getElementById(id).outerHTML.replace(/<(\/?)input/g, '<$1textarea')
-	        .replace(/onkeydown=".*?"/g, 'onkeydown=""');
-	    // min-height
-	    document.getElementById(id).style.minHeight = '35px';
-	    document.getElementById(id).style.height = '35px';
-	    let shift = false;
-	    document.addEventListener('keydown', (e) => {
-	        if (e.key == 'Shift') shift = true;
-	    })
-	    document.addEventListener('keyup', (e) => {
-	        if (e.key == 'Shift') shift = false;
-	    })
-	    document.getElementById(id).addEventListener('keydown', (e) => {
-	        if (e.key != 'Enter') return;
-	        if (shift) return;
-	        document.getElementById(click).click()
-	        if (click)e.preventDefault();
-	    })
-    }
-    thing('ms-msg', 'ms-button-post');
-    thing('ml-msg', 'ml-button-post');
-	thing('mm-content-inbox', '');
-})();
 // ==UserScript==
 // @name         bossdeer notifications
 // @namespace    wlod
