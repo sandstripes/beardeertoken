@@ -504,8 +504,8 @@ function updateUlist() {
         document.getElementById("ms-ulist").innerHTML = `${ulist.length} user online (${ulstring})❓ (Try <a href='javascript:window.location.reload();'>refreshing the page</a>?)`;
         document.getElementById("ml-ulist").innerHTML = `${ulist.length} user online (${ulstring})❓ (Try <a href='javascript:window.location.reload();'>refreshing the page</a>?)`;
     } else if (ulist.length == 1 && guest == false) {
-        document.getElementById("ms-ulist").innerHTML = "You are the only user online. 😥🦌";
-        document.getElementById("ml-ulist").innerHTML = "You are the only user online. 😥🦌";
+        document.getElementById("ms-ulist").innerHTML = "You are the only user online. 😥🦌<br>Are you lonely? Here's a frog! <a href='https://commons.wikimedia.org/wiki/File:Golden-eyed_tree_frog_(Agalychnis_annae).jpg' target='_blank'><img src='https://upload.wikimedia.org/wikipedia/commons/c/c6/Golden-eyed_tree_frog_%28Agalychnis_annae%29.jpg' style='vertical-align: top' height='200'></a>";
+        document.getElementById("ml-ulist").innerHTML = "You are the only user online. 😥🦌<br>Are you lonely? Here's a frog! <a href='https://commons.wikimedia.org/wiki/File:Golden-eyed_tree_frog_(Agalychnis_annae).jpg' target='_blank'><img src='https://upload.wikimedia.org/wikipedia/commons/c/c6/Golden-eyed_tree_frog_%28Agalychnis_annae%29.jpg' style='vertical-align: top' height='200'></a>";
     } else if (ulist.length == 1) {
         document.getElementById("ms-ulist").innerHTML = `${ulist.length} user online (${ulstring})`;
         document.getElementById("ml-ulist").innerHTML = `${ulist.length} user online (${ulstring})`;
