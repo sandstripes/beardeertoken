@@ -1320,17 +1320,17 @@ setInterval(ping, 2500);
     	if (!lePinged) return;
     	pings = 0;
     	lePinged = false;
-        document.title = 'chaosdeer'
+        document.title = 'BearDeer'
     })
 
     loadPost = function (resf, isFetch, isInbox) {
         if (isFetch) return actuallyLoadPost(resf, isFetch, isInbox);
 		if (document.hasFocus()) return actuallyLoadPost(resf, isFetch, isInbox);; // do not the ping if focused
 
-        if (resf.content.includes(`@${username}`) || resf.replies.find(r => r.author.username == username)) {
+        if ((resf.content.includes(`@${username}`) || resf.replies.find(r => r.author.username == username)) && !resf.content.match(/^Reaction: (\p{Emoji_Presentation})$/u)) {
             lePinged = true;
             pings++;
-            document.title = `(${pings}) chaosdeer`
+            document.title = `(${pings}) BearDeer`
             if (notifPerms == 'granted')
                 new Notification(resf?.author.display_name ?? resf?.author.username, { body: resf.content, icon: resf.author.avatar ?? "/assets/default.png" });
         }
