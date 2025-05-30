@@ -821,7 +821,7 @@ function loadPost(resf, isFetch, isInbox) {
 
 function reactpost(id) {
   const emoji = prompt("What emoji do you want to react with?");
-  if (!/\p{Emoji_Presentation}/u.test(emoji)) {
+  if (!/^\p{Emoji_Presentation}$/u.test(emoji)) {
     alert("That's not an emoji.");
     return;
   }
