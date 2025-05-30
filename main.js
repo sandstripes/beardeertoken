@@ -825,7 +825,7 @@ function reactpost(id) {
     alert("That's not an emoji.");
     return;
   }
-  if (document.querySelector(`#${id} .reactions .reaction-author[data-emoji="${emoji}"]`)) {
+  if (document.querySelector(`[id="${id}"] .reactions .reaction-author[data-emoji="${emoji}"]`)) {
     alert("You already reacted with that emoji.")
     return;
   }
