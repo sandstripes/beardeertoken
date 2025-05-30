@@ -97,6 +97,10 @@ hr {
 .hidden {
     display: none;
 }
+#ms-posts, #ml-posts {
+  display: flex;
+  flex-direction: column-reverse;
+}
 .post {
     padding: 6px;
     border-radius: 4px;
@@ -106,6 +110,12 @@ hr {
     box-sizing: border-box;
     width: 100%;
     overflow: hidden;
+}
+.reactions button {
+  border: 2px solid transparent;
+}
+.reactions button.reaction-author {
+  border: 2px solid cornflowerblue;
 }
 .mono {
     font-family: monospace;

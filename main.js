@@ -342,7 +342,7 @@ ws.onmessage = function (event) {
             document.getElementById("ms-name").innerText = `@${username}`
             last_cmd = "get_inbox"
             authed = true;
-            for (const i in posts_list) {
+            for (const i in posts_list.reverse()) {
                 loadPost(posts_list[i], true, false);
             };
             posts_list = undefined;
@@ -642,6 +642,48 @@ function replyElement(replies) {
 function loadPost(resf, isFetch, isInbox) {
     if (settings.debug) { console.log("Loading post " + resf._id) };
 
+    const reactionMatch = resf.content.match(/^Reaction: (\p{Emoji_Presentation})$/u);
+    if (reactionMatch && resf.replies.length === 1) {
+      const emoji = reactionMatch[1]
+      const reactions = document.querySelector(`[id="${resf.replies[0]._id}"] .reactions`);
+      if (!reactions) return;
+      let reactionEl = reactions.querySelector(`[data-emoji=${emoji}]`);
+      if (reactionEl?.hasAttribute(`data-has-reacted-${resf.author.username}`)) {
+        return;
+      }
+      if (!reactionEl) {
+        reactionEl = document.createElement("button");
+        if (resf.author.username === username) {
+          reactionEl.classList.add("reaction-author");
+        }
+        reactionEl.addEventListener("click", () => {
+          if (reactionEl.hasAttribute("data-reaction-post-author")) {
+            last_cmd = "delete_post";
+            ws.send(JSON.stringify({command: "delete_post", id: reactionEl.getAttribute("data-reaction-post-author")}))
+          } else {
+            ws.send(JSON.stringify({command: "post", content: `Reaction: ${reactionEl.dataset.emoji}`, replies: [resf.replies[0]._id], attachments: []}))
+          }
+        })
+        reactionEl.dataset.emoji = emoji;
+        const reactionEmojiEl = document.createElement("span");
+        reactionEmojiEl.textContent = emoji;
+        reactionEl.append(reactionEmojiEl);
+        const reactionCountEl = document.createElement("span");
+        reactionCountEl.classList.add("count");
+        reactionCountEl.textContent = "0";
+        reactionEl.append(reactionCountEl);
+        reactions.append(reactionEl);
+      }
+      reactionEl.setAttribute(`data-reaction-post-${resf._id}`, "");
+      reactionEl.setAttribute(`data-has-reacted-${resf.author.username}`, "");
+      if (resf.author.username === username) {
+        reactionEl.setAttribute(`data-reaction-post-author`, resf._id);
+        reactionEl.classList.add("reaction-author");
+      }
+      reactionEl.querySelector(".count").textContent++;
+      return;
+    }
+
     var sts = new Date(resf.created * 1000).toLocaleString();
     var replies_loaded = replyElement(resf.replies)
 
@@ -686,6 +728,9 @@ function loadPost(resf, isFetch, isInbox) {
     }
     if (resf.author?.username == username || delete_all) {
         postDetails.innerHTML += ` - <span class="text-clickable" onclick="deletepost('${resf._id}');">Delete</span>`
+    }
+    if (username) {
+      postDetails.innerHTML += ` - <span class="text-clickable" onclick="reactpost('${resf._id}')">React</span>`
     }
     post.appendChild(postDetails);
     
@@ -746,6 +791,10 @@ function loadPost(resf, isFetch, isInbox) {
           })
         }
     }
+
+    const reactions = document.createElement("div");
+    reactions.classList.add("reactions");
+    post.append(reactions);
     
     var postboxid;
     if (isInbox) {
@@ -757,16 +806,30 @@ function loadPost(resf, isFetch, isInbox) {
   	}; // this oneliner is ugly imo
   	// :true:
 
+    // todo: i can probably remove this conditional now
     if (isFetch) {
         document.getElementById(postboxid).appendChild(post);
     } else {
-        document.getElementById(postboxid).insertBefore(post, document.getElementById(postboxid).firstChild);
+        document.getElementById(postboxid).appendChild(post);
     }
 
     for (const x in resf.attachments) {
         document.getElementById(`p-${resf._id}-attachment-${Number(x)}`).innerText = `Attachment ${Number(x) + 1} (${resf.attachments[x]})`
         document.getElementById(`p-${resf._id}-attachment-${Number(x)}`).href = resf.attachments[x];
     }
+}
+
+function reactpost(id) {
+  const emoji = prompt("What emoji do you want to react with?");
+  if (!/\p{Emoji_Presentation}/u.test(emoji)) {
+    alert("That's not an emoji.");
+    return;
+  }
+  if (document.querySelector(`#${id} .reactions .reaction-author[data-emoji="${emoji}"]`)) {
+    alert("You already reacted with that emoji.")
+    return;
+  }
+  ws.send(JSON.stringify({command: "post", content: `Reaction: ${emoji}`, replies: [id], attachments: []}))
 }
 
 function sendPreset(el) {
@@ -1015,6 +1078,17 @@ function removepost(id, dba) {
             repliesMade[x].innerText = `→ post deleted`;
         }
     } catch {}
+    document.querySelectorAll(`[data-reaction-post-${id}]`).forEach((r) => {
+      const count = r.querySelector(".count");
+      count.textContent--;
+      r.removeAttribute(`data-reaction-post-${id}`)
+      if (count.textContent === "0") {
+        r.remove();
+      } else if (r.dataset.reactionPostAuthor === id) {
+        r.removeAttribute(`data-reaction-post-author`);
+        r.classList.remove("reaction-author");
+      }
+    })
 }
 
 function editedpost(id, content) {
