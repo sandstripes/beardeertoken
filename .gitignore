@@ -3,3 +3,5 @@ host.js
 package.json
 pnpm-lock.yaml
 start.sh
+beta
+deno.lock
