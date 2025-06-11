@@ -26,7 +26,7 @@ function clearValueOf(array) {
 function findandReplaceMentions(content) {
     const regex = /@([a-zA-Z0-9_-]+)/g;
     return content.replace(regex, (_match, username) => {
-        const element = `<span class='inter' style='font-weight: bold' onclick='showUser("${username}");'>@${username}</a>`;
+        const element = `<span class='inter' style='font-weight: bold' onclick='showUser("${username}");'>@${username}</span>`;
         return element;
     })
 }
