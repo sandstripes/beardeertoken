@@ -5,24 +5,6 @@ const loclUrl = "ws://10.88.0.3:3000";
 //   DO NOT FORGET TO CHANGE THE URL
 //
 
-let last_cmd = "";
-let username = "";
-let logged_in = false; // unused?
-let authed = false;
-let scene = "loading";
-let ulist = [];
-let raw_ulist = {};
-let posts = {};
-let lcPosts = {};
-let posts_list = [];
-let lcPosts_list = [];
-let replies = [];
-let attachments = [];
-let editing = false;
-let edit_id = "";
-let delete_all = false;
-let guest = false;
-let replace_text = false;
 let wsurl = prodUrl;
 if (localStorage.getItem("serverurl")) {
     wsurl = localStorage.getItem("serverurl");

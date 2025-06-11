@@ -23,6 +23,7 @@ button {
     -webkit-box-shadow: #000 0 1px 0, 0 1px 3px black;
     box-shadow: #000 0 1px 0, 0 1px 3px black;
     border-top: 1px solid #fff3;
+    transition: background .3s ease-in-out;
 }
 button:hover {
     cursor: pointer;
@@ -43,9 +44,8 @@ input {
 }
 textarea:focus {
     outline: none;
-    border: 1px solid var(--deer-button-hover);
     -webkit-box-shadow: #000 0 1px 0, 0 1px 3px black, 0 0 4px;
-    box-shadow: #000 0 1px 0, 0 1px 3px black, 0 0 4px;
+    box-shadow: #000 0 1px 0, 0 1px 3px black, 0 2px 5px;
 }
 textarea {
     min-width: 180px;
@@ -71,11 +71,20 @@ hr {
     border-top: 1px solid;
     padding: 0;
 }
-
+blockquote {
+    margin-left: 70px;
+    border-left: 3px solid var(--deer-container-background);
+    padding: 12px;
+    background-color: var(--deer-button);
+    box-shadow: 0px 0 5px #00000021;
+}
 
 #main {
     padding: 10px
 }
+.inter { cursor: pointer; }
+.inter:hover { text-decoration: underline;}
+
 .message-input {
     height: 35px;
     min-height: 35px;
@@ -96,10 +105,6 @@ hr {
     width: 100%;
     padding: 4px;
     box-sizing: border-box;
-    /*z-index: 99 !important;
-    position: fixed;
-    float: top;
-    margin: 0;*/
 }
 .text-clickable {
     text-decoration: underline;
@@ -137,6 +142,11 @@ hr {
 .mono {
     font-family: monospace;
 }
+#ms-ulist {
+    font-weight: bold;
+    color: var(--deer-reply);
+    text-shadow: 1px 1px black;
+}
 #ms-msg {
     width:60vw;
     box-sizing: border-box;
@@ -145,7 +155,7 @@ hr {
     box-sizing: border-box;
 }
 .album-cover {
-    border-radius: 4px;
+    border-radius: 2px;
     width: 62px;
     height: 62px;
     float: left;
@@ -156,7 +166,7 @@ hr {
 #ud-lastfm-container {
     width: 100%;
     padding: 6px;
-    border-radius: 4px;
+    border-radius: 2px;
     margin-top: 8px;
     word-break: break-word;
     overflow-wrap: break-word;
@@ -165,7 +175,7 @@ hr {
 #ud-bio-container {
     width: 100%;
     padding: 6px;
-    border-radius: 4px;
+    border-radius: 2px;
     margin-top: 8px;
     word-break: break-word;
     overflow-wrap: break-word;
@@ -181,7 +191,7 @@ hr {
 .mc-container {
     width: 100%;
     padding: 6px;
-    border-radius: 4px;
+    border-radius: 2px;
     margin-top: 8px;
     word-break: break-word;
     overflow-wrap: break-word;
@@ -190,7 +200,7 @@ hr {
 #mc-danger-container {
     width: 100%;
     padding: 6px;
-    border-radius: 4px;
+    border-radius: 2px;
     margin-top: 8px;
     word-break: break-word;
     overflow-wrap: break-word;
@@ -205,7 +215,7 @@ hr {
     margin-bottom: 8px;
     background-color: var(--deer-background);
     border: 2px var(--deer-button-disabled) solid;
-    border-radius: 4px;
+    border-radius: 2px;
 }
 
 .mc-preview-content {
@@ -214,7 +224,7 @@ hr {
 
 .mc-preview-post {
     padding: 4px;
-    border-radius: 4px;
+    border-radius: 2px;
     margin-bottom: 8px;
     word-break: break-word;
     overflow-wrap: break-word;
@@ -248,7 +258,8 @@ hr {
 .mm-container {
     width: auto;
     padding: 12px;
-    border-radius: 4px;
+    border-radius: 2px;
+    box-shadow: 0 0 1px, 0 0 14px -4px black;
     margin: 8px;
     word-break: break-word;
     overflow-wrap: break-word;
@@ -311,6 +322,7 @@ input {
 #error-bar {
     background-color: var(--deer-error);
     color: var(--deer-background);
+    box-shadow: 0 0 3px black, inset 0 -2px 5px -2px black;
 }
 .ms-seperator {
     color: var(--deer-seperator);
