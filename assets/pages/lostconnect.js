@@ -1,0 +1,13 @@
+export function lostConnectionContents() {
+    return `
+            <center>Connection was lost.
+                <br>
+                <span onclick="window.location.reload();" class="text-clickable">Reload</span>.
+                <br>
+                <br>
+                <small>
+                    <span onclick="setServerPrompt();" class="text-clickable">Set a custom server URL</span>
+                </small>
+            </center>
+    `
+}

@@ -1,0 +1,7 @@
+export function inboxContents() {
+    return `
+        <button onclick="switchScene('main-scene');">Return to Home</button><br>
+        <h2>Inbox</h2>
+        <div id="mi-posts"></div>
+    `
+}
