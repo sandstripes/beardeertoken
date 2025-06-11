@@ -788,6 +788,10 @@ function loadPost(resf, isFetch, isInbox) {
               i.src = url;
               attachment.append(i);
             }
+          }).catch(() => {
+              const i = document.createElement("img");
+              i.src = url;
+              attachment.append(i);
           })
         }
     }
