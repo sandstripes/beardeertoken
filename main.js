@@ -15,7 +15,6 @@ const md = markdownit({
   })
   .disable('image');
   
-clearValueOf(["rl-username", "rl-password", "rl-invitecode"])
 const version = "1.7.6b";
 const serverVersion = "Helium-1.0.1a";
 
@@ -107,6 +106,7 @@ function stgsTriggers() {
     //};
 };
 
+clearValueOf(["rl-username", "rl-password", "rl-invitecode"])
 function updateStg(setting) {
     switch(setting) {
         case "replace_text":

@@ -1,29 +1,44 @@
-import { homeContents } from '/assets/pages/home.js';
-import { moderationContents } from './assets/pages/moderation.js';
-import { configContents } from './assets/pages/config.js';
-import { inboxContents } from './assets/pages/inbox.js';
-import { livechatContents } from './assets/pages/livechat.js';
-import { regisLogContents } from './assets/pages/regislog.js';
-import { whatsNewContents } from './assets/pages/whatsnew.js';
-import { lostConnectionContents } from './assets/pages/lostconnect.js';
-import { profileContents } from './assets/pages/profile.js';
-
 const main = document.getElementById('main');
 
-function createPage(name, contents) {
+async function createPage(name) {
     const page = document.createElement('div');
+    const contents = await (await fetch("./assets/pages/" + name + ".html")).text();
     page.id = name;
     page.className = 'scene hidden';
     page.innerHTML = contents;
     main.appendChild(page);
 }
 
-createPage('main-scene', homeContents());
-createPage('main-moderation', moderationContents());
-createPage('main-config', configContents());
-createPage('main-inbox', inboxContents())
-createPage('main-livechat', livechatContents());
-createPage('register-login', regisLogContents());
-createPage('main-whatsnew', whatsNewContents());
-createPage('connection-lost', lostConnectionContents())
-createPage('user-display', profileContents())
+async function createScript(src, defer) {
+    return new Promise((resolve, reject) => {
+        const script = document.createElement('script');
+        script.src = src;
+        if (defer) {
+            script.defer = defer;
+        }
+        script.onload = resolve;
+        script.onerror = reject;
+        document.body.appendChild(script);
+    });
+}
+
+async function createAllPagesAndLoadScripts() {
+    const pagePromises = [
+        createPage('main-scene'),
+        createPage('main-moderation'),
+        createPage('main-config'),
+        createPage('main-inbox'),
+        createPage('main-livechat'),
+        createPage('register-login'),
+        createPage('main-whatsnew'),
+        createPage('connection-lost'),
+        createPage('user-display')
+    ];
+
+    await Promise.all(pagePromises);
+    await createScript('/helpers/functions.js');
+    await createScript('/helpers/ws.js');
+    await createScript('/helpers/notification.js');
+    await createScript('/main.js?93000', true);
+}
+createAllPagesAndLoadScripts();
