@@ -1,0 +1,57 @@
+<button onclick="switchScene('main-scene');">Return to Home</button><br>
+<div class="mc-container">
+    <h2 class="header-notop">Profile</h2>
+    <input id="mc-display-name" placeholder="Display name..." autocomplete="off" type="text" maxlength=20></input>
+    <button onclick="setDisplayName();">Set display name</button><br>
+    <input id="mc-avatar" placeholder="Avatar URL..." autocomplete="off" type="text" maxlength=656></input>
+    <button onclick="setAvatar();">Set avatar URL</button><br>
+    <span class="align-button"><textarea id="mc-bio" placeholder="Bio..." type="text" autocomplete="off"
+            maxlength=512></textarea> <button onclick="setBio();">Set bio</button></span><br>
+    <input id="mc-lastfm" placeholder="Last.fm..." autocomplete="off" type="text" maxlength=72></input>
+    <button onclick="setLastfm();">Set Last.fm</button>
+</div>
+<div class="mc-container">
+    <h2 class="header-notop">Misc</h2>
+    <h3 class="header-notop">Uploads</h3>
+    <select id="mc-upload-service">
+        <option value="imgbb">ImgBB</option>
+        <option value="fraud">Fraudulent Uploads</option>
+    </select><br>
+    <input id="mc-upload-key" placeholder="Service key..." autocomplete="off" type="text"
+        maxlength=128></input><br><button onclick="updateStg('upload_key');updateStg('upload_service');">Set
+        key and service</button><br>
+    <h3 class="header-notop">Other</h3>
+    <button id="mc-button-replace" onclick="updateStg('replace_text')">(?) Replace text</button><br>
+    <button onclick="logOut();">Log out</button>
+</div>
+<div class="mc-container">
+    <h2 class="header-notop">Theme</h2>
+    <div class="mc-theme-preview">
+        <div class="mc-preview-error">Error bar</div>
+        <div class="mc-preview-content">
+            <button>Button</button> <button disabled>Disabled</button><br>
+            <div class="mc-preview-post"><img src="/assets/icon256.png" class="pfp"><span>Post
+                    example<br>Lorem ipsum, dolor sit amet.</span></div>
+        </div>
+    </div>
+    <p>Selected theme: <span id="mc-theme-name">?</span></p>
+    <div id="mc-theme-buttons"></div>
+    <h3 class="header-notop">Custom CSS</h3>
+    <textarea id="mc-theme-custom" placeholder="Put CSS here..."></textarea><br>
+    <button onclick="setCustomTheme();">Set custom CSS</button>
+</div>
+<div id="mc-danger-container">
+    <h2 class="header-notop">Dangerous</h2>
+    <p>Be careful!</p>
+    <small>Some functions have not yet been re-implemented into SoktDeer Helium.</small><br>
+    <input id="mc-da-password" placeholder="Password..." autocomplete="off" type="password"></input>
+    <button onclick="deleteAcc();">Delete account</button><br><br>
+    <h3 class="header-notop">Change password</h3>
+    <input id="mc-pw-password" placeholder="Current password..." autocomplete="off" type="password"></input><br>
+    <input id="mc-pw-new-password" placeholder="New password..." autocomplete="off" type="password"></input><br>
+    <button onclick="changePswd();" disabled>Change password</button>
+</div><br><br>
+<small><span onclick="setServerPrompt();" class="text-clickable">Set a custom server URL</span></small><br>
+<small id="mc-version"></small><br><br>
+<h4>Server contributors</h4>
+<span id="mc-contributors"></span>
