@@ -34,7 +34,7 @@ function closePopup () {
 };
 
 const version = "1.7.6b";
-const serverVersion = "Helium-1.0.1a";
+const serverVersion = "Lithium-1.0.0a";
 let last_cmd = "";
 let username = "";
 let logged_in = false; // unused?
