@@ -1,223 +1,33 @@
 <!DOCTYPE html>
-<html lang="en-US">
-    <head>
-        <title>chaosdeer</title>
-        <meta name="apple-mobile-web-app-capable" content="yes">
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-        <link rel="apple-touch-icon" type="image/png" href="/assets/icon256.png">
-        <link rel="apple-touch-icon" type="image/png" sizes="256x256" href="/assets/icon256.png">
-        <meta rel="icon" type="image/x-icon" href="/favicon.ico">
-        <meta charset="UTF-8">
-        <link rel="stylesheet" href="/icons.css" />
-        <link rel="stylesheet" href="/global.css?92109" />
-        <link id="top-style" rel="stylesheet" href="/themes/helium.css" />
-        <style id="custom-style"></style>
-    </head>
-    <body>
-        <div id="error-bar"><span onclick="closePopup();" class="text-clickable">Close</span> - <span id="error-text">Connecting...<span></div>
-        <div class="scene">
-        <div id="loading"><center>Taking too long to load? Try <span onclick="logOut();" class="text-clickable">a full reset</span>.</center></div>
-        <div id="connection-lost" class="hidden"><center>Connection was lost.<br><span onclick="window.location.reload();" class="text-clickable">Reload</span>.<br><br><small><span onclick="setServerPrompt();" class="text-clickable">Set a custom server URL</span></small></center></div>
-        <div id="register-login" class="hidden"><center>
-            <button class="rl-button-a" id="rl-t-login" onclick="rltab('login');">Login</button>
-            <button class="rl-button-a" id="rl-t-signup" onclick="rltab('signup');">Signup</button>
-            <button class="rl-button=a" id="rl-t-guest" onclick="guest = true;updateUlist();switchScene('main-scene', true);">Guest</button><br><br>
-            <div id="rl-login-container" class="hidden">
-                <input id="rl-username" placeholder="Username..." type="text" maxlength=20></input><br>
-                <input id="rl-password" placeholder="Password..." type="password"></input><br>
-                <button class="rl-button" onclick="logIn();">Log in</button> 
-            </div>
-            <div id="rl-signup-container" class="hidden">
-                <input id="rl-username-s" autocomplete="off" placeholder="Username..." type="text" maxlength=20></input><br>
-                <input id="rl-password-s" autocomplete="off" placeholder="Password..." type="password"></input><br>
-                <input id="rl-invitecode" autocomplete="off" placeholder="Invite code..." type="text" maxlength=16></input><br>
-                <button class="rl-button" onclick="register();">Sign up</button><br>
-                <!-- <p></p> -->
-            </div><br><br>
-            <span>Please ensure you have read the <a href="https://alpha.wasteof.money/users/cheesewhisk3rs/wall/684149ef390b5646e3daa087">ToS</a>.</span><br>
-            <small><span onclick="setServerPrompt();" class="text-clickable">Set a custom server URL</span></small><br>
-            <small id="rl-version"></small>
-        </center></div>
-        <div id="main-scene" class="hidden">
-            <div id="nav">
-                <button id="ms-name" onclick="userBox();">@...</button> 
-                <span class="ms-seperator">|</span> 
-                <span id="ms-show-guest-nav" class="hidden">
-                    <button onclick="window.location.reload();" id="ms-button-reload">Return to menu</button> 
-                </span>
-                <span id="ms-hide-guest-nav">
-                    <button onclick="switchScene('main-inbox');" id="ms-button-inbox">Inbox</button> 
-                    <button onclick="switchScene('main-livechat');" id="ms-button-livechat">Livechat</button> 
-                    <!--<button onclick="switchScene('main-buddies');" id="ms-button-buddies">Buddies (0 online)</button>--> 
-                    <button id="ms-button-mod" class="hidden" onclick="switchScene('main-moderation');">Moderation</button>
-                </span>
-            </div>
-            <div id="ms-userbox" class="mc-container hidden">
-                <button onclick="showUser(username);">Profile</button> 
-                <button onclick="switchScene('main-config');">Settings</button> 
-                <button onclick="logOut();">Log out</button> 
-                <button onclick="showUserPrompt();">Show a user...</button> 
-                <button onclick="switchScene('main-whatsnew');">What's new?</button>
-            </div>
-            <small id="ms-ulist">0 users online (?)</small><br><br>
-            <div id="ms-make-post">
-                <center>
-                <button onclick="addAttachment();">URL...</button> 
-                <button onclick="addUpload();">+</button> 
-                <textarea id="ms-msg" class="message-input" maxlength=2000 oninput="textinput();" autocomplete="off" onkeydown="doInputEnterThingy(event, 'ms-button-post')" placeholder="What's on your mind?" type="text"></textarea> 
-                <button id="ms-button-post" onclick="sendPost();">Post</button><br>
-                <small id="ms-details"></small>
-                </center>
-            </div>
-            <br>
-            <div id="ms-posts"></div>
-            <input class="hidden" id="ms-attach" onchange="attachFile();" multiple=true type="file">
+<html lang="en-UK">
+
+<head>
+    <title>chaosdeer</title>
+    <meta charset="UTF-8">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <link rel="apple-touch-icon" type="image/png" href="/assets/icon256.png">
+    <link rel="apple-touch-icon" type="image/png" sizes="256x256" href="/assets/icon256.png">
+    <meta rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/icons.css" />
+    <link rel="stylesheet" href="/global.css?92109" />
+    <link id="top-style" rel="stylesheet" href="/themes/helium.css" />
+    <style id="custom-style"></style>
+</head>
+
+<body>
+    <div id="error-bar">
+        <span onclick="closePopup();" class="text-clickable">Close</span> - <span id="error-text">Connecting...<span>
+    </div>
+    <div id="main">
+        <div id="loading">
+            <center>Taking too long to load? Try <span onclick="logOut();" class="text-clickable">a full reset</span>.
+            </center>
         </div>
-        <div id="main-config" class="hidden">
-            <button onclick="switchScene('main-scene');">Return to Home</button><br>
-            <div class="mc-container">
-                <h2 class="header-notop">Profile</h2>
-                <input id="mc-display-name" placeholder="Display name..." autocomplete="off" type="text" maxlength=20></input> <button onclick="setDisplayName();">Set display name</button><br>
-                <input id="mc-avatar" placeholder="Avatar URL..." autocomplete="off" type="text" maxlength=656></input> <button onclick="setAvatar();">Set avatar URL</button><br>
-                <span class="align-button"><textarea id="mc-bio" placeholder="Bio..." type="text" autocomplete="off" maxlength=512></textarea> <button onclick="setBio();">Set bio</button></span><br>
-                <input id="mc-lastfm" placeholder="Last.fm..." autocomplete="off" type="text" maxlength=72></input> <button onclick="setLastfm();">Set Last.fm</button>
-            </div>
-            <div class="mc-container">
-                <h2 class="header-notop">Misc</h2>
-                <h3 class="header-notop">Uploads</h3>
-                <select id="mc-upload-service">
-                    <option value="imgbb">ImgBB</option>
-                    <option value="fraud">Fraudulent Uploads</option>
-                </select><br>
-                <input id="mc-upload-key" placeholder="Service key..." autocomplete="off" type="text" maxlength=128></input><br><button onclick="updateStg('upload_key');updateStg('upload_service');">Set key and service</button><br>
-                <h3 class="header-notop">Other</h3>
-                <button id="mc-button-replace" onclick="updateStg('replace_text')">(?) Replace text</button><br>
-                <button onclick="logOut();">Log out</button>
-            </div>
-            <div class="mc-container">
-                <h2 class="header-notop">Theme</h2>
-                <div class="mc-theme-preview">
-                    <div class="mc-preview-error">Error bar</div>
-                    <div class="mc-preview-content">
-                        <button>Button</button> <button disabled>Disabled</button><br>
-                        <div class="mc-preview-post"><img src="/assets/icon256.png" class="pfp"><span>Post example<br>Lorem ipsum, dolor sit amet.</span></div>
-                    </div>
-                </div>
-                <p>Selected theme: <span id="mc-theme-name">?</span></p>
-                <div id="mc-theme-buttons"></div>
-                <h3 class="header-notop">Custom CSS</h3>
-                <textarea id="mc-theme-custom" placeholder="Put CSS here..."></textarea><br>
-                <button onclick="setCustomTheme();">Set custom CSS</button>
-            </div>
-            <div id="mc-danger-container">
-                <h2 class="header-notop">Dangerous</h2>
-                <p>Be careful!</p>
-                <small>Some functions have not yet been re-implemented into SoktDeer Helium.</small><br>
-                <input id="mc-da-password" placeholder="Password..." autocomplete="off" type="password"></input> 
-                <button onclick="deleteAcc();">Delete account</button><br><br>
-                <h3 class="header-notop">Change password</h3>
-                <input id="mc-pw-password" placeholder="Current password..." autocomplete="off" type="password"></input><br>
-                <input id="mc-pw-new-password" placeholder="New password..." autocomplete="off" type="password"></input><br>
-                <button onclick="changePswd();" disabled>Change password</button>
-            </div><br><br>
-            <small><span onclick="setServerPrompt();" class="text-clickable">Set a custom server URL</span></small><br>
-            <small id="mc-version"></small><br><br>
-            <h4>Server contributors</h4>
-            <span id="mc-contributors"></span>
-        </div>
-        <div id="main-whatsnew" class="hidden">
-            <button onclick="switchScene('main-scene');">Return to Home</button><br>
-            <h2>What's new?</h2>
-            <div id="mw-new"></div>
-        </div>
-        <div id="main-inbox" class="hidden">
-            <button onclick="switchScene('main-scene');">Return to Home</button><br>
-            <h2>Inbox</h2>
-            <div id="mi-posts"></div>
-        </div>
-        <div id="main-livechat" class="hidden">
-            <button onclick="switchScene('main-scene');">Return to Home</button><br>
-            <h2>Livechat</h2>
-            <small id="ml-ulist">0 users online (?)</small><br><br>
-            <div id="ml-make-post">
-                <center>
-                <button onclick="addAttachment();">URL...</button> 
-                <button onclick="addUpload();">+</button> 
-                <textarea id="ml-msg" class="message-input" maxlength=2000 oninput="textinput();" autocomplete="off" onkeydown="doInputEnterThingy(event, 'ml-button-post')" placeholder="What's on your mind?" type="text"></textarea> 
-                <button id="ml-button-post" onclick="sendLcPost();">Post</button><br>
-                <small id="ms-details"></small>
-                </center>
-            </div>
-            <div id="ml-posts"></div>
-        </div>
-        <div id="main-moderation" class="hidden">
-            <button onclick="switchScene('main-scene');">Return to Home</button><br>
-            <p>Welcome to the moderation tool menu.</p>
-            <div id="mm-flex">
-            <div class="mm-container">
-                <h3 class="header-notop">Ban</h3>
-                <input id="mm-username-ban" placeholder="Username..." type="text"></input><br>
-                <input id="mm-until-ban" type="datetime-local"></input><br>
-                <input id="mm-reason-ban" placeholder="Reason..." type="text"></input><br>
-                <button onclick="ban();">Ban User</button>
-            </div>
-            <div class="mm-container">
-                <h3 class="header-notop">Invite code</h3>
-                <span id="mm-invite-code"></span><br>
-                <button onclick="genInviteCode();">Generate invite code</button><br>
-                <button onclick="resetInvites();">Reset invite codes</button>
-            </div>
-            <div class="mm-container">
-                <h3 class="header-notop">Forcekick</h3>
-                <input id="mm-username-forcekick" placeholder="Username..." type="text"></input><br>
-                <button onclick="forceKick();">Forcekick</button>
-            </div>
-            <div class="mm-container">
-                <h3 class="header-notop">Inbox</h3>
-                <textarea id="mm-content-inbox" placeholder="Message..." type="text" width=80></textarea><br>
-                <button onclick="postInbox();">Post inbox</button>
-            </div>
-            <div class="mm-container">
-                <h3 class="header-notop">User IPs</h3>
-                <input id="mm-username-ip" placeholder="Username..." type="text"></input><br>
-                <button onclick="getIPs();">Get recent IPs</button> 
-                <button onclick="clearIPs();">Clear</button><br>
-                <span id="mm-ips"></span>
-            </div>
-            <div class="mm-container">
-                <h3 class="header-notop">banish to the SHADOW REALM</h3>
-                <input id="mm-ip-banish" placeholder="IP..." type="text"></input><br>
-                <button onclick="banish();">Begone, foul beast</button>
-            </div>
-            <div class="mm-container">
-                <small>This function has not yet been re-implemented into SoktDeer Helium.</small><br>
-                <h3 class="header-notop">Lockdown server</h3>
-                <button onclick="toggleLock();" disabled>Toggle lock</button>
-            </div>
-            </div>
-        </div>
-        <div id="user-display" class="hidden">
-            <button onclick="switchScene('main-scene');">Return to Home</button><br>
-            <img id="ud-avatar" class="pfp" src="/assets/default.png" onerror="this.src = '/assets/default.png'">
-            <span id="ud-display-name"></span> <span id="ud-d-tags"></span><br>
-            <span id="ud-username" class="mono"></span><br>
-            <small id="ud-created"></small><br>
-            <small id="ud-permissions"></small> <!-- no br here!! -->
-            <small id="ud-special"></small><br>
-            <span id="ud-banned" class="hidden"><small id="ud-banned-span"></small><br></span>
-            <div id="ud-bio-container"><b>Bio</b><br><span id="ud-bio">This user does not have a bio.</span></div>
-            <div id="ud-lastfm-container">
-                <img id="ud-lastfm-cover" class="album-cover" src="/assets/default.png" onerror="this.src = '/assets/default.png'">
-                <span id="ud-lastfm-name"></span><br>
-                <span id="ud-lastfm-artist"></span><br>
-                <small id="ud-lastfm-album"></small>
-            </div>
-        </div>
-        </div>
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/atom-one-dark.css">
-        <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/markdown-it@14.1.0/dist/markdown-it.min.js"></script>
-        <script type="text/javascript" src="/main.js?92109"></script>
-    </body>
-    <!-- <script type="text/javascript" src="/purify.min.js"></script> -->
+    </div>
+    <script src="/page.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/atom-one-dark.css">
+    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/markdown-it@14.1.0/dist/markdown-it.min.js"></script>
+</body>
 </html>
