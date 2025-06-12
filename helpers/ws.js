@@ -91,7 +91,9 @@ ws.onmessage = function (event) {
             }
             buddies = incoming.user.buddies;
             handleAppearElement(["main-scene"])
-            document.getElementById("ms-name").innerText = `@${username}`
+            chaosEvents.doWhenReady(() => {
+                document.getElementById("ms-name").innerText = `@${username}`
+            })
             last_cmd = "get_inbox"
             authed = true;
             for (const i in posts_list) {
