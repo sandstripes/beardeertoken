@@ -392,7 +392,7 @@ function editer(id) {
     edit_id = id;
     editing = true;
     if (id in posts) {
-        document.getElementById("ms-msg").value = posts[id].content.replaceAll("\n", "\\n");
+        document.getElementById("ms-msg").value = posts[id].content;
     }
     document.getElementById("ms-msg").focus();
     updateDetailsMsg();
