@@ -405,7 +405,7 @@ ws.onmessage = function (event) {
         document.getElementById("ud-display-name").innerText = incoming.user.display_name;
         document.getElementById("ud-username").innerText = "@" + incoming.user.username;
         const info = document.getElementById("ud-info");
-        info.style.background = incoming.user.banner ? `url('${incoming.user.banner}')` : '';
+        info.style.backgroundImage = incoming.user.banner ? `url('${incoming.user.banner}')` : '';
         info.classList.toggle("has-banner", !!incoming.user.banner);
         if (incoming.user.username in timeZones) {
           const formatter = new Intl.DateTimeFormat([], {

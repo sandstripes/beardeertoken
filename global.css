@@ -171,7 +171,6 @@ hr {
 #ud-info.has-banner {
   padding-left: 10px;
   padding-right: 10px;
-  -webkit-text-stroke: 0.3px black;
   /* stolen from @waso */
   height: 150px;
   padding-top: 100px;
