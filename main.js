@@ -1364,7 +1364,7 @@ setInterval(ping, 2500);
             pings++;
             document.title = `(${pings}) BearDeer`
             if (notifPerms == 'granted')
-                new Notification(resf?.author.display_name ?? resf?.author.username, { body: resf.content, icon: resf.author.avatar ?? "/assets/default.png" });
+                new Notification(resf?.author.display_name ?? resf?.author.username, { body: resf.content, icon: resf.author.avatar ?? "assets/default.png" });
         }
 
         actuallyLoadPost(resf, isFetch, isInbox);
