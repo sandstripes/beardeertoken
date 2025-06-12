@@ -38,6 +38,16 @@ const settings_template = {
     enter_to_send: false, //TODO: implement this
 }
 
+let settings = JSON.parse(localStorage.getItem("settings"));
+for (const i in settings_template) {
+    if (!i in settings) {
+        settings[i] = settings_template[i]
+        localStorage.setItem("settings", JSON.stringify(settings))
+    }
+}
+
+//TODO: more to the bottom bc this happens after all the functions are initialised n stuff
+chaosEvents.addEventListener('ready', () => {
     document.addEventListener('keydown', (e) => {
         if (e.key == 'Shift') shift = true;
     })
@@ -65,28 +75,25 @@ const settings_template = {
         localStorage.setItem("last_inbox_id", "")
     };
 
-let settings = JSON.parse(localStorage.getItem("settings"));
-for (const i in settings_template) {
-    if (!i in settings) {
-        settings[i] = settings_template[i]
-        localStorage.setItem("settings", JSON.stringify(settings))
+    for (const i in themes) {
+        document.getElementById("mc-theme-buttons").innerHTML += `<button onclick="setTheme('${i}');">${themes[i]}</button> `
     }
-}
 
-for (const i in themes) {
-    document.getElementById("mc-theme-buttons").innerHTML += `<button onclick="setTheme('${i}');">${themes[i]}</button> `
-}
-
-document.getElementById("mc-theme-name").innerText = themes[localStorage.getItem("theme")];
-document.getElementById("mc-upload-service").value = settings.upload_service;
-fetch('changelog.md')
-  .then(response => response.text())
-  .then(markdownContent => {
-    document.getElementById("mw-new").innerHTML = md.render(markdownContent);
-  })
-  .catch(error => {
-    console.error('Error fetching changelog:', error);
-});
+    document.getElementById("mc-theme-name").innerText = themes[localStorage.getItem("theme")];
+    document.getElementById("mc-upload-service").value = settings.upload_service;
+    fetch('changelog.md')
+        .then(response => response.text())
+        .then(markdownContent => {
+            document.getElementById("mw-new").innerHTML = md.render(markdownContent);
+        })
+        .catch(error => {
+            console.error('Error fetching changelog:', error);
+        });
+    
+    clearValueOf(["rl-username", "rl-password", "rl-invitecode"]);
+    stgsTriggers();
+    rltab('login');
+})
 
 // @berry told me not eat commented out code so....
 function stgsTriggers() {
@@ -105,8 +112,6 @@ function stgsTriggers() {
         //document.getElementById("mc-button-detectft").innerText = "(disabled) Detect file types";
     //};
 };
-
-clearValueOf(["rl-username", "rl-password", "rl-invitecode"])
 function updateStg(setting) {
     switch(setting) {
         case "replace_text":
@@ -128,7 +133,6 @@ function updateStg(setting) {
     localStorage.setItem("settings", JSON.stringify(settings));
     stgsTriggers();
 };
-stgsTriggers();
 
 async function uploadFile(file) {
     // ORIGINAL CREDIT TO:
@@ -225,7 +229,6 @@ function rltab (tab) {
         document.getElementById("rl-t-signup").disabled = true;
     };
 };
-rltab('login');
 
 function logOut() {
     localStorage.removeItem("token");

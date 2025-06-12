@@ -35,10 +35,6 @@ async function createAllPagesAndLoadScripts() {
         createPage('user-display')
     ];
     await Promise.all(pagePromises);
-    
-    await createScript('/helpers/functions.js');
-    await createScript('/helpers/ws.js');
-    await createScript('/helpers/notification.js');
-    await createScript('/main.js?93000', true);
+    chaosEvents.dispatchEvent(new Event('ready'))
 }
 createAllPagesAndLoadScripts();
