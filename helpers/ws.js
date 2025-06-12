@@ -520,7 +520,10 @@ function textinput() {
     // TODO
 }
 
-const suggestionsEl = document.querySelector("#ms-suggestions");
+let suggestionsEl;
+chaosEvents.doWhenReady(() => {
+  document.querySelector("#ms-suggestions");
+});
 function selection(el) {
   const suggestions = determineSuggestions(el);
   suggestionsEl.innerHTML = "";
