@@ -19,202 +19,336 @@ let text_replacements = {
     ":b:": "🅱️"
 };
 
-const ws = new WebSocket(wsurl)
+class WsHelper {
+    /** @type {WebSocket} */
+    ws;
+    /** @private @type {number} */
+    id = 0;
+    /** @typedef {Record<string, Record<number, {(...args: any[]) => void, once: boolean}>>} handlerRecord  */
+    /** @private @type {handlerRecord} */
+    handlers = {};
+    /** @private @type {handlerRecord} */
+    commandHandlers = {};
+    /** @private @type {handlerRecord} */
+    listenerHandlers = {};
+    /**
+     * get a unique event id
+     * @private
+     * @returns {number}
+     */
+    getId() {
+        return this.id++;
+    }
 
-ws.onmessage = function (event) {
-    let incoming = JSON.parse(event.data);
-    if (settings.debug) { console.log(incoming) };
+    /**
+     * @private
+     * @param {handlerRecord} handlerDict 
+     * @param {string} category 
+     * @param {(...args: any[]) => void} handler 
+     * @param {boolean} [once=false] 
+     * @returns {number}
+     */
+    initHandler(handlerDict, category, handler, once=false) {
+        if (!handlerDict[category])
+            handlerDict[category] = {};
+        const id = this.getId();
+        handlerDict[category][id] = {
+            handler,
+            once
+        };
+        return id;
+    }
 
-    if (incoming.command == "greet") {
-        closePopup();
-        chaosEvents.doWhenReady(() => {
-            document.getElementById("rl-version").innerText = `${version} - ${incoming.version}`;
-            document.getElementById("mc-version").innerText = `${version} - ${incoming.version}`;
-        })
-        if (incoming.server_contributors) {
-            for (const x in incoming.server_contributors) {
-                chaosEvents.doWhenReady(() => {
-                    document.getElementById("mc-contributors").innerText += `\n${incoming.server_contributors[x]}`;
-                })
-            }
-        }
-        if (incoming.version != serverVersion) {
-            displayError(`The server is on a newer version than this version of BossDeer was designed for. You may experience problems. (Expected "${serverVersion}", got "${incoming.version}")`);
-        };
-        ulist = Object.keys(incoming.ulist);
-        raw_ulist = incoming.ulist;
-        chaosEvents.doWhenReady(() => {
-            updateUlist();
-        })
-        for (const x in incoming.messages) {
-            posts[incoming.messages[x]._id] = incoming.messages[x]
-        }
-        posts_list = incoming.messages
-        if (localStorage.getItem("username") == null || localStorage.getItem("token") == null) {
-            scene = "register-login";
-            handleAppearElement(["loading", "register-login"])
-        } else {
-            username = localStorage.getItem("username").toLowerCase();
-            last_cmd = "login_token";
-            ws.send(JSON.stringify({command: "login_token", token: localStorage.getItem("token"), client: `BossDeer ${version}`}))
-        };
-    } else if (incoming.command == "ulist") {
-        ulist = Object.keys(incoming.ulist);
-        raw_ulist = incoming.ulist;
-        chaosEvents.doWhenReady(() => {
-            updateUlist();
-        })
-    };
-    if ("error" in incoming) {
-        if (incoming.error) {
-            if (incoming.code == "banned") {
-                displayError(`Account is banned until ${new Date(incoming.banned_until * 1000).toLocaleString()} for "${incoming.ban_reason}"`)
-            } else {
-                displayError(`We hit an error. ${incoming.context} (${incoming.code})`);
-            };
-        } else if (incoming.listener == "PingBossDeer") {
-            last_ping = Date.now();
-        } else if (last_cmd == "login_token" || last_cmd == "login_pswd") {
-            if (scene == "register-login") {
-                handleAppearElement(["register-login"])
-            } else if (scene == "loading") {
-                handleAppearElement(["loading"])
-            };
-            scene = "main-scene";
-            if ([JSON.stringify([]), JSON.stringify(["PROTECTED"])].includes(JSON.stringify(incoming.user.permissions))) {
-                handleAppearElement(["ms-button-mod"], "hide")
-            } else {
-                handleAppearElement(["ms-button-mod"], "show")
-            };
-            if (incoming.user.permissions.includes("DELETE")) {
-                delete_all = true;
-            }
-            buddies = incoming.user.buddies;
-            handleAppearElement(["main-scene"])
+    /**
+     * @overload
+     * @param {"command"} event
+     * @param {(command: string, data: Record<string, any>)}
+     */
+    /**
+     * set a listener for an event
+     * @param {string} event the name of the event
+     * @param {(...args: any[]) => void} handler a handler for the event
+     */
+    on(event, handler) {
+        return this.initHandler(this.handlers, event, handler, false)
+    }
+    /**
+     * @overload
+     * @param {"command"} event
+     * @param {(command: string, data: Record<string, any>)}
+     */
+    /**
+     * set a listener for an event
+     * @param {string} event the name of the event
+     * @param {(...args: any[]) => void} handler a handler for the event
+     */
+    once(event, handler) {
+        return this.initHandler(this.handlers, event, handler, true)
+    }
+    /**
+     * set a listener for a command
+     * @param {string} commandName the name of the event
+     * @param {(Record<string, any>) => void} handler a handler for the event
+     */
+    onCommand(commandName, handler) {
+        return this.initHandler(this.commandHandlers, commandName, handler, false)
+    }
+    /**
+     * set a listener for a command
+     * @param {string} commandName the name of the event
+     * @param {(Record<string, any>) => void} handler a handler for the event
+     */
+    onceCommand(commandName, handler) {
+        return this.initHandler(this.commandHandlers, commandName, handler, true)
+    }
+    /**
+     * set a listener for a listener,, fires ur handler when we get a response with ur listener
+     * @param {string} listener the name of the event
+     * @param {(Record<string, any>) => void} handler a handler for the event
+     */
+    onListener(listener, handler) {
+        return this.initHandler(this.listenerHandlers, listener, handler, false)
+    }
+    /**
+     * set a listener for a listener,, fires ur handler when we get a response with ur listener
+     * @param {string} listener the name of the event
+     * @param {(Record<string, any>) => void} handler a handler for the event
+     */
+    onceListener(listener, handler) {
+        return this.initHandler(this.listenerHandlers, listener, handler, true)
+    }
+
+    off(id) {
+        const handler = [this.handlers, this.commandHandlers, this.listenerHandlers]
+            .find(h => Object.values(h)
+                    .find(f => f[id]));
+        if (!handler)
+            return;
+        const category = Object.entries(handler)
+            .find(([_, f]) => f[id])[0];
+        return [category, category[id]];
+    }
+
+    /**
+     * @param {handlerRecord} handlers the handlers
+     * @param {string} event event name
+     * @param {any} [data] the event data
+     */
+    fireEvent(handlers, event, data) {
+
+    }
+
+    /**
+     * a helper class for all your soktdeer needs
+     * @param {WebSocket} ws the soktdeer websocket
+     */
+    constructor(ws) {
+        this.ws = ws;
+        ws.addEventListener('open', () => {});
+    }
+}
+
+
+let ws;
+chaosEvents.doWhenReady(() => {
+    ws = new WebSocket(wsurl)
+    ws.onmessage = function (event) {
+        let incoming = JSON.parse(event.data);
+        if (settings.debug) { console.log(incoming) };
+
+        if (incoming.command == "greet") {
+            closePopup();
             chaosEvents.doWhenReady(() => {
-                document.getElementById("ms-name").innerText = `@${username}`
+                document.getElementById("rl-version").innerText = `${version} - ${incoming.version}`;
+                document.getElementById("mc-version").innerText = `${version} - ${incoming.version}`;
             })
-            last_cmd = "get_inbox"
-            authed = true;
-            for (const i in posts_list) {
-                loadPost(posts_list[i], true, false);
-            };
-            posts_list = undefined;
-            ws.send(JSON.stringify({command: "get_inbox"}))
-        };
-    };
-    commandHandler:
-    if ("token" in incoming && incoming.listener == "RegisterLoginPswdListener") {
-        localStorage.setItem("username", username);
-        localStorage.setItem("token", incoming.token);
-        if (last_cmd == "register") {
-            window.location.reload();
-        };
-        logged_in = true;
-    } else if (incoming.command == "new_post") {
-    	if (incoming.origin == 'livechat') {
-   	        lcPosts[incoming.data._id] = incoming.data;
-   	        if (lcPosts_list) {
-   	            lcPosts_list.splice(0, 0, incoming.data);
-   	        }
-   	        if (authed || guest) {
-   	            loadPost(incoming.data, false, false);
-   	        }
-    		break commandHandler
-    	}
-        posts[incoming.data._id] = incoming.data;
-        if (posts_list) {
-            posts_list.splice(0, 0, incoming.data);
-        }
-        if (authed || guest) {
-            loadPost(incoming.data, false, false);
-        }
-    } else if (incoming.command == "deleted_post") {
-        removepost(incoming._id, incoming.deleted_by_author)
-        if (incoming._id in posts) {
-            delete posts[incoming._id];
-        }
-    } else if (incoming.command == "edited_post") {
-        editedpost(incoming._id, incoming.content)
-    } else if (last_cmd == "gen_invite" && "invite_code" in incoming) {
-        document.getElementById("mm-invite-code").innerText = `Your invite code is "${incoming.invite_code}". Use it on any SoktDeer client to sign up!\nhttps://soktdeer.com/\n\nCodes: ${incoming.invite_codes}`
-    } else if (last_cmd == "get_inbox" && "inbox" in incoming) {
-        document.getElementById("mi-posts").innerHTML = ""
-        for (const i in incoming.inbox) {
-            loadPost(incoming.inbox[i], true, true);
-        };
-        if (!incoming.inbox.length == 0) {
-            if (localStorage.getItem("last_inbox_id") != incoming.inbox[0]._id) {
-                document.getElementById("ms-button-inbox").innerText = "Inbox*";
-                localStorage.setItem("last_inbox_id", incoming.inbox[0]._id)
-            } else {
-                document.getElementById("ms-button-inbox").innerText = "Inbox";
+            if (incoming.server_contributors) {
+                for (const x in incoming.server_contributors) {
+                    chaosEvents.doWhenReady(() => {
+                        document.getElementById("mc-contributors").innerText += `\n${incoming.server_contributors[x]}`;
+                    })
+                }
             }
+            if (incoming.version != serverVersion) {
+                displayError(`The server is on a newer version than this version of BossDeer was designed for. You may experience problems. (Expected "${serverVersion}", got "${incoming.version}")`);
+            };
+            ulist = Object.keys(incoming.ulist);
+            raw_ulist = incoming.ulist;
+            chaosEvents.doWhenReady(() => {
+                updateUlist();
+            })
+            for (const x in incoming.messages) {
+                posts[incoming.messages[x]._id] = incoming.messages[x]
+            }
+            posts_list = incoming.messages
+            if (localStorage.getItem("username") == null || localStorage.getItem("token") == null) {
+                scene = "register-login";
+                handleAppearElement(["loading", "register-login"])
+            } else {
+                username = localStorage.getItem("username").toLowerCase();
+                last_cmd = "login_token";
+                ws.send(JSON.stringify({command: "login_token", token: localStorage.getItem("token"), client: `BossDeer ${version}`}))
+            };
+        } else if (incoming.command == "ulist") {
+            ulist = Object.keys(incoming.ulist);
+            raw_ulist = incoming.ulist;
+            chaosEvents.doWhenReady(() => {
+                updateUlist();
+            })
         };
-    } else if (last_cmd == "get_user" && "user" in incoming) {
-        var bio;
-        document.getElementById("ud-d-tags").innerHTML = "";
-        if (incoming.user.profile.bio == "") {bio = "This user does not have a bio."} else {bio = incoming.user.profile.bio};
-        document.getElementById("ud-avatar").src = incoming.user.avatar;
-        document.getElementById("ud-display-name").innerText = incoming.user.display_name;
-        document.getElementById("ud-username").innerText = "@" + incoming.user.username;
-        document.getElementById("ud-created").innerText = new Date(incoming.user.created * 1000).toLocaleString();
-        document.getElementById("ud-permissions").innerText = `Permissions: ${incoming.user.permissions.toString().toLowerCase().replaceAll(",", ", ")}`;
-        document.getElementById("ud-special").innerHTML = ""
-        if (incoming.user.bot) {
-            document.getElementById("ud-d-tags").innerHTML += ' <span title="This user is a robot." class="inline-icon material-symbols-outlined">smart_toy</span>'
+        if ("error" in incoming) {
+            if (incoming.error) {
+                if (incoming.code == "banned") {
+                    displayError(`Account is banned until ${new Date(incoming.banned_until * 1000).toLocaleString()} for "${incoming.ban_reason}"`)
+                } else {
+                    displayError(`We hit an error. ${incoming.context} (${incoming.code})`);
+                };
+            } else if (incoming.listener == "PingBossDeer") {
+                last_ping = Date.now();
+            } else if (last_cmd == "login_token" || last_cmd == "login_pswd") {
+                if (scene == "register-login") {
+                    handleAppearElement(["register-login"])
+                } else if (scene == "loading") {
+                    handleAppearElement(["loading"])
+                };
+                scene = "main-scene";
+                if ([JSON.stringify([]), JSON.stringify(["PROTECTED"])].includes(JSON.stringify(incoming.user.permissions))) {
+                    handleAppearElement(["ms-button-mod"], "hide")
+                } else {
+                    handleAppearElement(["ms-button-mod"], "show")
+                };
+                if (incoming.user.permissions.includes("DELETE")) {
+                    delete_all = true;
+                }
+                buddies = incoming.user.buddies;
+                handleAppearElement(["main-scene"])
+                chaosEvents.doWhenReady(() => {
+                    document.getElementById("ms-name").innerText = `@${username}`
+                })
+                last_cmd = "get_inbox"
+                authed = true;
+                for (const i in posts_list) {
+                    loadPost(posts_list[i], true, false);
+                };
+                posts_list = undefined;
+                ws.send(JSON.stringify({command: "get_inbox"}))
+            };
         };
-        if (incoming.user.banned_until > new Date().getTime() / 1000) {
-            document.getElementById("ud-banned-span").innerText = `Banned until ${new Date(incoming.user.banned_until * 1000).toLocaleString()}`;
-            handleAppearElement(["ud-banned"], "show")
-        } else {
-            handleAppearElement(["ud-banned"], "hide")
-        };
-        document.getElementById("ud-bio").innerHTML = md.render(bio);
-        if (incoming.user.profile.lastfm) {
-            handleAppearElement(["ud-lastfm-container"], "hide")
-            var xhttp = new XMLHttpRequest();
-            xhttp.onreadystatechange = function() {
-                if (this.readyState == 4 && this.status == 200) {
-                    var lfm = JSON.parse(xhttp.responseText);
-                    if (settings.debug) { console.log(lfm) };
-                    if (!"track" in lfm) {
-                        handleAppearElement(["ud-lastfm-container"], "hide")
-                    } else if (lfm.track["@attr"] && lfm.track["@attr"].nowplaying) {
-                        handleAppearElement(["ud-lastfm-container"], "show")
-                        document.getElementById("ud-lastfm-cover").src = lfm.track.image[lfm.track.image.length - 1]["#text"];
-                        document.getElementById("ud-lastfm-name").innerText = lfm.track.name;
-                        document.getElementById("ud-lastfm-album").innerText = `on "${lfm.track.album["#text"]}"`;
-                        document.getElementById("ud-lastfm-artist").innerText = `by "${lfm.track.artist["#text"]}"`;
-                    } else {
-                        handleAppearElement(["ud-lastfm-container"], "hide")
-                    };
+        commandHandler:
+        if ("token" in incoming && incoming.listener == "RegisterLoginPswdListener") {
+            localStorage.setItem("username", username);
+            localStorage.setItem("token", incoming.token);
+            if (last_cmd == "register") {
+                window.location.reload();
+            };
+            logged_in = true;
+        } else if (incoming.command == "new_post") {
+            if (incoming.origin == 'livechat') {
+                lcPosts[incoming.data._id] = incoming.data;
+                if (lcPosts_list) {
+                    lcPosts_list.splice(0, 0, incoming.data);
+                }
+                if (authed || guest) {
+                    loadPost(incoming.data, false, false);
+                }
+                break commandHandler
+            }
+            posts[incoming.data._id] = incoming.data;
+            if (posts_list) {
+                posts_list.splice(0, 0, incoming.data);
+            }
+            if (authed || guest) {
+                loadPost(incoming.data, false, false);
+            }
+        } else if (incoming.command == "deleted_post") {
+            removepost(incoming._id, incoming.deleted_by_author)
+            if (incoming._id in posts) {
+                delete posts[incoming._id];
+            }
+        } else if (incoming.command == "edited_post") {
+            editedpost(incoming._id, incoming.content)
+        } else if (last_cmd == "gen_invite" && "invite_code" in incoming) {
+            document.getElementById("mm-invite-code").innerText = `Your invite code is "${incoming.invite_code}". Use it on any SoktDeer client to sign up!\nhttps://soktdeer.com/\n\nCodes: ${incoming.invite_codes}`
+        } else if (last_cmd == "get_inbox" && "inbox" in incoming) {
+            document.getElementById("mi-posts").innerHTML = ""
+            for (const i in incoming.inbox) {
+                loadPost(incoming.inbox[i], true, true);
+            };
+            if (!incoming.inbox.length == 0) {
+                if (localStorage.getItem("last_inbox_id") != incoming.inbox[0]._id) {
+                    document.getElementById("ms-button-inbox").innerText = "Inbox*";
+                    localStorage.setItem("last_inbox_id", incoming.inbox[0]._id)
+                } else {
+                    document.getElementById("ms-button-inbox").innerText = "Inbox";
                 }
             };
-            xhttp.open("GET", `https://lastfm.kije.workers.dev/${incoming.user.profile.lastfm}`, true);
-            xhttp.send();
-        } else {
-            handleAppearElement(["ud-lastfm-container"], "hide")
+        } else if (last_cmd == "get_user" && "user" in incoming) {
+            var bio;
+            document.getElementById("ud-d-tags").innerHTML = "";
+            if (incoming.user.profile.bio == "") {bio = "This user does not have a bio."} else {bio = incoming.user.profile.bio};
+            document.getElementById("ud-avatar").src = incoming.user.avatar;
+            document.getElementById("ud-display-name").innerText = incoming.user.display_name;
+            document.getElementById("ud-username").innerText = "@" + incoming.user.username;
+            document.getElementById("ud-created").innerText = new Date(incoming.user.created * 1000).toLocaleString();
+            document.getElementById("ud-permissions").innerText = `Permissions: ${incoming.user.permissions.toString().toLowerCase().replaceAll(",", ", ")}`;
+            document.getElementById("ud-special").innerHTML = ""
+            if (incoming.user.bot) {
+                document.getElementById("ud-d-tags").innerHTML += ' <span title="This user is a robot." class="inline-icon material-symbols-outlined">smart_toy</span>'
+            };
+            if (incoming.user.banned_until > new Date().getTime() / 1000) {
+                document.getElementById("ud-banned-span").innerText = `Banned until ${new Date(incoming.user.banned_until * 1000).toLocaleString()}`;
+                handleAppearElement(["ud-banned"], "show")
+            } else {
+                handleAppearElement(["ud-banned"], "hide")
+            };
+            document.getElementById("ud-bio").innerHTML = md.render(bio);
+            if (incoming.user.profile.lastfm) {
+                handleAppearElement(["ud-lastfm-container"], "hide")
+                var xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200) {
+                        var lfm = JSON.parse(xhttp.responseText);
+                        if (settings.debug) { console.log(lfm) };
+                        if (!"track" in lfm) {
+                            handleAppearElement(["ud-lastfm-container"], "hide")
+                        } else if (lfm.track["@attr"] && lfm.track["@attr"].nowplaying) {
+                            handleAppearElement(["ud-lastfm-container"], "show")
+                            document.getElementById("ud-lastfm-cover").src = lfm.track.image[lfm.track.image.length - 1]["#text"];
+                            document.getElementById("ud-lastfm-name").innerText = lfm.track.name;
+                            document.getElementById("ud-lastfm-album").innerText = `on "${lfm.track.album["#text"]}"`;
+                            document.getElementById("ud-lastfm-artist").innerText = `by "${lfm.track.artist["#text"]}"`;
+                        } else {
+                            handleAppearElement(["ud-lastfm-container"], "hide")
+                        };
+                    }
+                };
+                xhttp.open("GET", `https://lastfm.kije.workers.dev/${incoming.user.profile.lastfm}`, true);
+                xhttp.send();
+            } else {
+                handleAppearElement(["ud-lastfm-container"], "hide")
+            };
+            switchScene('user-display');
+        } else if (last_cmd == "get_ips" && "ips" in incoming) {
+            document.getElementById("mm-ips").innerText = incoming.ips.toString().replaceAll(",", "\n");
+        } else if (incoming["listener"] == "daAccountBossDeer" && incoming.error == false) {
+            logOut();
+        } else if (incoming["listener"] == "pwAccountBossDeer" && incoming.error == false) {
+            logOut();
         };
-        switchScene('user-display');
-    } else if (last_cmd == "get_ips" && "ips" in incoming) {
-        document.getElementById("mm-ips").innerText = incoming.ips.toString().replaceAll(",", "\n");
-    } else if (incoming["listener"] == "daAccountBossDeer" && incoming.error == false) {
-        logOut();
-    } else if (incoming["listener"] == "pwAccountBossDeer" && incoming.error == false) {
-        logOut();
     };
-};
 
-ws.onclose = function() {
-    closePopup();
-    switchScene("connection-lost");
-};
+    ws.onclose = function() {
+        closePopup();
+        switchScene("connection-lost");
+    };
 
-ws.onerror = function() {
-    closePopup();
-    switchScene("connection-lost");
-};
+    ws.onerror = function() {
+        closePopup();
+        switchScene("connection-lost");
+    };
+
+    const soktHelper = window.soktHelper = new WsHelper(ws)
+})
 
 function switchScene (newScene, isguest) {
     if (newScene == "main-inbox") {
