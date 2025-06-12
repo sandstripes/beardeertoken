@@ -404,6 +404,9 @@ ws.onmessage = function (event) {
         document.getElementById("ud-avatar").src = incoming.user.avatar;
         document.getElementById("ud-display-name").innerText = incoming.user.display_name;
         document.getElementById("ud-username").innerText = "@" + incoming.user.username;
+        const info = document.getElementById("ud-info");
+        info.style.background = incoming.user.banner ? `url('${incoming.user.banner}')` : '';
+        info.classList.toggle("has-banner", !!incoming.user.banner);
         if (incoming.user.username in timeZones) {
           const formatter = new Intl.DateTimeFormat([], {
             timeZone: timeZones[incoming.user.username],
@@ -934,6 +937,13 @@ function setAvatar() {
     last_cmd = "set_avatar";
     ws.send(JSON.stringify({command: "set_property", property: "avatar", value: document.getElementById("mc-avatar").value}))
     document.getElementById("mc-avatar").value = "";
+};
+
+
+function setBanner() {
+    last_cmd = "set_banner";
+    ws.send(JSON.stringify({command: "set_property", property: "banner", value: document.getElementById("mc-banner").value}))
+    document.getElementById("mc-banner").value = "";
 };
 
 function setBio() {

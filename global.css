@@ -12,6 +12,11 @@
   src: url("assets/notocoloremoji/NotoColorEmoji-Regular-NoSVG.ttf");
 }
 
+.flex { display: flex }
+.flex-column { flex-direction: column }
+.flex-row { flex-direction: row }
+.gap { gap: 10px }
+
 body {
     font-family: 'Noto Sans', sans-serif, serif, "Noto Color Emoji", 'sitelen seli kiwen';
     margin: 0px;
@@ -162,6 +167,17 @@ hr {
     margin-right: 8px;
     margin-top: 1px;
     border: 2px solid;
+}
+#ud-info.has-banner {
+  padding-left: 10px;
+  padding-right: 10px;
+  -webkit-text-stroke: 0.3px black;
+  /* stolen from @waso */
+  height: 150px;
+  padding-top: 100px;
+  box-sizing: border-box;
+  background-size: cover;
+  background-position: center;
 }
 #ud-lastfm-container {
     width: 100%;
