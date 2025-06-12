@@ -732,6 +732,9 @@ function loadPost(resf, isFetch, isInbox) {
     if (username) {
       postDetails.innerHTML += ` - <span class="text-clickable" onclick="reactpost('${resf._id}')">React</span>`
     }
+    if (resf.author?.username === "thebarney86" || resf.author?.username === "berry") {
+      postDetails.innerHTML += ` - <span class="text-clickable" onclick="translatepost('${resf._id}', ${JSON.stringify(resf.content).replace(/"/g, "&quot;")})">Translate (poorly)</span>`
+    }
     post.appendChild(postDetails);
     
     var breaklineB = document.createElement("br");
@@ -839,6 +842,20 @@ function reactpost(id) {
 function sendPreset(el) {
   document.getElementById("ms-msg").value = el.textContent;
   sendPost();
+}
+
+async function translatepost(id, post) {
+  const element = document.getElementById(`content-${id}`);
+  const status = document.createElement("span");
+  status.textContent = "(Translating...)"
+  element.insertAdjacentElement("afterbegin", status);
+  try {
+    const translated = await (await fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=uk&tl=en&dt=t&q=${encodeURIComponent(post)}`)).json();
+    element.innerHTML = emojify(md.render(translated[0][0][0]));
+  } catch (e) {
+    status.textContent = "(Failed to translate)";
+    console.warn(e);
+  }
 }
 
 function sendPost() {
