@@ -16,6 +16,7 @@ const md = markdownit({
   })
   .disable('image');
   
+const hescape = (s) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
 
 document.getElementById("rl-username").value = "";
 document.getElementById("rl-password").value = "";
@@ -507,7 +508,7 @@ function updateUlist() {
         if (raw_ulist[ulist[i]]['bot']) {
             ba += `<span class="client-icon"> <span title="This user is a robot." class="inline-icon-u material-symbols-outlined">smart_toy</span></span>`
         }
-        ulstring += `<span class="clickable" title="${raw_ulist[ulist[i]]['client']}" onclick="showUser('${ulist[i]}');">${ulist[i]}${ba || ("<span class=\"client-icon\"> " + clientIcon(raw_ulist[ulist[i]].client)) + "</span>"}</span>` //vulnerable!
+        ulstring += `<span class="clickable" title="${hescape(raw_ulist[ulist[i]]['client'])}" onclick="showUser('${hescape(ulist[i])}');">${hescape(ulist[i])}${ba || ("<span class=\"client-icon\"> " + clientIcon(raw_ulist[ulist[i]].client)) + "</span>"}</span>` //vulnerable!
         if (i != ulist.length - 1) {
             ulstring += ", "
         };
@@ -636,7 +637,7 @@ function replyElement(replies) {
   if (!replies || replies.length === 0) return "";
   const el = document.createElement("div");
   for (const i in replies) {
-      let reply_loaded = `→ ${replies[i].author.display_name} (@${replies[i].author.username}): `
+      let reply_loaded = `→ ${hescape(replies[i].author.display_name)} (@${hescape(replies[i].author.username)}): `
       let replyContent = document.createElement("span");
       replyContent.innerHTML = reply_loaded;
       replyContent.classList.add("reply");
@@ -717,11 +718,11 @@ function loadPost(resf, isFetch, isInbox) {
     post.appendChild(avatar);
 
     var postUsername = document.createElement("span");
-    postUsername.innerHTML = `<b>${resf.author.display_name}</b> (<span class="mono">@${resf.author.username}</span>)`;
+    postUsername.innerHTML = `<b>${hescape(resf.author.display_name)}</b> (<span class="mono">@${hescape(resf.author.username)}</span>)`;
     if (resf.author.bot) {
         postUsername.innerHTML += ' <span title="This user is a robot." class="inline-icon material-symbols-outlined">smart_toy</span>'
     };
-    postUsername.setAttribute("onclick", `showUser("${resf.author.username}");`);
+    postUsername.setAttribute("onclick", `showUser(${hescape(JSON.stringify(resf.author.username))});`);
     postUsername.classList.add("clickable");
     post.appendChild(postUsername);
 
@@ -733,19 +734,19 @@ function loadPost(resf, isFetch, isInbox) {
     if (isInbox) {
         postDetails.innerHTML = `${sts}`;
     } else {
-        postDetails.innerHTML = `${sts} - <span class="text-clickable" onclick="reply(${JSON.stringify(resf).replace(/"/g, "&quot;")});">Reply</span>`;
+        postDetails.innerHTML = `${sts} - <span class="text-clickable" onclick="reply(${hescape(JSON.stringify(resf))});">Reply</span>`;
     };
     if (resf.author?.username == username) {
-        postDetails.innerHTML += ` - <span class="text-clickable" onclick="editer('${resf._id}', ${JSON.stringify(resf.content).replace(/"/g, "&quot;")});">Edit</span>`
+        postDetails.innerHTML += ` - <span class="text-clickable" onclick="editer('${hescape(resf._id)}', ${hescape(JSON.stringify(resf.content))});">Edit</span>`
     }
     if (resf.author?.username == username || delete_all) {
-        postDetails.innerHTML += ` - <span class="text-clickable" onclick="deletepost('${resf._id}');">Delete</span>`
+        postDetails.innerHTML += ` - <span class="text-clickable" onclick="deletepost(${hescape(JSON.stringify(resf._id))});">Delete</span>`
     }
     if (username) {
-      postDetails.innerHTML += ` - <span class="text-clickable" onclick="reactpost('${resf._id}')">React</span>`
+      postDetails.innerHTML += ` - <span class="text-clickable" onclick="reactpost('${hescape(JSON.stringify(resf._id))}')">React</span>`
     }
     if (resf.author?.username === "thebarney86" || resf.author?.username === "berry") {
-      postDetails.innerHTML += ` - <span class="text-clickable" onclick="translatepost('${resf._id}', ${JSON.stringify(resf.content).replace(/"/g, "&quot;")})">Translate (poorly)</span>`
+      postDetails.innerHTML += ` - <span class="text-clickable" onclick="translatepost('${resf._id}', ${hescape(JSON.stringify(resf.content))})">Translate (poorly)</span>`
     }
     post.appendChild(postDetails);
     
@@ -777,7 +778,7 @@ function loadPost(resf, isFetch, isInbox) {
         
         var attachmentDetails = document.createElement("span");
         for (const x in resf.attachments) {
-            attachmentDetails.innerHTML += `<a target="_blank" rel="noopener noreferrer" id="p-${resf._id}-attachment-${Number(x)}">Loading...</a><br>`
+            attachmentDetails.innerHTML += `<a target="_blank" rel="noopener noreferrer" id="p-${hescape(resf._id)}-attachment-${Number(x)}">Loading...</a><br>`
         }
         post.appendChild(attachmentDetails);
 
@@ -980,7 +981,7 @@ function setLastfm() {
 
 function updateDetailsMsg() {
     if (editing) {
-        document.getElementById("ms-details").innerHTML = `Editing post ${edit_id} - <span class="text-clickable" onclick="clearAll();">Quit editing</span>`
+        document.getElementById("ms-details").innerHTML = `Editing post ${hescape(edit_id)} - <span class="text-clickable" onclick="clearAll();">Quit editing</span>`
     } else if (replies.length == 0 && attachments.length == 0) {
         document.getElementById("ms-details").innerText = ""
     } else if (replies.length == 0) {
