@@ -712,7 +712,7 @@ function loadPost(resf, isFetch, isInbox) {
         avatar.src = "assets/default.png";
     };
     avatar.setAttribute("onerror", "this.src = 'assets/default.png';")
-    avatar.setAttribute("onclick", `showUser("${resf.author.username}");`); // TODO: use this more often
+    avatar.setAttribute("onclick", `showUser(${JSON.stringify(resf.author.username)});`); // TODO: use this more often
     avatar.classList.add("clickable");
     avatar.classList.add("pfp");
     post.appendChild(avatar);
@@ -722,7 +722,7 @@ function loadPost(resf, isFetch, isInbox) {
     if (resf.author.bot) {
         postUsername.innerHTML += ' <span title="This user is a robot." class="inline-icon material-symbols-outlined">smart_toy</span>'
     };
-    postUsername.setAttribute("onclick", `showUser(${hescape(JSON.stringify(resf.author.username))});`);
+    postUsername.setAttribute("onclick", `showUser(${JSON.stringify(resf.author.username)});`);
     postUsername.classList.add("clickable");
     post.appendChild(postUsername);
 
