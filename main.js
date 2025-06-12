@@ -311,8 +311,9 @@ function loadPost(resf, isFetch, isInbox) {
     postContent.setAttribute("id", "content-" + resf._id)
     if (!isInbox) {
         postContent.innerHTML = md.render(resf.content);
+        postContent.innerHTML = findandReplaceMentions(postContent.innerHTML);
     } else {
-        postContent.innerText = resf.content;
+        postContent.innerText = findandReplaceMentions(resf.content);
     }
     post.appendChild(postContent);
 

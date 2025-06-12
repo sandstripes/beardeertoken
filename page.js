@@ -34,8 +34,8 @@ async function createAllPagesAndLoadScripts() {
         createPage('connection-lost'),
         createPage('user-display')
     ];
-
     await Promise.all(pagePromises);
+    
     await createScript('/helpers/functions.js');
     await createScript('/helpers/ws.js');
     await createScript('/helpers/notification.js');

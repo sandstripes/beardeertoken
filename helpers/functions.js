@@ -1,7 +1,34 @@
+let last_cmd = "";
+let username = "";
+let logged_in = false; // unused?
+let authed = false;
+let scene = "loading";
+let ulist = [];
+let raw_ulist = {};
+let posts = {};
+let lcPosts = {};
+let posts_list = [];
+let lcPosts_list = [];
+let replies = [];
+let attachments = [];
+let editing = false;
+let edit_id = "";
+let delete_all = false;
+let guest = false;
+let replace_text = false;
+
 function clearValueOf(array) {
     array.forEach(id => {
         document.getElementById(id).value = ""
     });
+}
+
+function findandReplaceMentions(content) {
+    const regex = /@([a-zA-Z0-9_-]+)/g;
+    return content.replace(regex, (_match, username) => {
+        const element = `<span class='inter' style='font-weight: bold' onclick='showUser("${username}");'>@${username}</span>`;
+        return element;
+    })
 }
 
 function closePopup () {
