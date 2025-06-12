@@ -35,6 +35,7 @@ async function createAllPagesAndLoadScripts() {
         createPage('user-display')
     ];
     await Promise.all(pagePromises);
-    chaosEvents.dispatchEvent(new Event('ready'))
+    chaosEvents.dispatchEvent(new Event('ready'));
+    chaosEvents.loaded = true;
 }
 createAllPagesAndLoadScripts();

@@ -40,23 +40,27 @@ function userBox () {
 }
 
 function handleAppearElement(ids, mode) {
-    ids.forEach(id => {
-    if (mode === "hide") {
-        document.getElementById(id).classList.add("hidden");
-    } else if (mode === "show") {
-        document.getElementById(id).classList.remove("hidden");
-    } else {
-        document.getElementById(id).classList.toggle("hidden");
-    }
-    });
+    chaosEvents.doWhenReady(() => {
+        ids.forEach(id => {
+            if (mode === "hide") {
+                document.getElementById(id).classList.add("hidden");
+            } else if (mode === "show") {
+                document.getElementById(id).classList.remove("hidden");
+            } else {
+                document.getElementById(id).classList.toggle("hidden");
+            }
+        });
+    })
 }
 
 function displayError (errText) {
-    document.getElementById("error-text").innerText = errText;
-    if (errText.includes("{{Reload}}")) {
-        document.getElementById("error-text").innerHTML = document.getElementById("error-text").innerHTML.replaceAll("{{Reload}}", "<span class='text-clickable' onclick='window.location.reload();'>Reload</span>");
-    }
-    handleAppearElement(["error-bar"], "show")
+    chaosEvents.doWhenReady(() => {
+        document.getElementById("error-text").innerText = errText;
+        if (errText.includes("{{Reload}}")) {
+            document.getElementById("error-text").innerHTML = document.getElementById("error-text").innerHTML.replaceAll("{{Reload}}", "<span class='text-clickable' onclick='window.location.reload();'>Reload</span>");
+        }
+        handleAppearElement(["error-bar"], "show")
+    })
 };
 
 function addAttachment() {

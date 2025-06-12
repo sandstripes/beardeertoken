@@ -33,6 +33,25 @@
     
     <script>
         const chaosEvents = window.chaosEvents = new EventTarget();
+        chaosEvents.loaded = false;
+        chaosEvents.on = chaosEvents.addEventListener;
+        chaosEvents.once = function (event, listener) {
+            const actualListener = function (...e) {
+                chaosEvents
+                listener(...e);
+                chaosEvents.removeEventListener(event, actualListener)
+            };
+            chaosEvents.addEventListener(event, actualListener);
+        }
+        chaosEvents.doWhenReady = function (func) {
+            if (chaosEvents.loaded) {
+                func()
+            } else {
+                chaosEvents.once('ready', () => {
+                    func()
+                })
+            }
+        }
     </script>
     <script src="/helpers/functions.js"></script>
     <script src="/helpers/ws.js"></script>

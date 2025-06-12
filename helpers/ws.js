@@ -27,11 +27,15 @@ ws.onmessage = function (event) {
 
     if (incoming.command == "greet") {
         closePopup();
-        document.getElementById("rl-version").innerText = `${version} - ${incoming.version}`;
-        document.getElementById("mc-version").innerText = `${version} - ${incoming.version}`;
+        chaosEvents.doWhenReady(() => {
+            document.getElementById("rl-version").innerText = `${version} - ${incoming.version}`;
+            document.getElementById("mc-version").innerText = `${version} - ${incoming.version}`;
+        })
         if (incoming.server_contributors) {
             for (const x in incoming.server_contributors) {
-                document.getElementById("mc-contributors").innerText += `\n${incoming.server_contributors[x]}`;
+                chaosEvents.doWhenReady(() => {
+                    document.getElementById("mc-contributors").innerText += `\n${incoming.server_contributors[x]}`;
+                })
             }
         }
         if (incoming.version != serverVersion) {
@@ -39,7 +43,9 @@ ws.onmessage = function (event) {
         };
         ulist = Object.keys(incoming.ulist);
         raw_ulist = incoming.ulist;
-        updateUlist();
+        chaosEvents.doWhenReady(() => {
+            updateUlist();
+        })
         for (const x in incoming.messages) {
             posts[incoming.messages[x]._id] = incoming.messages[x]
         }
@@ -55,7 +61,9 @@ ws.onmessage = function (event) {
     } else if (incoming.command == "ulist") {
         ulist = Object.keys(incoming.ulist);
         raw_ulist = incoming.ulist;
-        updateUlist();
+        chaosEvents.doWhenReady(() => {
+            updateUlist();
+        })
     };
     if ("error" in incoming) {
         if (incoming.error) {
