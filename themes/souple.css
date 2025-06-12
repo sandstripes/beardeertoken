@@ -127,11 +127,6 @@ blockquote {
   background: var(--deer-button-hover);
   margin-top: 11px;
 }
-#ud-info {
-  padding: 3px;
-  background: var(--deer-button);
-  box-shadow: 0 0 2px 3px var(--deer-background);
-}
 #ud-lastfm-container {
   border-radius: 2px;
 }
