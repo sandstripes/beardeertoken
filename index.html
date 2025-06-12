@@ -55,10 +55,10 @@
             </div>
             <div id="ms-userbox" class="mc-container hidden">
                 <button onclick="showUser(username);">Profile</button> 
-                <button onclick="switchScene('main-config');">Settings</button>
+                <button onclick="switchScene('main-config'); populateProfileSettings()">Settings</button>
                 <button onclick="logOut();">Log out</button>
                 <button onclick="showUserPrompt();">Show a user...</button> 
-                <button onclick="switchScene('main-whatsnew');">What's new?</button>
+                <button onclick="switchScene('main-whatsnew')">What's new?</button>
             </div>
             <small id="ms-ulist">0 users online (?)</small><br><br>
             <div id="ms-make-post">

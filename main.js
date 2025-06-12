@@ -398,6 +398,13 @@ ws.onmessage = function (event) {
                 document.getElementById("ms-button-inbox").innerText = "Inbox";
             }
         };
+    } else if (last_cmd == "populate_profile_settings" && "user" in incoming) {
+        document.getElementById("mc-display-name").value = incoming.user.display_name;
+        document.getElementById("mc-avatar").value = incoming.user.avatar;
+        document.getElementById("mc-banner").value = incoming.user.banner;
+        document.getElementById("mc-css").value = incoming.user.profile.css;
+        document.getElementById("mc-bio").value = incoming.user.profile.bio;
+        document.getElementById("mc-lastfm").value = incoming.user.profile.lastfm;
     } else if (last_cmd == "get_user" && "user" in incoming) {
         var bio;
         document.getElementById("ud-d-tags").innerHTML = "";
@@ -929,29 +936,30 @@ function resetInvites() {
     ws.send(JSON.stringify({command: "reset_invites"}))
 };
 
+function populateProfileSettings() {
+  last_cmd = "populate_profile_settings"
+  ws.send(JSON.stringify({command: "get_user", username }));
+}
+
 function setDisplayName() {
     last_cmd = "set_display_name";
     ws.send(JSON.stringify({command: "set_property", property: "display_name", value: document.getElementById("mc-display-name").value}))
-    document.getElementById("mc-display-name").value = "";
 };
 
 function setAvatar() {
     last_cmd = "set_avatar";
     ws.send(JSON.stringify({command: "set_property", property: "avatar", value: document.getElementById("mc-avatar").value}))
-    document.getElementById("mc-avatar").value = "";
 };
 
 
 function setBanner() {
     last_cmd = "set_banner";
     ws.send(JSON.stringify({command: "set_property", property: "banner", value: document.getElementById("mc-banner").value}))
-    document.getElementById("mc-banner").value = "";
 };
 
 function setCSS() {
     last_cmd = "set_css";
     ws.send(JSON.stringify({command: "set_property", property: "css", value: document.getElementById("mc-css").value}))
-    document.getElementById("mc-css").value = "";
 };
 
 function setBio() {
@@ -963,13 +971,11 @@ function setBio() {
         };
     };
     ws.send(JSON.stringify({command: "set_property", property: "bio", value: bio}))
-    document.getElementById("mc-bio").value = "";
 };
 
 function setLastfm() {
     last_cmd = "set_lastfm";
     ws.send(JSON.stringify({command: "set_property", property: "lastfm", value: document.getElementById("mc-lastfm").value}))
-    document.getElementById("mc-lastfm").value = "";
 };
 
 function updateDetailsMsg() {
