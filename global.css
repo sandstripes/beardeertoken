@@ -106,6 +106,7 @@ blockquote {
     height: 35px;
     min-height: 35px;
     box-sizing: border-box;
+>>>>>>> f67dd7b237557a6f1b4f70b3c9262dc71e457b49
 }
 .align-button {
     vertical-align: middle;
@@ -159,6 +160,7 @@ blockquote {
 .pfp {
     border-radius: 1px;
     padding: 1px;
+    background: white;
     width: 36px;
     height: 36px;
     float: left;

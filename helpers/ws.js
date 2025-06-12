@@ -522,7 +522,7 @@ function textinput() {
 
 let suggestionsEl;
 chaosEvents.doWhenReady(() => {
-  suggestionsEl = document.querySelector("#ms-suggestions");
+  document.querySelector("#ms-suggestions");
 });
 function selection(el) {
   const suggestions = determineSuggestions(el);
