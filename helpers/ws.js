@@ -126,7 +126,7 @@ class WsHelper {
             return;
         const category = Object.entries(handler)
             .find(([_, f]) => f[id])[0];
-        return [category, category[id]];
+        delete category[id];
     }
 
     /**
