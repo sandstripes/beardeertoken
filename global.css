@@ -168,6 +168,21 @@ hr {
     margin-top: 1px;
     border: 2px solid;
 }
+#user-display:not(.hidden) {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 8px;
+  box-sizing: border-box;
+}
+#ud-iframe {
+  flex: 1;
+  border: none;
+}
 #ud-banner.has-banner {
   padding-left: 10px;
   padding-right: 10px;

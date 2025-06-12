@@ -407,16 +407,26 @@ ws.onmessage = function (event) {
         document.getElementById("mc-bio").value = incoming.user.profile.bio;
         document.getElementById("mc-lastfm").value = incoming.user.profile.lastfm;
     } else if (last_cmd == "get_user" && "user" in incoming) {
+        const idocument = (/** @type {HTMLIFrameElement} */(document.getElementById("ud-iframe"))).contentDocument;
+        const mainStyles = idocument.getElementById("ud-main-styles");
+        mainStyles.innerHTML = "";
+        document.querySelectorAll("link[rel=stylesheet]").forEach((link) => {
+          const link2 = idocument.createElement("link");
+          link2.setAttribute("rel", "stylesheet");
+          link2.setAttribute("href", link.href);
+          mainStyles.append(link2);
+        })
         var bio;
-        document.getElementById("ud-d-tags").innerHTML = "";
+        idocument.getElementById("ud-d-tags").innerHTML = "";
         if (incoming.user.profile.bio == "") {bio = "This user does not have a bio."} else {bio = incoming.user.profile.bio};
-        document.getElementById("ud-avatar").src = incoming.user.avatar;
-        document.getElementById("ud-display-name").innerText = incoming.user.display_name;
-        document.getElementById("ud-username").innerText = "@" + incoming.user.username;
-        const banner = document.getElementById("ud-banner");
+        idocument.getElementById("ud-avatar").src = incoming.user.avatar;
+        idocument.getElementById("ud-display-name").innerText = incoming.user.display_name;
+        idocument.getElementById("ud-username").innerText = "@" + incoming.user.username;
+        const banner = idocument.getElementById("ud-banner");
         banner.style.backgroundImage = incoming.user.banner ? `url('${incoming.user.banner}')` : '';
         banner.classList.toggle("has-banner", !!incoming.user.banner);
-        document.querySelector("#ud-style").innerHTML = incoming.user.profile.css || "";
+        idocument.querySelector("#ud-style").innerHTML = incoming.user.profile.css || "";
+        idocument.querySelector("#ud-style").dataset.css = incoming.user.profile.css || "";
         if (incoming.user.username in timeZones) {
           const formatter = new Intl.DateTimeFormat([], {
             timeZone: timeZones[incoming.user.username],
@@ -424,51 +434,51 @@ ws.onmessage = function (event) {
             timeStyle: "medium"
           });
           const updateTimeZone = () => {
-            document.getElementById("ud-tz").innerText = formatter.format(new Date());
+            idocument.getElementById("ud-tz").innerText = formatter.format(new Date());
           };
           clearInterval(timeUpdate);
           updateTimeZone();
           timeUpdate = setInterval(updateTimeZone, 500);
         } else {
-          document.getElementById("ud-tz").innerText = "Unknown";
+          idocument.getElementById("ud-tz").innerText = "Unknown";
         }
-        document.getElementById("ud-created").innerText = new Date(incoming.user.created * 1000).toLocaleString();
-        document.getElementById("ud-permissions").innerText = `Permissions: ${incoming.user.permissions.toString().toLowerCase().replaceAll(",", ", ")}`;
-        document.getElementById("ud-special").innerHTML = ""
+        idocument.getElementById("ud-created").innerText = new Date(incoming.user.created * 1000).toLocaleString();
+        idocument.getElementById("ud-permissions").innerText = `Permissions: ${incoming.user.permissions.toString().toLowerCase().replaceAll(",", ", ")}`;
+        idocument.getElementById("ud-special").innerHTML = ""
         if (incoming.user.bot) {
-            document.getElementById("ud-d-tags").innerHTML += ' <span title="This user is a robot." class="inline-icon material-symbols-outlined">smart_toy</span>'
+            idocument.getElementById("ud-d-tags").innerHTML += ' <span title="This user is a robot." class="inline-icon material-symbols-outlined">smart_toy</span>'
         };
         if (incoming.user.banned_until > new Date().getTime() / 1000) {
-            document.getElementById("ud-banned-span").innerText = `Banned until ${new Date(incoming.user.banned_until * 1000).toLocaleString()}`;
-            document.getElementById("ud-banned").classList.remove("hidden");
+            idocument.getElementById("ud-banned-span").innerText = `Banned until ${new Date(incoming.user.banned_until * 1000).toLocaleString()}`;
+            idocument.getElementById("ud-banned").classList.remove("hidden");
         } else {
-            document.getElementById("ud-banned").classList.add("hidden");
+            idocument.getElementById("ud-banned").classList.add("hidden");
         };
-        document.getElementById("ud-bio").innerHTML = md.render(bio);
+        idocument.getElementById("ud-bio").innerHTML = md.render(bio);
         if (incoming.user.profile.lastfm) {
-            document.getElementById("ud-lastfm-container").classList.add("hidden");
+            idocument.getElementById("ud-lastfm-container").classList.add("hidden");
             var xhttp = new XMLHttpRequest();
             xhttp.onreadystatechange = function() {
                 if (this.readyState == 4 && this.status == 200) {
                     var lfm = JSON.parse(xhttp.responseText);
                     if (settings.debug) { console.log(lfm) };
                     if (!"track" in lfm) {
-                        document.getElementById("ud-lastfm-container").classList.add("hidden");
+                        idocument.getElementById("ud-lastfm-container").classList.add("hidden");
                     } else if (lfm.track["@attr"] && lfm.track["@attr"].nowplaying) {
-                        document.getElementById("ud-lastfm-container").classList.remove("hidden")
-                        document.getElementById("ud-lastfm-cover").src = lfm.track.image[lfm.track.image.length - 1]["#text"];
-                        document.getElementById("ud-lastfm-name").innerText = lfm.track.name;
-                        document.getElementById("ud-lastfm-album").innerText = `on "${lfm.track.album["#text"]}"`;
-                        document.getElementById("ud-lastfm-artist").innerText = `by "${lfm.track.artist["#text"]}"`;
+                        idocument.getElementById("ud-lastfm-container").classList.remove("hidden")
+                        idocument.getElementById("ud-lastfm-cover").src = lfm.track.image[lfm.track.image.length - 1]["#text"];
+                        idocument.getElementById("ud-lastfm-name").innerText = lfm.track.name;
+                        idocument.getElementById("ud-lastfm-album").innerText = `on "${lfm.track.album["#text"]}"`;
+                        idocument.getElementById("ud-lastfm-artist").innerText = `by "${lfm.track.artist["#text"]}"`;
                     } else {
-                        document.getElementById("ud-lastfm-container").classList.add("hidden");
+                        idocument.getElementById("ud-lastfm-container").classList.add("hidden");
                     };
                 }
             };
             xhttp.open("GET", `https://lastfm.kije.workers.dev/${incoming.user.profile.lastfm}`, true);
             xhttp.send();
         } else {
-            document.getElementById("ud-lastfm-container").classList.add("hidden")
+            idocument.getElementById("ud-lastfm-container").classList.add("hidden")
         };
         switchScene('user-display');
     } else if (last_cmd == "get_ips" && "ips" in incoming) {
@@ -542,7 +552,7 @@ function switchScene (newScene, isguest) {
         ws.send(JSON.stringify({command: "get_inbox"}))
     };
     if (scene == "user-display") {
-        document.getElementById("ud-avatar").src = "assets/default.png";
+        document.getElementById("ud-iframe").contentDocument.querySelector("#ud-avatar").src = "assets/default.png";
     };
     if (newScene == "main-scene" && isguest == true) {
         for (const i in posts_list) {
@@ -913,6 +923,11 @@ function postInbox() {
     ws.send(JSON.stringify({command: "post_inbox", content: document.getElementById("mm-content-inbox").value.replaceAll("\\n", "\n"), replies: [], attachments: []}))
     document.getElementById("mm-content-inbox").value = "";
 };
+
+function toggleProfileCSS() {
+  const style = document.getElementById("ud-iframe").contentDocument.querySelector("#ud-style");
+  style.innerHTML = style.innerHTML === "" ? style.dataset.css : "";
+}
 
 function ban() {
     last_cmd = "post";

@@ -234,11 +234,16 @@
             </div>
         </div>
         <div id="user-display" class="hidden">
-          <style id="ud-style"></style>
-            <button onclick="switchScene('main-scene'); document.querySelector('#ud-style').innerHTML = ''; clearInterval(timeUpdate)">Return to Home</button><br>
+          <div>
+            <button onclick="switchScene('main-scene'); document.querySelector('#ud-style').innerHTML = ''; clearInterval(timeUpdate)">Return to Home</button>
+            <button id="ud-toggle-css" onclick="toggleProfileCSS()">Toggle CSS</button>
+          </div>
+          <iframe id="ud-iframe" srcdoc='
+            <div id="ud-main-styles"></div>
+            <style id="ud-style"></style>
             <div id="ud-banner">
                 <div id="ud-info">
-                    <img id="ud-avatar" class="pfp" src="assets/default.png" onerror="this.src = 'assets/default.png'">
+                    <img id="ud-avatar" class="pfp" src="assets/default.png" onerror="this.src = &#39;assets/default.png&#39;">
                     <span id="ud-display-name"></span> <span id="ud-d-tags"></span>
                     <br>
                     <span id="ud-username" class="mono"></span>
@@ -258,7 +263,7 @@
                     <div class="title">LastFM</div>
                     <div id="ud-lastfm-wrapper">
                         <img id="ud-lastfm-cover" class="album-cover" src="assets/default.png"
-                            onerror="this.src = 'assets/default.png'">
+                            onerror="this.src = &#39;assets/default.png&#39;">
                         <span id="ud-lastfm-name"></span>
                         <br>
                         <span id="ud-lastfm-artist"></span>
@@ -267,7 +272,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        '></iframe></div>
         </div>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/atom-one-dark.css">
         <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js"></script>
