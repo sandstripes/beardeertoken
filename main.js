@@ -408,6 +408,7 @@ ws.onmessage = function (event) {
         const banner = document.getElementById("ud-banner");
         banner.style.backgroundImage = incoming.user.banner ? `url('${incoming.user.banner}')` : '';
         banner.classList.toggle("has-banner", !!incoming.user.banner);
+        document.querySelector("#ud-style").innerHTML = incoming.user.profile.css || "";
         if (incoming.user.username in timeZones) {
           const formatter = new Intl.DateTimeFormat([], {
             timeZone: timeZones[incoming.user.username],
@@ -945,6 +946,12 @@ function setBanner() {
     last_cmd = "set_banner";
     ws.send(JSON.stringify({command: "set_property", property: "banner", value: document.getElementById("mc-banner").value}))
     document.getElementById("mc-banner").value = "";
+};
+
+function setCSS() {
+    last_cmd = "set_css";
+    ws.send(JSON.stringify({command: "set_property", property: "css", value: document.getElementById("mc-css").value}))
+    document.getElementById("mc-css").value = "";
 };
 
 function setBio() {

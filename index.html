@@ -114,6 +114,7 @@
                 <input id="mc-avatar" placeholder="Avatar URL..." autocomplete="off" type="text" maxlength=656></input> <button onclick="setAvatar();">Set avatar URL</button><br>
                 <input id="mc-banner" placeholder="Banner URL..." autocomplete="off" type="text" maxlength=656></input>
                 <button onclick="setBanner();">Set banner URL</button><br>
+                 <span class="align-button"><textarea class="big-textarea" id="mc-css" placeholder="Profile CSS..." autocomplete="off"></textarea> <button onclick="setCSS();">Set CSS</button></span><br>
                 <span class="align-button"><textarea class="big-textarea" id="mc-bio" placeholder="Bio..." type="text" autocomplete="off" maxlength=512></textarea> <button onclick="setBio();">Set bio</button></span><br>
                 <input id="mc-lastfm" placeholder="Last.fm..." autocomplete="off" type="text" maxlength=72></input> <button onclick="setLastfm();">Set Last.fm</button>
             </div>
@@ -233,7 +234,8 @@
             </div>
         </div>
         <div id="user-display" class="hidden">
-            <button onclick="switchScene('main-scene'); clearInterval(timeUpdate)">Return to Home</button><br>
+          <style id="ud-style"></style>
+            <button onclick="switchScene('main-scene'); document.querySelector('#ud-style').innerHTML = ''; clearInterval(timeUpdate)">Return to Home</button><br>
             <div id="ud-banner">
                 <div id="ud-info">
                     <img id="ud-avatar" class="pfp" src="assets/default.png" onerror="this.src = 'assets/default.png'">
