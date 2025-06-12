@@ -234,11 +234,13 @@
         </div>
         <div id="user-display" class="hidden">
             <button onclick="switchScene('main-scene'); clearInterval(timeUpdate)">Return to Home</button><br>
-            <div id="ud-info">
-                <img id="ud-avatar" class="pfp" src="assets/default.png" onerror="this.src = 'assets/default.png'">
-                <span id="ud-display-name"></span> <span id="ud-d-tags"></span>
-                <br>
-                <span id="ud-username" class="mono"></span>
+            <div id="ud-banner">
+                <div id="ud-info">
+                    <img id="ud-avatar" class="pfp" src="assets/default.png" onerror="this.src = 'assets/default.png'">
+                    <span id="ud-display-name"></span> <span id="ud-d-tags"></span>
+                    <br>
+                    <span id="ud-username" class="mono"></span>
+                </div>
             </div>
             <small>Current time: <span id="ud-tz"></span></small><br>
             <small>Account created at <span id="ud-created"></span></small><br>
