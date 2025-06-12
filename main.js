@@ -60,7 +60,8 @@ let themes = {
     "midnight": "Midnight",
     "bright": "Bright",
     "cosmic-latte": "Cosmic Latte",
-    "roarer1": "Roarer 1"
+    "roarer1": "Roarer 1",
+    "souple": "Souple",
 }
 
 let replace_text = false;
