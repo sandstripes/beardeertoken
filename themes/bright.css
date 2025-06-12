@@ -1,5 +1,5 @@
 :root {
-    --deer-background: #cadce6;
+    --deer-background: #ffffff;
 
     --deer-foreground: #000000;
     --deer-reply: #303030;
@@ -15,6 +15,6 @@
 
     --deer-image-border: #a19e95;
 
-    --deer-container-background: #94a1a8;
+    --deer-container-background: #d3d3d3;
     --deer-danger-background: #ffdbdb;
 }

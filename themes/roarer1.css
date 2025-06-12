@@ -47,10 +47,6 @@ code, button, input, textarea, .post, .album-cover, #ud-lastfm-container, #ud-bi
   border-radius: 0.75rem;
 }
 
-button {
-  border: 0px !important;
-}
-
 input, textarea {
   background-color: transparent;
   border: 2px solid var(--deer-button);
@@ -62,9 +58,6 @@ a, #nav button, #ms-userbox button, #ms-ulist > span {
   padding: 0;
   background: 0;
   font-size: 1rem;
-}
-#ms-ulist {
-  font-weight: normal;
 }
 #ms-ulist > span > .client-icon {
   display: none;
@@ -121,21 +114,11 @@ a, #nav button, #ms-userbox button, #ms-ulist > span {
   margin-bottom: 0.5rem;
 }
 
-#ms-posts {
-  gap: 0.5rem;
-}
-
-.pfp {
-  background-color: transparent;
-}
-
 .post {
   padding-top: 0.25rem;
   padding-bottom: 0.25rem;
   padding-left: 0.5rem;
   padding-right: 0.5rem;
-  box-shadow: initial;
-  border: 0px !important;
 }
 .post > br {
   display: none;

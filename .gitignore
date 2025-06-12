@@ -2,6 +2,4 @@ node_modules
 host.js
 package.json
 pnpm-lock.yaml
-beta
-deno.lock
-old
+start.sh

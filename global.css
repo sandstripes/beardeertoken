@@ -24,23 +24,17 @@ pre > code {
 }
 code {
     overflow: auto;
-    background-color: #1c1d20;
+    background-color: #282c34;
     color: #abb2bf;
     padding: 4px;
-    border-radius: 2px;
-    box-shadow: inset 0 0px 2px #00000096, 0 0 2px #0000005e;
-    border-bottom: 1px solid #ffffff3d;
+    border-radius: 4px;
 }
 button {
-    border-radius: 0px;
-    padding: 7px;
+    border: none;
+    border-radius: 4px;
+    padding: 8px;
     font-family: 'Noto Sans', sans-serif, serif, 'sitelen seli kiwen';
     margin-bottom: 4px;
-    border: 1px solid var(--deer-horizontalrule);
-    -webkit-box-shadow: #000 0 1px 0, 0 1px 3px black;
-    box-shadow: #000 0 1px 0, 0 1px 3px black;
-    border-top: 1px solid #fff3;
-    transition: background .3s ease-in-out;
 }
 button:hover {
     cursor: pointer;
@@ -50,63 +44,18 @@ button:disabled, button[disabled] {
 }
 input, textarea {
     border: none;
-    border-radius: 0;
-    padding: 7px;
-    font-family: 'Noto Sans', sans-serif, serif, 'sitelen seli kiwen';
-    margin-bottom: 4px;
-    font-size: 13.3333px;
-    border: 1px solid var(--deer-horizontalrule);
-    -webkit-box-shadow: #000 0 1px 0, 0 1px 3px black;
-    box-shadow: #000 0 1px 0, 0 1px 3px black;
-}
-textarea:focus {
-    outline: none;
-    -webkit-box-shadow: #000 0 1px 0, 0 1px 3px black, 0 0 4px;
-    box-shadow: #000 0 1px 0, 0 1px 3px black, 0 2px 5px;
-}
-textarea {
-    min-width: 180px;
-    min-height: 100px;
+    border-radius: 4px;
     padding: 8px;
-    font-family: 'Noto Sans', sans-serif;
+    font-family: 'Noto Sans', sans-serif, serif, 'sitelen seli kiwen';
+    font-size: 14px;
     margin-bottom: 4px;
     vertical-align: middle;
-    font-size: 13.3333px;
-    background-color: var(--deer-button-hover);
-    color: var(--deer-foreground);
-    border: 1px solid var(--deer-horizontalrule);
-    -webkit-box-shadow: #000 0 1px 0, 0 1px 3px black;
-    -moz-box-shadow: #000 0 1px 0, 0 1px 3px black;
-    box-shadow: #000 0 1px 0, 0 1px 3px black;
-    transition: box-shadow 0.3s ease-in-out;
-    overflow: hidden;
+    resize: none;
 }
-hr {
-    display: block;
-    height: 1px;
-    border: 0;
-    border-top: 1px solid;
-    padding: 0;
-}
-blockquote {
-    margin-left: 70px;
-    border-left: 3px solid var(--deer-container-background);
-    padding: 12px;
-    background-color: var(--deer-button);
-    box-shadow: 0px 0 5px #00000021;
-}
-
-#main {
-    padding: 10px
-}
-.inter { cursor: pointer; }
-.inter:hover { text-decoration: underline;}
-
-.message-input {
-    height: 35px;
-    min-height: 35px;
-    box-sizing: border-box;
->>>>>>> f67dd7b237557a6f1b4f70b3c9262dc71e457b49
+textarea.big-textarea {
+    min-width: 180px;
+    min-height: 100px;
+    vertical-align: middle;
 }
 .align-button {
     vertical-align: middle;
@@ -119,10 +68,24 @@ blockquote {
     width: 58.3px;
     box-sizing: border-box;
 }
+.scene {
+    margin: 8px;
+}
 #error-bar {
     width: 100%;
     padding: 4px;
     box-sizing: border-box;
+    /*z-index: 99 !important;
+    position: fixed;
+    float: top;
+    margin: 0;*/
+}
+hr {
+    display: block;
+    height: 1px;
+    border: 0;
+    border-top: 1px solid;
+    padding: 0;
 }
 .text-clickable {
     text-decoration: underline;
@@ -138,18 +101,15 @@ blockquote {
   display: flex;
   flex-direction: column-reverse;
 }
-
-/* Post */
 .post {
-    padding: 5px 7px 12px 7px;
+    padding: 6px;
+    border-radius: 4px;
+    margin-bottom: 8px;
     word-break: break-word;
     overflow-wrap: break-word;
     box-sizing: border-box;
     width: 100%;
     overflow: hidden;
-    box-shadow: 0 0 4px -1px black;
-    border-bottom: 1px dashed black;
-    border-top: 1px solid #ffffff24;
 }
 .reactions button {
   border: 2px solid transparent;
@@ -157,24 +117,8 @@ blockquote {
 .reactions button.reaction-author {
   border: 2px solid cornflowerblue;
 }
-.pfp {
-    border-radius: 1px;
-    padding: 1px;
-    background: white;
-    width: 36px;
-    height: 36px;
-    float: left;
-    margin-right: 8px;
-    margin-top: 2px;
-    border: 2px solid;
-}
 .mono {
     font-family: monospace;
-}
-#ms-ulist {
-    font-weight: bold;
-    color: var(--deer-reply);
-    text-shadow: 1px 1px black;
 }
 #ms-msg {
     width:60vw;
@@ -201,8 +145,17 @@ blockquote {
 #ms-button-post {
     box-sizing: border-box;
 }
+.pfp {
+    border-radius: 100%;
+    width: 36px;
+    height: 36px;
+    float: left;
+    margin-right: 8px;
+    margin-top: 2px;
+    border: 2px solid;
+}
 .album-cover {
-    border-radius: 2px;
+    border-radius: 4px;
     width: 62px;
     height: 62px;
     float: left;
@@ -213,7 +166,7 @@ blockquote {
 #ud-lastfm-container {
     width: 100%;
     padding: 6px;
-    border-radius: 2px;
+    border-radius: 4px;
     margin-top: 8px;
     word-break: break-word;
     overflow-wrap: break-word;
@@ -222,7 +175,7 @@ blockquote {
 #ud-bio-container {
     width: 100%;
     padding: 6px;
-    border-radius: 2px;
+    border-radius: 4px;
     margin-top: 8px;
     word-break: break-word;
     overflow-wrap: break-word;
@@ -238,7 +191,7 @@ blockquote {
 .mc-container {
     width: 100%;
     padding: 6px;
-    border-radius: 2px;
+    border-radius: 4px;
     margin-top: 8px;
     word-break: break-word;
     overflow-wrap: break-word;
@@ -247,7 +200,7 @@ blockquote {
 #mc-danger-container {
     width: 100%;
     padding: 6px;
-    border-radius: 2px;
+    border-radius: 4px;
     margin-top: 8px;
     word-break: break-word;
     overflow-wrap: break-word;
@@ -262,7 +215,7 @@ blockquote {
     margin-bottom: 8px;
     background-color: var(--deer-background);
     border: 2px var(--deer-button-disabled) solid;
-    border-radius: 2px;
+    border-radius: 4px;
 }
 
 .mc-preview-content {
@@ -271,7 +224,7 @@ blockquote {
 
 .mc-preview-post {
     padding: 4px;
-    border-radius: 2px;
+    border-radius: 4px;
     margin-bottom: 8px;
     word-break: break-word;
     overflow-wrap: break-word;
@@ -305,8 +258,7 @@ blockquote {
 .mm-container {
     width: auto;
     padding: 12px;
-    border-radius: 2px;
-    box-shadow: 0 0 1px, 0 0 14px -4px black;
+    border-radius: 4px;
     margin: 8px;
     word-break: break-word;
     overflow-wrap: break-word;
@@ -383,7 +335,6 @@ input, textarea {
 #error-bar {
     background-color: var(--deer-error);
     color: var(--deer-background);
-    box-shadow: 0 0 3px black, inset 0 -2px 5px -2px black;
 }
 .ms-seperator {
     color: var(--deer-seperator);
