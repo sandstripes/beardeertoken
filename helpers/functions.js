@@ -54,7 +54,7 @@ function handleAppearElement(ids, mode) {
 function displayError (errText) {
     document.getElementById("error-text").innerText = errText;
     if (errText.includes("{{Reload}}")) {
-        document.getElementById("error-text").innerHTML = errText.replaceAll("{{Reload}}", "<span class='text-clickable' onclick='window.location.reload();'>Reload</span>");
+        document.getElementById("error-text").innerHTML = document.getElementById("error-text").innerHTML.replaceAll("{{Reload}}", "<span class='text-clickable' onclick='window.location.reload();'>Reload</span>");
     }
     handleAppearElement(["error-bar"], "show")
 };
