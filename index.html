@@ -234,13 +234,14 @@
             </div>
         </div>
         <div id="user-display" class="hidden">
-          <div>
+          <div id="ud-row">
             <button onclick="switchScene('main-scene'); document.querySelector('#ud-style').innerHTML = ''; clearInterval(timeUpdate)">Return to Home</button>
             <button id="ud-toggle-css" onclick="toggleProfileCSS()">Toggle CSS</button>
           </div>
           <iframe id="ud-iframe" srcdoc='
             <div id="ud-main-styles"></div>
             <style id="ud-style"></style>
+            <div style="height: 42px;"></div><div class="scene">
             <div id="ud-banner">
                 <div id="ud-info">
                     <img id="ud-avatar" class="pfp" src="assets/default.png" onerror="this.src = &#39;assets/default.png&#39;">
@@ -271,7 +272,7 @@
                         <small id="ud-lastfm-album"></small>
                     </div>
                 </div>
-            </div>
+            </div></div>
         '></iframe></div>
         </div>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/atom-one-dark.css">
