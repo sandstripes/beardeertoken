@@ -1,24 +1,24 @@
-@import url('https://fonts.googleapis.com/css2?family=Asap:ital,wght@0,100..900;1,100..900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Asap:ital,wght@0,100..900;1,100..900&display=swap");
 
 :root {
-    --deer-background: #020617;
+  --deer-background: #020617;
 
-    --deer-foreground: #cbd5e1;
-    --deer-reply: #cbd5e1;
+  --deer-foreground: #cbd5e1;
+  --deer-reply: #cbd5e1;
 
-    --deer-button: #1e293b;
-    --deer-button-hover: #1e293b;
-    --deer-button-disabled: #1e293b;
+  --deer-button: #1e293b;
+  --deer-button-hover: #1e293b;
+  --deer-button-disabled: #1e293b;
 
-    --deer-error: #1e293b;
+  --deer-error: #1e293b;
 
-    --deer-seperator: #cbd5e1;
-    --deer-horizontalrule: #cbd5e1;
+  --deer-seperator: #cbd5e1;
+  --deer-horizontalrule: #cbd5e1;
 
-    --deer-image-border: #0000000;
+  --deer-image-border: #0000000;
 
-    --deer-container-background: #020617;
-    --deer-danger-background: #020617;
+  --deer-container-background: #020617;
+  --deer-danger-background: #020617;
 }
 
 #error-bar,
@@ -30,8 +30,11 @@ body {
   width: min(100%, 100ch);
   margin: 0 auto;
 }
-body, button, input, textarea {
-  font-family: Asap, "Noto Color Emoji", 'sitelen seli kiwen';
+body,
+button,
+input,
+textarea {
+  font-family: Asap, "Noto Color Emoji", "sitelen seli kiwen";
 }
 
 body::before {
@@ -42,17 +45,33 @@ body::before {
   font-size: 1.875rem;
 }
 
-code, button, input, textarea, .post, .album-cover, #ud-lastfm-container, #ud-bio-container, .mc-container, #ms-danger-container, .mc-theme-preview, 
-.mc-preview-post, .mc-preview-pfp, .mm-container {
+code,
+button,
+input,
+textarea,
+.post,
+.album-cover,
+#ud-lastfm-container,
+#ud-bio-container,
+.mc-container,
+#ms-danger-container,
+.mc-theme-preview,
+.mc-preview-post,
+.mc-preview-pfp,
+.mm-container {
   border-radius: 0.75rem;
 }
 
-input, textarea {
+input,
+textarea {
   background-color: transparent;
   border: 2px solid var(--deer-button);
 }
 
-a, #nav button, #ms-userbox button, #ms-ulist > span {
+a,
+#nav button,
+#ms-userbox button,
+#ms-ulist > span {
   color: #38bdf8;
   text-decoration: underline;
   padding: 0;
@@ -62,7 +81,8 @@ a, #nav button, #ms-userbox button, #ms-ulist > span {
 #ms-ulist > span > .client-icon {
   display: none;
 }
-#nav, #ms-userbox {
+#nav,
+#ms-userbox {
   display: flex;
   align-items: center;
   justify-content: center;

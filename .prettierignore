@@ -1,0 +1,7 @@
+.gitignore
+assets/**/*
+.gitignore
+.prettierignore
+LICENSE
+*.ico
+*.png
