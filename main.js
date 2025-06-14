@@ -402,8 +402,8 @@ ws.onmessage = function (event) {
     } else if (last_cmd == "populate_profile_settings" && "user" in incoming) {
         document.getElementById("mc-display-name").value = incoming.user.display_name;
         document.getElementById("mc-avatar").value = incoming.user.avatar;
-        document.getElementById("mc-banner").value = incoming.user.banner;
-        document.getElementById("mc-css").value = incoming.user.profile.css;
+        document.getElementById("mc-banner").value = incoming.user.banner || "";
+        document.getElementById("mc-css").value = incoming.user.profile.css || "";
         document.getElementById("mc-bio").value = incoming.user.profile.bio;
         document.getElementById("mc-lastfm").value = incoming.user.profile.lastfm;
     } else if (last_cmd == "get_user" && "user" in incoming) {
