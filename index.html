@@ -110,13 +110,13 @@
             <button onclick="switchScene('main-scene');">Return to Home</button><br>
             <div class="mc-container">
                 <h2 class="header-notop">Profile</h2>
-                <input id="mc-display-name" placeholder="Display name..." autocomplete="off" type="text" maxlength=20></input> <button onclick="setDisplayName();">Set display name</button><br>
-                <input id="mc-avatar" placeholder="Avatar URL..." autocomplete="off" type="text" maxlength=656></input> <button onclick="setAvatar();">Set avatar URL</button><br>
+                <input id="mc-display-name" placeholder="Display name..." autocomplete="off" type="text" maxlength=20></input> <button onclick="setProperty('display_name');">Set display name</button><br>
+                <input id="mc-avatar" placeholder="Avatar URL..." autocomplete="off" type="text" maxlength=656></input> <button onclick="setProperty('avatar');">Set avatar URL</button><br>
                 <input id="mc-banner" placeholder="Banner URL..." autocomplete="off" type="text" maxlength=656></input>
-                <button onclick="setBanner();">Set banner URL</button><br>
-                 <span class="align-button"><textarea class="big-textarea" id="mc-css" placeholder="Profile CSS..." autocomplete="off"></textarea> <button onclick="setCSS();">Set CSS</button></span><br>
-                <span class="align-button"><textarea class="big-textarea" id="mc-bio" placeholder="Bio..." type="text" autocomplete="off" maxlength=512></textarea> <button onclick="setBio();">Set bio</button></span><br>
-                <input id="mc-lastfm" placeholder="Last.fm..." autocomplete="off" type="text" maxlength=72></input> <button onclick="setLastfm();">Set Last.fm</button>
+                <button onclick="setProperty('banner')">Set banner URL</button><br>
+                 <span class="align-button"><textarea class="big-textarea" id="mc-css" placeholder="Profile CSS..." autocomplete="off"></textarea> <button onclick="setProperty('css')">Set CSS</button></span><br>
+                <span class="align-button"><textarea class="big-textarea" id="mc-bio" placeholder="Bio..." type="text" autocomplete="off" maxlength=512></textarea> <button onclick="setProperty('bio');">Set bio</button></span><br>
+                <input id="mc-lastfm" placeholder="Last.fm..." autocomplete="off" type="text" maxlength=72></input> <button onclick="setProperty('lastfm');">Set Last.fm</button>
             </div>
             <div class="mc-container">
                 <h2 class="header-notop">Misc</h2>

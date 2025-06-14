@@ -957,41 +957,15 @@ function populateProfileSettings() {
   ws.send(JSON.stringify({command: "get_user", username }));
 }
 
-function setDisplayName() {
-    last_cmd = "set_display_name";
-    ws.send(JSON.stringify({command: "set_property", property: "display_name", value: document.getElementById("mc-display-name").value}))
-};
-
-function setAvatar() {
-    last_cmd = "set_avatar";
-    ws.send(JSON.stringify({command: "set_property", property: "avatar", value: document.getElementById("mc-avatar").value}))
-};
-
-
-function setBanner() {
-    last_cmd = "set_banner";
-    ws.send(JSON.stringify({command: "set_property", property: "banner", value: document.getElementById("mc-banner").value}))
-};
-
-function setCSS() {
-    last_cmd = "set_css";
-    ws.send(JSON.stringify({command: "set_property", property: "css", value: document.getElementById("mc-css").value}))
-};
-
-function setBio() {
-    last_cmd = "set_bio";
-    var bio = document.getElementById("mc-bio").value;
-    if (replace_text) {
+function setProperty(property) {
+    last_cmd = `set_${property}`;
+    let value = document.getElementById(`mc-${property.replace(/_/g, "-")}`).value;
+    if (property === "bio" && replace_text) {
         for (const i in text_replacements) {
-            bio = bio.replaceAll(i, text_replacements[i]);
+            value = value.replaceAll(i, text_replacements[i]);
         };
     };
-    ws.send(JSON.stringify({command: "set_property", property: "bio", value: bio}))
-};
-
-function setLastfm() {
-    last_cmd = "set_lastfm";
-    ws.send(JSON.stringify({command: "set_property", property: "lastfm", value: document.getElementById("mc-lastfm").value}))
+    ws.send(JSON.stringify({command: "set_property", property, value }))
 };
 
 function updateDetailsMsg() {
