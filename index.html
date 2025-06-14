@@ -264,8 +264,9 @@
           <button onclick="setProperty('color');">Set display name color</button
           ><br />
           <input id="mc-font" placeholder="Display name font..." type="text" />
-          <button onclick="setProperty('font');">Set display name font</button
-          ><br />
+          <button onclick="setProperty('font');">Set display name font</button>
+          Note: The font feature might not work properly right now due to server
+          issues. <br />
           <input
             id="mc-avatar"
             placeholder="Avatar URL..."
@@ -341,6 +342,16 @@
             Set post right border color
           </button>
           <button onclick="setProperty('border-right', '');">Delete</button>
+          <br />
+          <input id="mc-shadow" autocomplete="off" type="text" />
+          <button onclick="setProperty('shadow');">Set post shadow</button>
+          <button onclick="setProperty('shadow', '');">Delete</button> Note: The
+          shadow feature might not work properly right now due to server issues.
+          <br />
+          <input id="mc-weight" autocomplete="off" type="text" />
+          <button onclick="setProperty('weight');">Set post weight</button>
+          <button onclick="setProperty('weight', '');">Delete</button> Note: The
+          weight feature might not work properly right now due to server issues.
           <br />
         </div>
         <div class="mc-container">

@@ -467,15 +467,19 @@ ws.onmessage = function (event) {
     document.getElementById("mc-bio").value = incoming.user.profile.bio;
     document.getElementById("mc-lastfm").value = incoming.user.profile.lastfm;
     document.getElementById("mc-background").value =
-      incoming.user.profile.background;
+      incoming.user.profile.background || "";
     document.getElementById("mc-border-top").value =
-      incoming.user.profile["border-top"];
+      incoming.user.profile["border-top"] || "";
     document.getElementById("mc-border-bottom").value =
-      incoming.user.profile["border-bottom"];
+      incoming.user.profile["border-bottom"] || "";
     document.getElementById("mc-border-left").value =
-      incoming.user.profile["border-left"];
+      incoming.user.profile["border-left"] || "";
     document.getElementById("mc-border-right").value =
-      incoming.user.profile["border-right"];
+      incoming.user.profile["border-right"] || "";
+    document.getElementById("mc-shadow").value =
+      incoming.user.profile["shadow"] || "";
+    document.getElementById("mc-weight").value =
+      incoming.user.profile["weight"] || "";
   } else if (last_cmd == "get_user" && "user" in incoming) {
     const idocument = /** @type {HTMLIFrameElement} */ (
       document.getElementById("ud-iframe")
@@ -897,6 +901,7 @@ function loadPost(resf, isFetch, isInbox) {
     const displayName = postUsername.querySelector("b");
     displayName.style.fontFamily = resf.author.font || "";
     displayName.style.color = resf.author.color || "";
+    displayName.style.textShadow = resf.author.shadow || "";
     if (resf.author.bot) {
       postUsername.innerHTML +=
         ' <span title="This user is a robot." class="inline-icon material-symbols-outlined">smart_toy</span>';
