@@ -489,9 +489,8 @@ ws.onmessage = function (event) {
     idocument.getElementById("ud-username").innerText =
       "@" + incoming.user.username;
     const banner = idocument.getElementById("ud-banner");
-    banner.style.backgroundImage = incoming.user.banner
-      ? `url('${incoming.user.banner}')`
-      : "";
+    banner.style.backgroundImage =
+      incoming.user.banner ? `url('${incoming.user.banner}')` : "";
     banner.classList.toggle("has-banner", !!incoming.user.banner);
     idocument.querySelector("#ud-style").innerHTML =
       incoming.user.profile.css || "";
@@ -602,23 +601,15 @@ ws.onerror = function (event) {
 };
 
 const clientIcon = (c) =>
-  c === null
-    ? " 🤖"
-    : c.startsWith("BossDeer ")
-      ? " 🦌"
-      : c.startsWith("BearDeer")
-        ? " 🐻"
-        : c.startsWith("BetterDeer ")
-          ? " ✨"
-          : c.startsWith("PresetDeer ")
-            ? " 🧩"
-            : c.startsWith("Kansas")
-              ? " 🇺🇸"
-              : c.startsWith("whitetail")
-                ? "🦨"
-                : c === "Unknown"
-                  ? "❓"
-                  : "🤖";
+  c === null ? " 🤖"
+  : c.startsWith("BossDeer ") ? " 🦌"
+  : c.startsWith("BearDeer") ? " 🐻"
+  : c.startsWith("BetterDeer ") ? " ✨"
+  : c.startsWith("PresetDeer ") ? " 🧩"
+  : c.startsWith("Kansas") ? " 🇺🇸"
+  : c.startsWith("whitetail") ? "🦨"
+  : c === "Unknown" ? "❓"
+  : "🤖";
 
 function updateUlist() {
   var ulstring = "";
@@ -773,9 +764,9 @@ const emoji = {
 };
 const emojify = (s) => {
   return s.replace(/:([a-zA-Z]+):/gi, (s, name) =>
-    name in emoji
-      ? `<img src=${emoji[name]} style="vertical-align: middle;" />`
-      : `:${name}:`,
+    name in emoji ?
+      `<img src=${emoji[name]} style="vertical-align: middle;" />`
+    : `:${name}:`,
   );
 };
 
