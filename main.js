@@ -459,11 +459,23 @@ ws.onmessage = function (event) {
   } else if (last_cmd == "populate_profile_settings" && "user" in incoming) {
     document.getElementById("mc-display-name").value =
       incoming.user.display_name;
+    document.getElementById("mc-color").value = incoming.user.profile.color;
+    document.getElementById("mc-font").value = incoming.user.profile.font;
     document.getElementById("mc-avatar").value = incoming.user.avatar;
     document.getElementById("mc-banner").value = incoming.user.banner || "";
     document.getElementById("mc-css").value = incoming.user.profile.css || "";
     document.getElementById("mc-bio").value = incoming.user.profile.bio;
     document.getElementById("mc-lastfm").value = incoming.user.profile.lastfm;
+    document.getElementById("mc-background").value =
+      incoming.user.profile.background;
+    document.getElementById("mc-border-top").value =
+      incoming.user.profile["border-top"];
+    document.getElementById("mc-border-bottom").value =
+      incoming.user.profile["border-bottom"];
+    document.getElementById("mc-border-left").value =
+      incoming.user.profile["border-left"];
+    document.getElementById("mc-border-right").value =
+      incoming.user.profile["border-right"];
   } else if (last_cmd == "get_user" && "user" in incoming) {
     const idocument = /** @type {HTMLIFrameElement} */ (
       document.getElementById("ud-iframe")
@@ -486,6 +498,8 @@ ws.onmessage = function (event) {
     idocument.getElementById("ud-avatar").src = incoming.user.avatar;
     idocument.getElementById("ud-display-name").innerText =
       incoming.user.display_name;
+    idocument.getElementById("ud-display-name").style.color =
+      incoming.user.profile.color ?? "";
     idocument.getElementById("ud-username").innerText =
       "@" + incoming.user.username;
     const banner = idocument.getElementById("ud-banner");
@@ -880,6 +894,9 @@ function loadPost(resf, isFetch, isInbox) {
 
     var postUsername = document.createElement("span");
     postUsername.innerHTML = `<b>${hescape(resf.author.display_name)}</b> (<span class="mono">@${hescape(resf.author.username)}</span>)`;
+    const displayName = postUsername.querySelector("b");
+    displayName.style.fontFamily = resf.author.font || "";
+    displayName.style.color = resf.author.color || "";
     if (resf.author.bot) {
       postUsername.innerHTML +=
         ' <span title="This user is a robot." class="inline-icon material-symbols-outlined">smart_toy</span>';
@@ -995,6 +1012,15 @@ function loadPost(resf, isFetch, isInbox) {
     postboxid = "ms-posts";
   } // this oneliner is ugly imo
   // :true:
+
+  post.style.backgroundColor = resf.author.background || "";
+  ["bottom", "top", "left", "right"].forEach((direction) => {
+    if (resf.author[`border-${direction}`]) {
+      const upper = direction[0].toUpperCase() + direction.slice(1);
+      post.style[`border${upper}`] = "1px solid";
+      post.style[`border${upper}Color`] = resf.author[`border-${direction}`];
+    }
+  });
 
   // todo: i can probably remove this conditional now
   if (isFetch) {
@@ -1168,17 +1194,21 @@ function populateProfileSettings() {
   ws.send(JSON.stringify({ command: "get_user", username }));
 }
 
-function setProperty(property) {
+function setProperty(property, overridenValue /* optional */) {
   last_cmd = `set_${property}`;
-  let value = document.getElementById(
-    `mc-${property.replace(/_/g, "-")}`,
-  ).value;
+  let value =
+    overridenValue ??
+    document.getElementById(`mc-${property.replace(/_/g, "-")}`).value;
   if (property === "bio" && replace_text) {
     for (const i in text_replacements) {
       value = value.replaceAll(i, text_replacements[i]);
     }
   }
   ws.send(JSON.stringify({ command: "set_property", property, value }));
+  if (overridenValue !== undefined) {
+    document.getElementById(`mc-${property.replace(/_/g, "-")}`).value =
+      overridenValue;
+  }
 }
 
 function updateDetailsMsg() {

@@ -257,6 +257,16 @@
             Set display name</button
           ><br />
           <input
+            id="mc-color"
+            placeholder="Display name color..."
+            type="color"
+          />
+          <button onclick="setProperty('color');">Set display name color</button
+          ><br />
+          <input id="mc-font" placeholder="Display name font..." type="text" />
+          <button onclick="setProperty('font');">Set display name font</button
+          ><br />
+          <input
             id="mc-avatar"
             placeholder="Avatar URL..."
             autocomplete="off"
@@ -299,7 +309,39 @@
             type="text"
             maxlength="72"
           />
-          <button onclick="setProperty('lastfm');">Set Last.fm</button>
+          <button onclick="setProperty('lastfm');">Set Last.fm</button> <br />
+          <input id="mc-background" autocomplete="off" type="color" />
+          <button onclick="setProperty('background');">
+            Set post background color
+          </button>
+          <button onclick="setProperty('background', '');">Delete</button> Note:
+          The background feature might not work properly right now due to server
+          issues.
+          <br />
+          <input id="mc-border-top" autocomplete="off" type="color" />
+          <button onclick="setProperty('border-top');">
+            Set post top border color
+          </button>
+          <button onclick="setProperty('border-top', '');">Delete</button>
+          <br />
+          <input id="mc-border-bottom" autocomplete="off" type="color" />
+          <button onclick="setProperty('border-bottom');">
+            Set post bottom border color
+          </button>
+          <button onclick="setProperty('border-bottom', '');">Delete</button>
+          <br />
+          <input id="mc-border-left" autocomplete="off" type="color" />
+          <button onclick="setProperty('border-left');">
+            Set post left border color
+          </button>
+          <button onclick="setProperty('border-left', '');">Delete</button>
+          <br />
+          <input id="mc-border-right" autocomplete="off" type="color" />
+          <button onclick="setProperty('border-right');">
+            Set post right border color
+          </button>
+          <button onclick="setProperty('border-right', '');">Delete</button>
+          <br />
         </div>
         <div class="mc-container">
           <h2 class="header-notop">Misc</h2>
