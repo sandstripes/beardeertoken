@@ -43,7 +43,7 @@ function closePopup() {
 }
 
 const version = "1.7.6b";
-const serverVersion = "Lithium-1.0.0a";
+const serverVersion = "Vulcan-1.0.0a";
 let last_cmd = "";
 let username = "";
 let logged_in = false; // unused?
