@@ -880,7 +880,15 @@ function loadPost(resf, isFetch, isInbox) {
   post.classList.add("post");
   post.setAttribute("id", resf._id);
 
-  if (!isInbox) {
+  if (isInbox) {
+    const username = document.createElement("span");
+    username.classList.add("mono");
+    username.textContent = `@${resf.author}`;
+    username.addEventListener("click", () => {
+      showUser(resf.author);
+    });
+    post.append(username, " - ");
+  } else {
     var avatar = document.createElement("img");
     if (resf.author.avatar) {
       avatar.src = resf.author.avatar;
