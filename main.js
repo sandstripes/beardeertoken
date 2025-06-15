@@ -1034,6 +1034,13 @@ function loadPost(resf, isFetch, isInbox) {
   );
   if (match || match2) {
     post.style.backgroundColor = resf.author.profile.background || "";
+    const r = parseInt(match?.[1] || match2[1], 16);
+    const b = parseInt(match?.[2] || match2[2], 16);
+    const g = parseInt(match?.[3] || match2[3], 16);
+    const luminance = 0.299 * r + 0.587 * g + 0.114 * b;
+    if (luminance > 128) {
+      post.style.color = "black";
+    }
   }
   ["bottom", "top", "left", "right"].forEach((direction) => {
     if (resf.author[`border-${direction}`]) {
