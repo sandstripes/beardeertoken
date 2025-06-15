@@ -500,10 +500,12 @@ ws.onmessage = function (event) {
       bio = incoming.user.profile?.bio;
     }
     idocument.getElementById("ud-avatar").src = incoming.user.avatar;
-    idocument.getElementById("ud-display-name").innerText =
-      incoming.user.display_name;
-    idocument.getElementById("ud-display-name").style.color =
-      incoming.user.profile?.color ?? "";
+    const displayName = idocument.getElementById("ud-display-name");
+    displayName.innerText = incoming.user.display_name;
+    displayName.style.color = incoming.user.profile?.color ?? "";
+    displayName.style.fontFamily = incoming.user.profile?.font || "";
+    displayName.style.color = incoming.user.color || "";
+    displayName.style.textShadow = incoming.user.profile?.shadow || "";
     idocument.getElementById("ud-username").innerText =
       "@" + incoming.user.username;
     const banner = idocument.getElementById("ud-banner");
