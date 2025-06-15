@@ -1116,7 +1116,7 @@ function reactpost(id) {
 }
 
 function sendPreset(el) {
-  document.getElementById("ms-msg").value = el.textContent;
+  document.getElementById("ms-msg").value = el.textContent.trim();
   sendPost();
 }
 
