@@ -311,13 +311,16 @@
             maxlength="72"
           />
           <button onclick="setProperty('lastfm');">Set Last.fm</button> <br />
-          <input id="mc-background" autocomplete="off" type="color" />
+          <input
+            id="mc-background"
+            autocomplete="off"
+            type="text"
+            placeholder="Post background..."
+          />
           <button onclick="setProperty('background');">
-            Set post background color
+            Set post background
           </button>
-          <button onclick="setProperty('background', '');">Delete</button> Note:
-          The background feature might not work properly right now due to server
-          issues.
+          <button onclick="setProperty('background', '');">Delete</button>
           <br />
           <input id="mc-border-top" autocomplete="off" type="color" />
           <button onclick="setProperty('border-top');">
@@ -345,13 +348,11 @@
           <br />
           <input id="mc-shadow" autocomplete="off" type="text" />
           <button onclick="setProperty('shadow');">Set post shadow</button>
-          <button onclick="setProperty('shadow', '');">Delete</button> Note: The
-          shadow feature might not work properly right now due to server issues.
+          <button onclick="setProperty('shadow', '');">Delete</button>
           <br />
           <input id="mc-weight" autocomplete="off" type="text" />
           <button onclick="setProperty('weight');">Set post weight</button>
-          <button onclick="setProperty('weight', '');">Delete</button> Note: The
-          weight feature might not work properly right now due to server issues.
+          <button onclick="setProperty('weight', '');">Delete</button>
           <br />
         </div>
         <div class="mc-container">
