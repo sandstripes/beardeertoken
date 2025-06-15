@@ -459,15 +459,15 @@ ws.onmessage = function (event) {
   } else if (last_cmd == "populate_profile_settings" && "user" in incoming) {
     document.getElementById("mc-display-name").value =
       incoming.user.display_name;
-    document.getElementById("mc-color").value = incoming.user.profile.color;
-    document.getElementById("mc-font").value = incoming.user.profile.font;
+    document.getElementById("mc-color").value = incoming.user.profile?.color;
+    document.getElementById("mc-font").value = incoming.user.profile?.font;
     document.getElementById("mc-avatar").value = incoming.user.avatar;
     document.getElementById("mc-banner").value = incoming.user.banner || "";
-    document.getElementById("mc-css").value = incoming.user.profile.css || "";
-    document.getElementById("mc-bio").value = incoming.user.profile.bio;
-    document.getElementById("mc-lastfm").value = incoming.user.profile.lastfm;
+    document.getElementById("mc-css").value = incoming.user.profile?.css || "";
+    document.getElementById("mc-bio").value = incoming.user.profile?.bio;
+    document.getElementById("mc-lastfm").value = incoming.user.profile?.lastfm;
     document.getElementById("mc-background").value =
-      incoming.user.profile.background || "";
+      incoming.user.profile?.background || "";
     document.getElementById("mc-border-top").value =
       incoming.user.profile["border-top"] || "";
     document.getElementById("mc-border-bottom").value =
@@ -494,16 +494,16 @@ ws.onmessage = function (event) {
     });
     var bio;
     idocument.getElementById("ud-d-tags").innerHTML = "";
-    if (incoming.user.profile.bio == "") {
+    if (incoming.user.profile?.bio == "") {
       bio = "This user does not have a bio.";
     } else {
-      bio = incoming.user.profile.bio;
+      bio = incoming.user.profile?.bio;
     }
     idocument.getElementById("ud-avatar").src = incoming.user.avatar;
     idocument.getElementById("ud-display-name").innerText =
       incoming.user.display_name;
     idocument.getElementById("ud-display-name").style.color =
-      incoming.user.profile.color ?? "";
+      incoming.user.profile?.color ?? "";
     idocument.getElementById("ud-username").innerText =
       "@" + incoming.user.username;
     const banner = idocument.getElementById("ud-banner");
@@ -511,9 +511,9 @@ ws.onmessage = function (event) {
       incoming.user.banner ? `url('${incoming.user.banner}')` : "";
     banner.classList.toggle("has-banner", !!incoming.user.banner);
     idocument.querySelector("#ud-style").innerHTML =
-      incoming.user.profile.css || "";
+      incoming.user.profile?.css || "";
     idocument.querySelector("#ud-style").dataset.css =
-      incoming.user.profile.css || "";
+      incoming.user.profile?.css || "";
     if (incoming.user.username in timeZones) {
       const formatter = new Intl.DateTimeFormat([], {
         timeZone: timeZones[incoming.user.username],
@@ -549,7 +549,7 @@ ws.onmessage = function (event) {
       idocument.getElementById("ud-banned").classList.add("hidden");
     }
     idocument.getElementById("ud-bio").innerHTML = md.render(bio);
-    if (incoming.user.profile.lastfm) {
+    if (incoming.user.profile?.lastfm) {
       idocument.getElementById("ud-lastfm-container").classList.add("hidden");
       var xhttp = new XMLHttpRequest();
       xhttp.onreadystatechange = function () {
@@ -583,7 +583,7 @@ ws.onmessage = function (event) {
       };
       xhttp.open(
         "GET",
-        `https://lastfm.kije.workers.dev/${incoming.user.profile.lastfm}`,
+        `https://lastfm.kije.workers.dev/${incoming.user.profile?.lastfm}`,
         true,
       );
       xhttp.send();
@@ -907,7 +907,7 @@ function loadPost(resf, isFetch, isInbox) {
     var postUsername = document.createElement("span");
     postUsername.innerHTML = `<b>${hescape(resf.author.display_name)}</b> (<span class="mono">@${hescape(resf.author.username)}</span>)`;
     const displayName = postUsername.querySelector("b");
-    displayName.style.fontFamily = resf.author.profile.font || "";
+    displayName.style.fontFamily = resf.author.profile?.font || "";
     displayName.style.color = resf.author.color || "";
     displayName.style.textShadow = resf.author.shadow || "";
     if (resf.author.bot) {
@@ -1026,14 +1026,14 @@ function loadPost(resf, isFetch, isInbox) {
   } // this oneliner is ugly imo
   // :true:
 
-  const match = resf.author.profile.background?.match(
+  const match = resf.author.profile?.background?.match(
     /^#([a-f0-9][a-f0-9])([a-f0-9][a-f0-9])([a-f0-9][a-f0-9])/i,
   );
-  const match2 = resf.author.profile.background?.match(
+  const match2 = resf.author.profile?.background?.match(
     /^#([a-f0-9])([a-f0-9])([a-f0-9])/i,
   );
   if (match || match2) {
-    post.style.backgroundColor = resf.author.profile.background || "";
+    post.style.backgroundColor = resf.author.profile?.background || "";
     const r = parseInt(match?.[1] || match2[1], 16);
     const b = parseInt(match?.[2] || match2[2], 16);
     const g = parseInt(match?.[3] || match2[3], 16);
