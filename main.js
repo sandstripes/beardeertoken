@@ -934,10 +934,10 @@ function loadPost(resf, isFetch, isInbox) {
   if (resf.author?.username == username) {
     postDetails.innerHTML += ` - <span class="text-clickable" onclick="editer('${hescape(resf._id)}', ${hescape(JSON.stringify(resf.content))});">Edit</span>`;
   }
-  if (resf.author?.username == username || delete_all) {
+  if ((resf.author?.username == username || delete_all) && !isInbox) {
     postDetails.innerHTML += ` - <span class="text-clickable" onclick="deletepost(${hescape(JSON.stringify(resf._id))});">Delete</span>`;
   }
-  if (username) {
+  if (username && !isInbox) {
     postDetails.innerHTML += ` - <span class="text-clickable" onclick="reactpost(${hescape(JSON.stringify(resf._id))})">React</span>`;
   }
   if (
