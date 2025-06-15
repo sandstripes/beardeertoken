@@ -907,7 +907,7 @@ function loadPost(resf, isFetch, isInbox) {
     var postUsername = document.createElement("span");
     postUsername.innerHTML = `<b>${hescape(resf.author.display_name)}</b> (<span class="mono">@${hescape(resf.author.username)}</span>)`;
     const displayName = postUsername.querySelector("b");
-    displayName.style.fontFamily = resf.author.font || "";
+    displayName.style.fontFamily = resf.author.profile.font || "";
     displayName.style.color = resf.author.color || "";
     displayName.style.textShadow = resf.author.shadow || "";
     if (resf.author.bot) {
@@ -1026,7 +1026,15 @@ function loadPost(resf, isFetch, isInbox) {
   } // this oneliner is ugly imo
   // :true:
 
-  post.style.backgroundColor = resf.author.background || "";
+  const match = resf.author.profile.background?.match(
+    /^#([a-f0-9][a-f0-9])([a-f0-9][a-f0-9])([a-f0-9][a-f0-9])/i,
+  );
+  const match2 = resf.author.profile.background?.match(
+    /^#([a-f0-9])([a-f0-9])([a-f0-9])/i,
+  );
+  if (match || match2) {
+    post.style.backgroundColor = resf.author.profile.background || "";
+  }
   ["bottom", "top", "left", "right"].forEach((direction) => {
     if (resf.author[`border-${direction}`]) {
       const upper = direction[0].toUpperCase() + direction.slice(1);
