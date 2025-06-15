@@ -318,6 +318,8 @@ if (localStorage.getItem("beardeer:serverurl")) {
 
 const ws = new WebSocket(wsurl);
 
+let didGreet = false;
+
 ws.onmessage = function (event) {
   let incoming = JSON.parse(event.data);
   if (settings.debug) {
@@ -347,25 +349,28 @@ ws.onmessage = function (event) {
     for (const x in incoming.messages) {
       posts[incoming.messages[x]._id] = incoming.messages[x];
     }
-    posts_list = incoming.messages;
-    if (
-      localStorage.getItem("beardeer:username") == null ||
-      localStorage.getItem("beardeer:token") == null
-    ) {
-      scene = "register-login";
-      document.getElementById("loading").classList.toggle("hidden");
-      document.getElementById("register-login").classList.toggle("hidden");
-    } else {
-      username = localStorage.getItem("beardeer:username").toLowerCase();
-      last_cmd = "login_token";
-      ws.send(
-        JSON.stringify({
-          command: "login_token",
-          token: localStorage.getItem("beardeer:token"),
-          client: `BearDeer ${version}`,
-        }),
-      );
+    posts_list = [...posts_list, ...incoming.messages];
+    if (!didGreet) {
+      if (
+        localStorage.getItem("beardeer:username") == null ||
+        localStorage.getItem("beardeer:token") == null
+      ) {
+        scene = "register-login";
+        document.getElementById("loading").classList.toggle("hidden");
+        document.getElementById("register-login").classList.toggle("hidden");
+      } else {
+        username = localStorage.getItem("beardeer:username").toLowerCase();
+        last_cmd = "login_token";
+        ws.send(
+          JSON.stringify({
+            command: "login_token",
+            token: localStorage.getItem("beardeer:token"),
+            client: `BearDeer ${version}`,
+          }),
+        );
+      }
     }
+    didGreet = true;
   } else if (incoming.command == "ulist") {
     ulist = Object.keys(incoming.ulist);
     raw_ulist = incoming.ulist;
