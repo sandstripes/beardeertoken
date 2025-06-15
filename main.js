@@ -1026,6 +1026,7 @@ function loadPost(resf, isFetch, isInbox) {
   } // this oneliner is ugly imo
   // :true:
 
+  post.style.background = resf.author.profile?.background || "";
   const match = resf.author.profile?.background?.match(
     /^#([a-f0-9][a-f0-9])([a-f0-9][a-f0-9])([a-f0-9][a-f0-9])/i,
   );
@@ -1033,13 +1034,12 @@ function loadPost(resf, isFetch, isInbox) {
     /^#([a-f0-9])([a-f0-9])([a-f0-9])/i,
   );
   if (match || match2) {
-    post.style.backgroundColor = resf.author.profile?.background || "";
     const r = parseInt(match?.[1] || match2[1], 16);
     const b = parseInt(match?.[2] || match2[2], 16);
     const g = parseInt(match?.[3] || match2[3], 16);
     const luminance = 0.299 * r + 0.587 * g + 0.114 * b;
     if (luminance > 128) {
-      post.style.color = "black";
+      post.classList.add("light-bg");
     }
   }
   ["bottom", "top", "left", "right"].forEach((direction) => {

@@ -419,6 +419,10 @@ hr {
 }
 .post {
   background-color: var(--deer-button-hover);
+  color: white;
+}
+.light-bg.post {
+  color: black;
 }
 .pfp {
   border: 2px var(--deer-image-border) solid;
@@ -445,7 +449,10 @@ a {
   color: var(--deer-foreground);
 }
 .reply {
-  color: var(--deer-reply);
+  color: #c2baac;
+}
+.light-bg .reply {
+  color: #333;
 }
 
 /* markdown */
