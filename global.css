@@ -347,8 +347,7 @@ h6 {
 .attachment video {
   margin-left: 4px;
   margin-right: 4px;
-  max-height: 25vw;
-  max-width: 25vw;
+  max-height: 250px;
   width: auto;
   height: auto;
   vertical-align: middle;
