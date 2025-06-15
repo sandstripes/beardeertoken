@@ -930,7 +930,7 @@ function loadPost(resf, isFetch, isInbox) {
     postDetails.innerHTML += ` - <span class="text-clickable" onclick="deletepost(${hescape(JSON.stringify(resf._id))});">Delete</span>`;
   }
   if (username) {
-    postDetails.innerHTML += ` - <span class="text-clickable" onclick="reactpost('${hescape(JSON.stringify(resf._id))}')">React</span>`;
+    postDetails.innerHTML += ` - <span class="text-clickable" onclick="reactpost(${hescape(JSON.stringify(resf._id))})">React</span>`;
   }
   if (
     resf.author?.username === "thebarney86" ||
