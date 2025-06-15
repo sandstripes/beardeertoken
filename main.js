@@ -909,7 +909,7 @@ function loadPost(resf, isFetch, isInbox) {
     const displayName = postUsername.querySelector("b");
     displayName.style.fontFamily = resf.author.profile?.font || "";
     displayName.style.color = resf.author.color || "";
-    displayName.style.textShadow = resf.author.shadow || "";
+    displayName.style.textShadow = resf.author.profile?.shadow || "";
     if (resf.author.bot) {
       postUsername.innerHTML +=
         ' <span title="This user is a robot." class="inline-icon material-symbols-outlined">smart_toy</span>';
