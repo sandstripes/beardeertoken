@@ -327,9 +327,9 @@ ws.onmessage = function (event) {
       }
     }
     if (incoming.version != serverVersion) {
-      displayError(
-        `The server is on a newer version than this version of BossDeer was designed for. You may experience problems. (Expected "${serverVersion}", got "${incoming.version}")`,
-      );
+      // displayError(
+      //   `The server is on a newer version than this version of BossDeer was designed for. You may experience problems. (Expected "${serverVersion}", got "${incoming.version}")`,
+      // );
     }
     ulist = Object.keys(incoming.ulist);
     raw_ulist = incoming.ulist;
