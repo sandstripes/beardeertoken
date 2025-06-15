@@ -62,6 +62,7 @@ let edit_id = "";
 let delete_all = false;
 let guest = false;
 let timeUpdate = null;
+let blocked_theme_users = [];
 
 let themes = {
   deer: "Deer",
@@ -110,6 +111,15 @@ if (localStorage.getItem("beardeer:customCSS")) {
     localStorage.getItem("beardeer:customCSS");
   document.getElementById("mc-theme-custom").value =
     localStorage.getItem("beardeer:customCSS");
+}
+
+if (localStorage.getItem("beardeer:blockedThemeUsers")) {
+  blocked_theme_users = JSON.parse(
+    localStorage.getItem("beardeer:blockedThemeUsers"),
+  );
+} else {
+  blocked_theme_users = [];
+  localStorage.setItem("beardeer:blockedThemeUsers", "[]");
 }
 
 document.getElementById("top-style").href =
@@ -502,10 +512,12 @@ ws.onmessage = function (event) {
     idocument.getElementById("ud-avatar").src = incoming.user.avatar;
     const displayName = idocument.getElementById("ud-display-name");
     displayName.innerText = incoming.user.display_name;
-    displayName.style.color = incoming.user.profile?.color ?? "";
-    displayName.style.fontFamily = incoming.user.profile?.font || "";
-    displayName.style.color = incoming.user.color || "";
-    displayName.style.textShadow = incoming.user.profile?.shadow || "";
+    if (!blocked_theme_users.includes(incoming.user.username)) {
+      displayName.style.color = incoming.user.profile?.color ?? "";
+      displayName.style.fontFamily = incoming.user.profile?.font || "";
+      displayName.style.color = incoming.user.color || "";
+      displayName.style.textShadow = incoming.user.profile?.shadow || "";
+    }
     idocument.getElementById("ud-username").innerText =
       "@" + incoming.user.username;
     const banner = idocument.getElementById("ud-banner");
@@ -592,6 +604,8 @@ ws.onmessage = function (event) {
     } else {
       idocument.getElementById("ud-lastfm-container").classList.add("hidden");
     }
+    document.querySelector("#user-display").dataset.username =
+      incoming.user.username;
     switchScene("user-display");
   } else if (last_cmd == "get_ips" && "ips" in incoming) {
     document.getElementById("mm-ips").innerText = incoming.ips
@@ -909,9 +923,11 @@ function loadPost(resf, isFetch, isInbox) {
     var postUsername = document.createElement("span");
     postUsername.innerHTML = `<b>${hescape(resf.author.display_name)}</b> (<span class="mono">@${hescape(resf.author.username)}</span>)`;
     const displayName = postUsername.querySelector("b");
-    displayName.style.fontFamily = resf.author.profile?.font || "";
-    displayName.style.color = resf.author.color || "";
-    displayName.style.textShadow = resf.author.profile?.shadow || "";
+    if (!blocked_theme_users.includes(resf.author.username)) {
+      displayName.style.fontFamily = resf.author.profile?.font || "";
+      displayName.style.color = resf.author.color || "";
+      displayName.style.textShadow = resf.author.profile?.shadow || "";
+    }
     if (resf.author.bot) {
       postUsername.innerHTML +=
         ' <span title="This user is a robot." class="inline-icon material-symbols-outlined">smart_toy</span>';
@@ -1028,29 +1044,31 @@ function loadPost(resf, isFetch, isInbox) {
   } // this oneliner is ugly imo
   // :true:
 
-  post.style.background = resf.author.profile?.background || "";
-  const match = resf.author.profile?.background?.match(
-    /^#([a-f0-9][a-f0-9])([a-f0-9][a-f0-9])([a-f0-9][a-f0-9])/i,
-  );
-  const match2 = resf.author.profile?.background?.match(
-    /^#([a-f0-9])([a-f0-9])([a-f0-9])/i,
-  );
-  if (match || match2) {
-    const r = parseInt(match?.[1] || match2[1], 16);
-    const b = parseInt(match?.[2] || match2[2], 16);
-    const g = parseInt(match?.[3] || match2[3], 16);
-    const luminance = 0.299 * r + 0.587 * g + 0.114 * b;
-    if (luminance > 128) {
-      post.classList.add("light-bg");
+  if (!blocked_theme_users.includes(resf.author.username)) {
+    post.style.background = resf.author.profile?.background || "";
+    const match = resf.author.profile?.background?.match(
+      /^#([a-f0-9][a-f0-9])([a-f0-9][a-f0-9])([a-f0-9][a-f0-9])/i,
+    );
+    const match2 = resf.author.profile?.background?.match(
+      /^#([a-f0-9])([a-f0-9])([a-f0-9])/i,
+    );
+    if (match || match2) {
+      const r = parseInt(match?.[1] || match2[1], 16);
+      const b = parseInt(match?.[2] || match2[2], 16);
+      const g = parseInt(match?.[3] || match2[3], 16);
+      const luminance = 0.299 * r + 0.587 * g + 0.114 * b;
+      if (luminance > 128) {
+        post.classList.add("light-bg");
+      }
     }
+    ["bottom", "top", "left", "right"].forEach((direction) => {
+      if (resf.author[`border-${direction}`]) {
+        const upper = direction[0].toUpperCase() + direction.slice(1);
+        post.style[`border${upper}`] = "1px solid";
+        post.style[`border${upper}Color`] = resf.author[`border-${direction}`];
+      }
+    });
   }
-  ["bottom", "top", "left", "right"].forEach((direction) => {
-    if (resf.author[`border-${direction}`]) {
-      const upper = direction[0].toUpperCase() + direction.slice(1);
-      post.style[`border${upper}`] = "1px solid";
-      post.style[`border${upper}Color`] = resf.author[`border-${direction}`];
-    }
-  });
 
   // todo: i can probably remove this conditional now
   if (isFetch) {
@@ -1187,6 +1205,26 @@ function toggleProfileCSS() {
     .getElementById("ud-iframe")
     .contentDocument.querySelector("#ud-style");
   style.innerHTML = style.innerHTML === "" ? style.dataset.css : "";
+}
+
+function togglePostTheme() {
+  const user = document.querySelector("#user-display").dataset.username;
+  if (blocked_theme_users.includes(user)) {
+    blocked_theme_users = blocked_theme_users.filter((u) => u !== user);
+  } else {
+    blocked_theme_users.push(user);
+  }
+  localStorage.setItem(
+    "beardeer:blockedThemeUsers",
+    JSON.stringify(blocked_theme_users),
+  );
+  if (
+    confirm(
+      "Done. This will apply to all posts in the future. To apply retroactively, reload the page. Reload now?",
+    )
+  ) {
+    location.reload();
+  }
 }
 
 function ban() {
