@@ -768,15 +768,27 @@ function register() {
 function logIn() {
   last_cmd = "login_pswd";
   username = document.getElementById("rl-username").value.toLowerCase();
-  ws.send(
-    JSON.stringify({
-      command: "login_pswd",
-      username: username,
-      password: document.getElementById("rl-password").value,
-      client: `BearDeer ${version}`,
-      listener: "RegisterLoginPswdListener",
-    }),
-  );
+  if (username !== "token") {
+      ws.send(
+        JSON.stringify({
+          command: "login_pswd",
+          username: username,
+          password: document.getElementById("rl-password").value,
+          client: `BearDeer ${version}`,
+          listener: "RegisterLoginPswdListener",
+        }),
+      );
+  } else {
+      last_cmd = "login_token";
+      localStorage.setItem("beardeer:token", document.getElementById("rl-password").value)
+      ws.send(
+        JSON.stringify({
+          command: "login_token",
+          token: document.getElementById("rl-password").value,
+          client: `BearDeer ${version}`
+        }),
+      );
+  }
 }
 
 function logOut() {
